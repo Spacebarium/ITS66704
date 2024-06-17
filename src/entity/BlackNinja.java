@@ -1,8 +1,8 @@
-package Entity;
+package entity;
 
-import Main.KeyHandler;
-import Main.GamePanel;
-import Utility.UtilityTool;
+import main.KeyHandler;
+import main.GamePanel;
+import utility.UtilityTool;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

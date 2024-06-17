@@ -1,4 +1,4 @@
-package Main;
+package main;
 
 import javax.swing.*;
 
@@ -8,7 +8,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("Steve simulator");
+        window.setTitle("game test");
 
         GamePanel gp = new GamePanel();
         window.add(gp);

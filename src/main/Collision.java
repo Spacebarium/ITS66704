@@ -1,9 +1,8 @@
-package Main;
+package main;
 
-import Entity.Entity;
+import entity.Entity;
 
 public class Collision {
-
     GamePanel gp;
 
     public Collision(GamePanel gp) {

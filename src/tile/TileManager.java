@@ -1,7 +1,7 @@
-package Tile;
+package tile;
 
-import Main.GamePanel;
-import Utility.UtilityTool;
+import main.GamePanel;
+import utility.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

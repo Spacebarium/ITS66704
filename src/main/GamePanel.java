@@ -1,8 +1,8 @@
-package Main;
+package main;
 
-import Entity.BlackNinja;
-import Entity.WhiteNinja;
-import Tile.TileManager;
+import entity.BlackNinja;
+import entity.WhiteNinja;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,14 +26,14 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     // default player pos
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 8;
+//    int playerX = 100;
+//    int playerY = 100;
+//    int playerSpeed = 8;
 
-    //instantiate BlackNinja class
+    // instantiate BlackNinja class
     public Collision colChecker = new Collision(this);
     BlackNinja blackNinja = new BlackNinja(this, keyHandler);
-    WhiteNinja whiteNinja = new WhiteNinja(this);
+//    WhiteNinja whiteNinja = new WhiteNinja(this);
     TileManager tileM = new TileManager(this);
 
     public int getTileSize() {

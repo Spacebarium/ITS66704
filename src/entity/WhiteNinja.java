@@ -1,6 +1,6 @@
-package Entity;
+package entity;
 
-import Main.GamePanel;
+import main.GamePanel;
 
 public class WhiteNinja extends Entity {
 
