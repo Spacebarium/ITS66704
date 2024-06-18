@@ -23,6 +23,7 @@ public class WhiteNinja extends NPC {
         setLeft2(imageSetup("whiteNinja", "whiteLeft2"));
         setRight1(imageSetup("whiteNinja", "whiteRight1"));
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
+        setIdle(imageSetup("blackNinja", "blackDown1"));
     }
 
 }

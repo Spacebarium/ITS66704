@@ -11,6 +11,7 @@ public class Collision {
     }
 
     private double top(Entity entity) {
+
         return entity.getY() + entity.getHitbox().y;
     }
 

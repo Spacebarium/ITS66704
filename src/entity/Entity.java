@@ -28,13 +28,15 @@ public abstract class Entity {
     private int     damage;
     private boolean inCombat;
     
-    private int     entityCounter = 0;
+    private int     entityCounterFrames = 12;
+    private int     entityCounter = entityCounterFrames;
     private int     entityImage;
-    private String  direction = "";
+    private String  direction = "idle";
     
     private boolean topCol, botCol, leftCol, rightCol;
     private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
-    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
+    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
+
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -186,8 +188,12 @@ public abstract class Entity {
         this.down2 = down2;
     }
 
-    // Methods
-    // Import images
+    public void setIdle(BufferedImage idle){
+        this.idle = idle;
+    }
+
+    //Methods
+    //Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -212,13 +218,12 @@ public abstract class Entity {
 
     }
 
-    public void setEntityImage() {
-        entityCounter++;
-
+    public void setEntityImage(){
         if (entityCounter > 12) {
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }
+        entityCounter++;
     }
 
     public void update() {
@@ -230,30 +235,22 @@ public abstract class Entity {
     public void draw(Graphics2D g2D) {
         if (entityImage == 1) {
             image = switch (direction) {
-                case "up" ->
-                    up1;
-                case "down" ->
-                    down1;
-                case "left" ->
-                    left1;
-                case "right" ->
-                    right1;
-                default ->
-                    down1;
+                case "up" -> up1;
+                case "down" -> down1;
+                case "left" -> left1;
+                case "right" -> right1;
+                default -> idle;
             };
         } else if (entityImage == 2) {
             image = switch (direction) {
-                case "up" ->
-                    up2;
-                case "down" ->
-                    down2;
-                case "left" ->
-                    left2;
-                case "right" ->
-                    right2;
-                default ->
-                    down2;
-            };
+                case "up" -> up2;
+                case "down" -> down2;
+                case "left" -> left2;
+                case "right" -> right2;
+                default -> idle;
+	        };
+        } else {
+            image = idle;
         }
 
         g2D.drawImage(image, x, y, null);

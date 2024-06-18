@@ -6,14 +6,14 @@ import main.MouseHandler;
 import weapon.*;
 
 public class Player extends Entity {
-    private final KeyHandler keyHandler;
-    private final MouseHandler mouseHandler;
+    KeyHandler keyHandler;
+    MouseHandler mouseHandler;
     private Weapon equip1, equip2;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(gp);
-        this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
+        this.keyHandler = keyHandler;
         this.equip1 = new Sword();
         this.equip2 = null;
 
@@ -64,12 +64,15 @@ public class Player extends Entity {
             if (leftCol()) {
                 updateX(-getSpeed());
             }
-        }
-
-        if (!keyHandler.leftPressed && !keyHandler.rightPressed && !keyHandler.upPressed && !keyHandler.downPressed){
+<<<<<<< HEAD
+            if (!keyH.leftPressed && !keyH.rightPressed && !keyH.upPressed && !keyH.downPressed){
                 setDirection("idle");
                 return;
             }
+            setEntityImage();
+=======
+>>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
+        }
         setEntityImage();
     }
     
