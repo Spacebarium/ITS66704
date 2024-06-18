@@ -25,6 +25,7 @@ public class Player extends Entity{
         setLeft2(imageSetup("whiteNinja", "whiteLeft2"));
         setRight1(imageSetup("whiteNinja", "whiteRight1"));
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
+        setIdle(imageSetup("blackNinja", "blackDown1"));
     }
 
         public void update() {
@@ -55,6 +56,10 @@ public class Player extends Entity{
                 if (LeftCol()) {
                     updateRow(-getSpeed());
                 }
+            }
+            if (!keyH.leftPressed && !keyH.rightPressed && !keyH.upPressed && !keyH.downPressed){
+                setDirection("idle");
+                return;
             }
             setEntityImage();
         }

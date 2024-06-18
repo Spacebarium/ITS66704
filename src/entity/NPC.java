@@ -18,7 +18,7 @@ public class NPC extends Entity {
         int j = -1;
         Random random = new Random();
 
-       if (actionLockCounter == 60) {
+       if (actionLockCounter == 30) {
            for (int x = 0; x <= 5; x++){
                i = random.nextInt(100) + 1;
                j = random.nextInt(100) + 1;
@@ -26,28 +26,28 @@ public class NPC extends Entity {
             actionLockCounter = 0;
        }
 
-        if (i > 0 && i <= 40) {
+        if (i > 0 && i <= 20) {
             setDirection("up");
             gp.colChecker.checkTop(this);
             if (TopCol()) {
                 updateColumn(-getSpeed());
             }
         }
-        if (i > 65 && i <= 100) {
+        if (i > 80 && i <= 100) {
             setDirection("down");
             gp.colChecker.checkBot(this);
             if (BotCol()) {
                 updateColumn(getSpeed());
             }
         }
-        if (j > 0 && j <= 40) {
+        if (j > 0 && j <= 20) {
             setDirection("left");
             gp.colChecker.checkLeft(this);
             if (LeftCol()) {
                 updateRow(-getSpeed());
             }
         }
-        if (j > 65 && j <= 100){
+        if (j > 80 && j <= 100){
             setDirection("right");
             gp.colChecker.checkRight(this);
             if (RightCol()) {
@@ -55,5 +55,8 @@ public class NPC extends Entity {
             }
         }
 
+        if ((i > 20 && i <=80) && (j > 20 && j <=80)){
+            setDirection("idle");
+        }
     }
 }
