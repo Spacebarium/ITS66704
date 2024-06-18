@@ -16,8 +16,8 @@ public class Entity {
     public BufferedImage left1, left2, right1, right2, up1, up2;
     public String direction = "";
 
-    //public int spriteCounter = 0;
-    //public int spriteNum = 1;
+//    public int spriteCounter = 0;
+//    public int spriteNum = 1;
     public Rectangle solidArea = new Rectangle(8, 16, 32, 32);
     public boolean topCol, botCol, leftCol, rightCol = false;
 

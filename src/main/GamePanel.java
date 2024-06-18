@@ -20,7 +20,6 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenHeight = tileSize * maxScreenRow;
 
     final int FPS = 60;
-    boolean isRunning = true;
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
@@ -71,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
         int drawCount = 0;
 
         // game loop
-        while (isRunning && gameThread != null) {
+        while (gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             timer += currentTime - lastTime;
@@ -96,7 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
 
         blackNinja.update();
-        //whiteNinja.update();
+//        whiteNinja.update();
     }
 
     public void paintComponent(Graphics g) {
@@ -104,10 +103,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2D = (Graphics2D) g;
 
-        //Tiles
+        // Tiles
         tileM.draw(g2D);
 
-        //Entities
+        // Entities
         blackNinja.draw(g2D);
         //  whiteNinja.draw(g2D);
 
