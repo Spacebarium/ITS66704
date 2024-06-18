@@ -6,14 +6,14 @@ import main.MouseHandler;
 import weapon.*;
 
 public class Player extends Entity {
-    KeyHandler keyHandler;
-    MouseHandler mouseHandler;
+    private final KeyHandler keyHandler;
+    private final MouseHandler mouseHandler;
     private Weapon equip1, equip2;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(gp);
-        this.mouseHandler = mouseHandler;
         this.keyHandler = keyHandler;
+        this.mouseHandler = mouseHandler;
         this.equip1 = new Sword();
         this.equip2 = null;
 

@@ -19,19 +19,20 @@ public abstract class Entity {
     public GamePanel gp;
 
     private Type    entityType;
-    private int     x, y;
-    private int     speed;
     private String  name;
-    private int     maxHealth;
+    private int     x, y;
     private int     health;
+    private int     maxHealth;
+    
+    private int     speed;
     private int     damage;
-    private boolean inCombat = false;
+    private boolean inCombat;
     
-    private int entityCounter = 0;
-    private int entityImage;
-    private String direction = "";
+    private int     entityCounter = 0;
+    private int     entityImage;
+    private String  direction = "";
     
-    private boolean topCol, botCol, leftCol, rightCol = false;
+    private boolean topCol, botCol, leftCol, rightCol;
     private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
 
@@ -117,7 +118,7 @@ public abstract class Entity {
         this.entityType = entityType;
     }
 
-    public Rectangle getSolidArea() {
+    public Rectangle getHitbox() {
         return hitbox;
     }
 
