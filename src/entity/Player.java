@@ -64,13 +64,12 @@ public class Player extends Entity {
             if (leftCol()) {
                 updateX(-getSpeed());
             }
+        }
 
-            if (!keyHandler.leftPressed && !keyHandler.rightPressed && !keyHandler.upPressed && !keyHandler.downPressed){
+        if (!keyHandler.leftPressed && !keyHandler.rightPressed && !keyHandler.upPressed && !keyHandler.downPressed){
                 setDirection("idle");
                 return;
             }
-            setEntityImage();
-        }
         setEntityImage();
     }
     

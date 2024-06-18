@@ -214,7 +214,6 @@ public abstract class Entity {
     }
 
     public void setEntityImage(){
-        
         if (entityCounter > 12) {
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
