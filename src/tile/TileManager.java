@@ -42,7 +42,7 @@ public class TileManager {
 
         try {
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("Tile/" + imageName + ".png"));
+            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize(), gp.getTileSize());
             tile[index].collision = collision;
 
@@ -53,7 +53,7 @@ public class TileManager {
 
     public void loadMap(String mapTxt) {
         try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("Map/" + mapTxt + ".txt");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("map/" + mapTxt + ".txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int col = 0;
