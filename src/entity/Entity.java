@@ -30,27 +30,8 @@ public abstract class Entity {
     private int damage;
     private boolean inCombat = false;
     private boolean topCol, botCol, leftCol, rightCol = false;
-    private Rectangle solidArea = new Rectangle(12, 23, 26, 27);
+    private Rectangle hitBox = new Rectangle(12, 23, 26, 27);
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
-=======
-
-    private Type    entityType;
-    private int     x, y;
-    private int     speed;
-    private String  name;
-    private int     maxHealth;
-    private int     health;
-    private int     damage;
-    private boolean inCombat = false;
-    
-    private int entityCounter = 0;
-    private int entityImage;
-    private String direction = "";
-    
-    private boolean topCol, botCol, leftCol, rightCol = false;
-    private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
-    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
->>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -134,8 +115,8 @@ public abstract class Entity {
         this.entityType = entityType;
     }
 
-    public Rectangle getSolidArea() {
-        return hitbox;
+    public Rectangle getHitBox() {
+        return hitBox;
     }
 
     public boolean topCol() {
@@ -208,10 +189,6 @@ public abstract class Entity {
 
     //Methods
     //Import images
-=======
-    // Methods
-    // Import images
->>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
     public BufferedImage imageSetup(String folderName, String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
@@ -237,13 +214,8 @@ public abstract class Entity {
     }
 
     public void setEntityImage(){
-        if (entityCounter == entityCounterFrames){
-=======
-    public void setEntityImage() {
-        entityCounter++;
-
+        
         if (entityCounter > 12) {
->>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }
@@ -271,7 +243,8 @@ public abstract class Entity {
                 case "down" -> down2;
                 case "left" -> left2;
                 case "right" -> right2;
-	    }
+                default -> idle;
+	        };
         }else {
             image = idle;
         }

@@ -11,19 +11,19 @@ public class Collision {
     }
 
     private double top(Entity entity) {
-        return entity.getY() + entity.getSolidArea().y;
+        return entity.getY() + entity.getHitBox().y;
     }
 
     private double bot(Entity entity) {
-        return entity.getY() + entity.getSolidArea().y + entity.getSolidArea().height;
+        return entity.getY() + entity.getHitBox().y + entity.getHitBox().height;
     }
 
     private double left(Entity entity) {
-        return entity.getX() + entity.getSolidArea().x;
+        return entity.getX() + entity.getHitBox().x;
     }
 
     private double right(Entity entity) {
-        return entity.getX() + entity.getSolidArea().x + entity.getSolidArea().width;
+        return entity.getX() + entity.getHitBox().x + entity.getHitBox().width;
     }
 
     private double topRow(Entity entity) {
