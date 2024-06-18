@@ -1,18 +1,21 @@
 package main;
 
-import entity.BlackNinja;
-import entity.WhiteNinja;
-import tile.TileManager;
+import entity.Entity;
 
+import entity.Player;
+import entity.EntityManager;
+import entity.enemy.WhiteNinja;
+import tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePanel extends JPanel implements Runnable {
-
+    
     // SCREEN SETTINGS
     final int originalTileSize = 16;
     final int scale = 3;
-
     final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
@@ -24,17 +27,27 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
-
-    // default player pos
-//    int playerX = 100;
-//    int playerY = 100;
-//    int playerSpeed = 8;
-
-    // instantiate BlackNinja class
     public Collision colChecker = new Collision(this);
-    BlackNinja blackNinja = new BlackNinja(this, keyHandler);
-//    WhiteNinja whiteNinja = new WhiteNinja(this);
+    public EntityManager entityManager = new EntityManager(this);
+
+    //Entity and Objects
+    //Player
+    Player player = new Player(this, keyHandler);
+    //Entities
+    WhiteNinja whiteNinja = new WhiteNinja(this);
+    //Entity array list for drawing order
+    //ArrayList <Entity> entityList = new ArrayList<>();
+
+    //Tiles
     TileManager tileM = new TileManager(this);
+
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.WHITE);
+        this.setDoubleBuffered(true);
+        this.addKeyListener(keyHandler);
+        this.setFocusable(true);
+    }
 
     public int getTileSize() {
         return tileSize;
@@ -48,68 +61,69 @@ public class GamePanel extends JPanel implements Runnable {
         return maxScreenRow;
     }
 
-    public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.WHITE);
-        this.setDoubleBuffered(true);
-        this.addKeyListener(keyHandler);
-        this.setFocusable(true);
+    public void setupEnemy(){
+        entityManager.setupEntity(player);
+        entityManager.setupEntity(whiteNinja);
     }
 
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
+    
     @Override
     public void run() {
-        double drawInterval = 1_000_000_000 / FPS;
+        double drawInterval = 1_000_000_000 /FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
         int drawCount = 0;
-
+        
+        
         // game loop
         while (isRunning && gameThread != null) {
             currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
+            delta += (currentTime - lastTime)/drawInterval;
             timer += currentTime - lastTime;
             lastTime = currentTime;
-
+            
             if (delta >= 1) {
-                update();
                 repaint();
+                update();
+
                 delta--;
                 drawCount++;
             }
-
+            
             if (timer >= 1_000_000_000) {
                 System.out.printf("FPS: %d\n", drawCount);
                 drawCount = 0;
                 timer = 0;
             }
-
+            
         }
     }
 
     public void update() {
-
-        blackNinja.update();
-        //whiteNinja.update();
+        List<Entity> sortedEntities = entityManager.sortedEntities();
+        for (Entity entity : sortedEntities) {
+            entity.update();
+        }
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Graphics2D g2D = (Graphics2D) g;
+        Graphics2D g2D = (Graphics2D)g;
 
         //Tiles
         tileM.draw(g2D);
 
         //Entities
-        blackNinja.draw(g2D);
-        //  whiteNinja.draw(g2D);
+        for (Entity entity: entityManager.sortedEntities()){
+            entity.draw(g2D);
+        }
+
 
         g2D.dispose();
     }

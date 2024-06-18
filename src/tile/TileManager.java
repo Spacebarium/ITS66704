@@ -16,73 +16,73 @@ public class TileManager {
     Tile[] tile;
     int[][] mapTileNum;
 
-    public TileManager(GamePanel gp) {
+    public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[2];
-        mapTileNum = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
+        mapTileNum = new int [gp.getMaxScreenCol()][gp.getMaxScreenRow()];
         getTileImage();
         loadMap("Test");
     }
 
-    public int getMapTileNum(int col, int row) {
+    public int getMapTileNum(int col, int row){
         return mapTileNum[col][row];
     }
 
-    public Tile getTile(int num) {
+    public Tile getTile(int num){
         return tile[num];
     }
 
-    public void getTileImage() {
-        tileSetup(0, "grass", false);
+    public void getTileImage(){
+        tileSetup(0,"grass", false);
         tileSetup(1, "wall", true);
     }
 
-    public void tileSetup(int index, String imageName, boolean collision) {
+    public void tileSetup(int index, String imageName, boolean collision){
         UtilityTool uTool = new UtilityTool();
 
-        try {
+        try{
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("Tile/" + imageName + ".png"));
+            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize(), gp.getTileSize());
             tile[index].collision = collision;
 
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    public void loadMap(String mapTxt) {
-        try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("Map/" + mapTxt + ".txt");
+    public void loadMap(String mapTxt){
+        try{
+            InputStream is = getClass().getClassLoader().getResourceAsStream("map/" + mapTxt + ".txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int col = 0;
             int row = 0;
 
-            while ((col < gp.getMaxScreenCol()) && row < (gp.getMaxScreenRow())) {
+            while((col < gp.getMaxScreenCol()) && row < (gp.getMaxScreenRow())){
                 String line = br.readLine();
 
-                while (col < gp.getMaxScreenCol()) {
-                    String[] numbers = line.split(" ");
+                while(col < gp.getMaxScreenCol()){
+                    String [] numbers = line.split(" ");
 
                     int num = Integer.parseInt(numbers[col]);
 
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if (col == gp.getMaxScreenCol()) {
+                if (col == gp.getMaxScreenCol()){
                     col = 0;
-                    row++;
+                    row ++;
                 }
             }
             br.close();
 
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D g2){
         int col = 0;
         int row = 0;
         int x = 0;
@@ -96,7 +96,7 @@ public class TileManager {
 
             x += gp.getTileSize();
 
-            if (col == gp.getMaxScreenCol()) {
+            if(col == gp.getMaxScreenCol()){
                 col = 0;
                 x = 0;
                 row++;
