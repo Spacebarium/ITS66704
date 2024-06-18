@@ -20,7 +20,10 @@ public abstract class Entity {
 
     private Type    entityType;
     private String  name;
-    private int     x, y;
+    private int     x;
+    private int     y;
+    private int     width;
+    private int     height;
     private int     health;
     private int     maxHealth;
     
@@ -34,12 +37,17 @@ public abstract class Entity {
     private String  direction = "idle";
     
     private boolean topCol, botCol, leftCol, rightCol;
-    private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
+    private final Rectangle hitbox;
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
-    public Entity(GamePanel gp) {
+    public Entity(GamePanel gp, int x, int y, int width, int height) {
         this.gp = gp;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.hitbox = new Rectangle(x, y, width, height);
     }
 
     // Getters and setters
@@ -208,9 +216,9 @@ public abstract class Entity {
         return image;
     }
 
-    public void setDefault(int row, int column, int speed) {
-        this.x = row;
-        this.y = column;
+    public void setDefault(int x, int y, int speed) {
+        this.x = x;
+        this.y = y;
         this.speed = speed;
     }
 

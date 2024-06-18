@@ -11,7 +11,6 @@ public class Collision {
     }
 
     private double top(Entity entity) {
-
         return entity.getY() + entity.getHitbox().y;
     }
 
@@ -47,7 +46,7 @@ public class Collision {
         try {
             int tileNum1 = gp.tileManager.getMapTileNum((int) col1, entityRow);
             int tileNum2 = gp.tileManager.getMapTileNum((int) col2, entityRow);
-            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
+            return gp.tileManager.getTile(tileNum1).isCollidable || gp.tileManager.getTile(tileNum2).isCollidable;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
@@ -58,7 +57,7 @@ public class Collision {
         try {
             int tileNum1 = gp.tileManager.getMapTileNum(entityCol, (int) row1);
             int tileNum2 = gp.tileManager.getMapTileNum(entityCol, (int) row2);
-            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
+            return gp.tileManager.getTile(tileNum1).isCollidable || gp.tileManager.getTile(tileNum2).isCollidable;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
