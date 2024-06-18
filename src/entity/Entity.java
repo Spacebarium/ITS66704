@@ -17,18 +17,20 @@ public abstract class Entity {
     }
     
     public GamePanel gp;
-    // In grid format
-    private int x, y;
-    private int speed;
+
+    private Type    entityType;
+    private int     x, y;
+    private int     speed;
+    private String  name;
+    private int     maxHealth;
+    private int     health;
+    private int     damage;
+    private boolean inCombat = false;
+    
     private int entityCounter = 0;
     private int entityImage;
     private String direction = "";
-    private String name;
-    private int maxHealth;
-    private int health;
-    private int damage;
-    private Type entityType;
-    private boolean inCombat = false;
+    
     private boolean topCol, botCol, leftCol, rightCol = false;
     private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
