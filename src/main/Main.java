@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.*;
 
-public class Main{
+public class Main {
 
     public static void main(String[] args) {
         JFrame window = new JFrame();
@@ -18,7 +18,7 @@ public class Main{
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        gp.setupEnemy();
+        gp.setupEntity();
         gp.startGameThread();
     }
 }

@@ -1,15 +1,16 @@
 package entity.enemy;
+
 import entity.NPC;
 import main.GamePanel;
 
-public class  WhiteNinja extends NPC {
+public class WhiteNinja extends NPC {
 
-    public WhiteNinja(GamePanel gp){
+    public WhiteNinja(GamePanel gp) {
         super(gp);
         setName("White Ninja");
         setEntityType(Type.ENEMY);
 
-        setDefault(390, 250, 5*2);
+        setDefault(390, 250, 5 * 2);
         getImage();
     }
 

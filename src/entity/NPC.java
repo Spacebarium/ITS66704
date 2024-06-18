@@ -12,6 +12,7 @@ public class NPC extends Entity {
         super(gp);
     }
 
+    @Override
     public void setAction() {
         actionLockCounter++;
         int i = -1;
@@ -29,29 +30,29 @@ public class NPC extends Entity {
         if (i > 0 && i <= 20) {
             setDirection("up");
             gp.colChecker.checkTop(this);
-            if (TopCol()) {
-                updateColumn(-getSpeed());
+            if (topCol()) {
+                updateY(-getSpeed());
             }
         }
         if (i > 80 && i <= 100) {
             setDirection("down");
             gp.colChecker.checkBot(this);
-            if (BotCol()) {
-                updateColumn(getSpeed());
+            if (botCol()) {
+                updateY(getSpeed());
             }
         }
         if (j > 0 && j <= 20) {
             setDirection("left");
             gp.colChecker.checkLeft(this);
-            if (LeftCol()) {
-                updateRow(-getSpeed());
+            if (leftCol()) {
+                updateX(-getSpeed());
             }
         }
         if (j > 80 && j <= 100){
             setDirection("right");
             gp.colChecker.checkRight(this);
-            if (RightCol()) {
-                updateRow(getSpeed());
+            if (rightCol()) {
+                updateX(getSpeed());
             }
         }
 

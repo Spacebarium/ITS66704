@@ -7,17 +7,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public abstract class Entity{
+public abstract class Entity {
 
-    public enum Type{
+    public enum Type {
         PLAYER,
         ENEMY,
         NPC,
         OBJECT
     }
+    
     public GamePanel gp;
-    //In grid format
-    private int row, column;
+    private Type entityType;
+    private int x, y;
     private int speed;
     private int entityCounterFrames = 12;
     private int entityCounter = entityCounterFrames;
@@ -27,54 +28,72 @@ public abstract class Entity{
     private int maxHealth;
     private int health;
     private int damage;
-    private Type entityType;
     private boolean inCombat = false;
     private boolean topCol, botCol, leftCol, rightCol = false;
     private Rectangle solidArea = new Rectangle(12, 23, 26, 27);
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
+=======
 
-    public Entity(GamePanel gp){
+    private Type    entityType;
+    private int     x, y;
+    private int     speed;
+    private String  name;
+    private int     maxHealth;
+    private int     health;
+    private int     damage;
+    private boolean inCombat = false;
+    
+    private int entityCounter = 0;
+    private int entityImage;
+    private String direction = "";
+    
+    private boolean topCol, botCol, leftCol, rightCol = false;
+    private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
+    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
+>>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
+
+    public Entity(GamePanel gp) {
         this.gp = gp;
     }
 
-    //Getters and setters
-    public int getRow(){
-        return row;
+    // Getters and setters
+    public int getX() {
+        return x;
     }
 
-    public void updateRow(int row){
-        this.row += row;
+    public void updateX(int x) {
+        this.x += x;
     }
 
-    public int getColumn(){
-        return column;
+    public int getY() {
+        return y;
     }
 
-    public void updateColumn(int column){
-        this.column += column;
+    public void updateY(int y) {
+        this.y += y;
     }
 
-    public int getSpeed(){
+    public int getSpeed() {
         return speed;
     }
 
-    public void updateSpeed(int speed){
+    public void updateSpeed(int speed) {
         this.speed = speed;
     }
 
-    public String getDirection(){
+    public String getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction){
+    public void setDirection(String direction) {
         this.direction = direction;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -107,18 +126,19 @@ public abstract class Entity{
         this.damage = damage;
     }
 
-    public Type getEntityType(){
+    public Type getEntityType() {
         return entityType;
     }
 
-    public final void setEntityType(Type entityType){
+    public final void setEntityType(Type entityType) {
         this.entityType = entityType;
     }
+
     public Rectangle getSolidArea() {
-        return solidArea;
+        return hitbox;
     }
 
-    public boolean TopCol() {
+    public boolean topCol() {
         return !topCol;
     }
 
@@ -126,7 +146,7 @@ public abstract class Entity{
         this.topCol = topCol;
     }
 
-    public boolean BotCol() {
+    public boolean botCol() {
         return !botCol;
     }
 
@@ -134,7 +154,7 @@ public abstract class Entity{
         this.botCol = botCol;
     }
 
-    public boolean LeftCol() {
+    public boolean leftCol() {
         return !leftCol;
     }
 
@@ -142,7 +162,7 @@ public abstract class Entity{
         this.leftCol = leftCol;
     }
 
-    public boolean RightCol() {
+    public boolean rightCol() {
         return !rightCol;
     }
 
@@ -153,7 +173,6 @@ public abstract class Entity{
     public void setLeft1(BufferedImage left1) {
         this.left1 = left1;
     }
-
 
     public void setLeft2(BufferedImage left2) {
         this.left2 = left2;
@@ -189,12 +208,16 @@ public abstract class Entity{
 
     //Methods
     //Import images
+=======
+    // Methods
+    // Import images
+>>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
     public BufferedImage imageSetup(String folderName, String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream( folderName + "/" + imageName + ".png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
             image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
@@ -203,31 +226,37 @@ public abstract class Entity{
         return image;
     }
 
-    public void setDefault(int row, int column, int speed){
-        this.row = row;
-        this.column = column;
+    public void setDefault(int row, int column, int speed) {
+        this.x = row;
+        this.y = column;
         this.speed = speed;
     }
 
-    public void setAction(){
+    public void setAction() {
 
     }
 
     public void setEntityImage(){
         if (entityCounter == entityCounterFrames){
+=======
+    public void setEntityImage() {
+        entityCounter++;
+
+        if (entityCounter > 12) {
+>>>>>>> 34f01f45b103c62c6c17a07b3441b053082277a5
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }
         entityCounter++;
     }
 
-    public void update(){
+    public void update() {
         setAction();
         setEntityImage();
     }
 
     //draw in GP
-    public void draw(Graphics2D g2D){
+    public void draw(Graphics2D g2D) {
         if (entityImage == 1) {
             image = switch (direction) {
                 case "up" -> up1;
@@ -236,19 +265,17 @@ public abstract class Entity{
                 case "right" -> right1;
                 default -> idle;
             };
-        }
-        else if (entityImage == 2) {
+        } else if (entityImage == 2) {
             image = switch (direction) {
                 case "up" -> up2;
                 case "down" -> down2;
                 case "left" -> left2;
                 case "right" -> right2;
-                default -> idle;
-            };
+	    }
         }else {
             image = idle;
         }
 
-        g2D.drawImage(image, row, column,null);
+        g2D.drawImage(image, x, y, null);
     }
 }
