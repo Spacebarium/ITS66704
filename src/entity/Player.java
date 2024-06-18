@@ -1,14 +1,21 @@
 package entity;
 
-import main.KeyHandler;
 import main.GamePanel;
+import main.KeyHandler;
+import main.MouseHandler;
+import weapon.*;
 
-public class Player extends Entity{
-    KeyHandler keyH;
+public class Player extends Entity {
+    KeyHandler keyHandler;
+    MouseHandler mouseHandler;
+    private Weapon equip1, equip2;
 
-    public Player(GamePanel gp, KeyHandler keyH){
+    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(gp);
-        this.keyH = keyH;
+        this.mouseHandler = mouseHandler;
+        this.keyHandler = keyHandler;
+        this.equip1 = new Sword();
+        this.equip2 = null;
 
         setName("Player");
         setEntityType(Type.PLAYER);
@@ -27,35 +34,44 @@ public class Player extends Entity{
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
     }
 
-        public void update() {
-            if (keyH.upPressed) {
-                setDirection("up");
-                gp.colChecker.checkTop(this);
-                if (TopCol()) {
-                    updateColumn(-getSpeed());
-                }
+    @Override
+    public void update() {
+        if (keyHandler.upPressed) {
+            setDirection("up");
+            gp.colChecker.checkTop(this);
+            if (topCol()) {
+                updateY(-getSpeed());
             }
-            if (keyH.downPressed) {
-                setDirection("down");
-                gp.colChecker.checkBot(this);
-                if (BotCol()) {
-                    updateColumn(getSpeed());
-                }
-            }
-            if (keyH.rightPressed) {
-                setDirection("right");
-                gp.colChecker.checkRight(this);
-                if (RightCol()) {
-                    updateRow(getSpeed());
-                }
-            }
-            if (keyH.leftPressed) {
-                gp.colChecker.checkLeft(this);
-                setDirection("left");
-                if (LeftCol()) {
-                    updateRow(-getSpeed());
-                }
-            }
-            setEntityImage();
         }
+        if (keyHandler.downPressed) {
+            setDirection("down");
+            gp.colChecker.checkBot(this);
+            if (botCol()) {
+                updateY(getSpeed());
+            }
+        }
+        if (keyHandler.rightPressed) {
+            setDirection("right");
+            gp.colChecker.checkRight(this);
+            if (rightCol()) {
+                updateX(getSpeed());
+            }
+        }
+        if (keyHandler.leftPressed) {
+            gp.colChecker.checkLeft(this);
+            setDirection("left");
+            if (leftCol()) {
+                updateX(-getSpeed());
+            }
+        }
+        setEntityImage();
+    }
+    
+    public void equipWeapon(Weapon weapon) {
+        this.equip1 = weapon;
+    }
+    
+    public String getWeaponName() {
+        return this.equip1.getName();
+    }
 }

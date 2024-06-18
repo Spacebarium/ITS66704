@@ -43,7 +43,7 @@ public class EntityManager {
         for (ArrayList<Entity> entityType : entities) {
             sortedList.addAll(entityType);
         }
-        sortedList.sort(Comparator.comparingInt(Entity::getColumn));
+        sortedList.sort(Comparator.comparingInt(Entity::getY));
         return sortedList;
     }
 }

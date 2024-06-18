@@ -11,19 +11,19 @@ public class Collision {
     }
 
     private double top(Entity entity) {
-        return entity.getColumn() + entity.getSolidArea().y;
+        return entity.getY() + entity.getSolidArea().y;
     }
 
     private double bot(Entity entity) {
-        return entity.getColumn() + entity.getSolidArea().y + entity.getSolidArea().height;
+        return entity.getY() + entity.getSolidArea().y + entity.getSolidArea().height;
     }
 
     private double left(Entity entity) {
-        return entity.getRow() + entity.getSolidArea().x;
+        return entity.getX() + entity.getSolidArea().x;
     }
 
     private double right(Entity entity) {
-        return entity.getRow() + entity.getSolidArea().x + entity.getSolidArea().width;
+        return entity.getX() + entity.getSolidArea().x + entity.getSolidArea().width;
     }
 
     private double topRow(Entity entity) {
@@ -44,9 +44,9 @@ public class Collision {
 
     private boolean isYCollision(double col1, double col2, int entityRow) {
         try {
-            int tileNum1 = gp.tileM.getMapTileNum((int) col1, entityRow);
-            int tileNum2 = gp.tileM.getMapTileNum((int) col2, entityRow);
-            return gp.tileM.getTile(tileNum1).collision || gp.tileM.getTile(tileNum2).collision;
+            int tileNum1 = gp.tileManager.getMapTileNum((int) col1, entityRow);
+            int tileNum2 = gp.tileManager.getMapTileNum((int) col2, entityRow);
+            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
@@ -55,9 +55,9 @@ public class Collision {
 
     private boolean isXCollision(double row1, double row2, int entityCol) {
         try {
-            int tileNum1 = gp.tileM.getMapTileNum(entityCol, (int) row1);
-            int tileNum2 = gp.tileM.getMapTileNum(entityCol, (int) row2);
-            return gp.tileM.getTile(tileNum1).collision || gp.tileM.getTile(tileNum2).collision;
+            int tileNum1 = gp.tileManager.getMapTileNum(entityCol, (int) row1);
+            int tileNum2 = gp.tileManager.getMapTileNum(entityCol, (int) row2);
+            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;

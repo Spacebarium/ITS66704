@@ -15,9 +15,10 @@ public abstract class Entity {
         NPC,
         OBJECT
     }
+    
     public GamePanel gp;
-    //In grid format
-    private int row, column;
+    // In grid format
+    private int x, y;
     private int speed;
     private int entityCounter = 0;
     private int entityImage;
@@ -29,7 +30,7 @@ public abstract class Entity {
     private Type entityType;
     private boolean inCombat = false;
     private boolean topCol, botCol, leftCol, rightCol = false;
-    private Rectangle solidArea = new Rectangle(12, 23, 26, 27);
+    private Rectangle hitbox = new Rectangle(12, 23, 26, 27);
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image;
 
     public Entity(GamePanel gp) {
@@ -37,20 +38,20 @@ public abstract class Entity {
     }
 
     // Getters and setters
-    public int getRow() {
-        return row;
+    public int getX() {
+        return x;
     }
 
-    public void updateRow(int row) {
-        this.row += row;
+    public void updateX(int x) {
+        this.x += x;
     }
 
-    public int getColumn() {
-        return column;
+    public int getY() {
+        return y;
     }
 
-    public void updateColumn(int column) {
-        this.column += column;
+    public void updateY(int y) {
+        this.y += y;
     }
 
     public int getSpeed() {
@@ -115,10 +116,10 @@ public abstract class Entity {
     }
 
     public Rectangle getSolidArea() {
-        return solidArea;
+        return hitbox;
     }
 
-    public boolean TopCol() {
+    public boolean topCol() {
         return !topCol;
     }
 
@@ -126,7 +127,7 @@ public abstract class Entity {
         this.topCol = topCol;
     }
 
-    public boolean BotCol() {
+    public boolean botCol() {
         return !botCol;
     }
 
@@ -134,7 +135,7 @@ public abstract class Entity {
         this.botCol = botCol;
     }
 
-    public boolean LeftCol() {
+    public boolean leftCol() {
         return !leftCol;
     }
 
@@ -142,7 +143,7 @@ public abstract class Entity {
         this.leftCol = leftCol;
     }
 
-    public boolean RightCol() {
+    public boolean rightCol() {
         return !rightCol;
     }
 
@@ -199,8 +200,8 @@ public abstract class Entity {
     }
 
     public void setDefault(int row, int column, int speed) {
-        this.row = row;
-        this.column = column;
+        this.x = row;
+        this.y = column;
         this.speed = speed;
     }
 
@@ -252,6 +253,6 @@ public abstract class Entity {
             };
         }
 
-        g2D.drawImage(image, row, column, null);
+        g2D.drawImage(image, x, y, null);
     }
 }
