@@ -1,6 +1,6 @@
 package movement.type;
 
-import entity.Entity;
+import entity.type.Entity;
 
 public interface Movement {
     int[] getMovement(Entity entity);

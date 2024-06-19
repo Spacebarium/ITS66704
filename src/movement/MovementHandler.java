@@ -1,14 +1,13 @@
 package movement;
 
-import entity.Entity;
-import java.awt.Rectangle;
+import entity.type.Entity;
 import main.CollisionHandler;
 import movement.type.Movement;
 
 public class MovementHandler {
-    private Entity entity;
-    private CollisionHandler collisionHandler;
-    private Movement baseMovement;
+    private final Entity entity;
+    private final CollisionHandler collisionHandler;
+    private final Movement baseMovement;
 
     public MovementHandler(Entity entity, CollisionHandler collisionHandler, Movement movement) {
         this.entity = entity;
@@ -21,11 +20,11 @@ public class MovementHandler {
         int dx = movement[0];
         int dy = movement[1];
 
-        Rectangle newHitbox = new Rectangle(entity.getX() + dx, entity.getY() + dy, entity.getWidth(), entity.getHeight());
-
-        if (true) { // check collision
+        if (collisionHandler.canMove(entity, dx, dy)) { // check collision
             entity.setX(entity.getX() + dx);
             entity.setY(entity.getY() + dy);
+        } else {
+            System.out.println("cannot move");
         }
     }
 }

@@ -3,8 +3,8 @@ package tile;
 import main.GamePanel;
 import utility.UtilityTool;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,89 +13,81 @@ import java.io.InputStreamReader;
 public class TileManager {
 
     GamePanel gp;
-    Tile[] tiles;
-    int[][] mapTileData;
+    private Tile[][] tiles;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tiles = new Tile[2];
-        mapTileData = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
-        getTileImage();
-        loadMap("Test");
+        tiles = new Tile[gp.getMaxScreenRow()][gp.getMaxScreenCol()];
     }
 
-    public int getMapTileNum(int x, int y) {
-        return mapTileData[x][y];
+    public void setTile(int x, int y, TileType type) {
+        tiles[y][x] = new Tile(type);
     }
 
-    public Tile getTile(int num) {
-        return tiles[num];
+    public Tile getTile(int x, int y) {
+        return tiles[y][x];
     }
 
-    public void getTileImage() {
-        tileSetup(0, "grass", false);
-        tileSetup(1, "wall", true);
+    public int getWidth() {
+        return tiles[0].length;
     }
 
-    public void tileSetup(int i, String imageName, boolean isCollidable) {
-        UtilityTool util = new UtilityTool();
+    public int getHeight() {
+        return tiles.length;
+    }
 
-        try {
-            tiles[i] = new Tile();
-            tiles[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
-            tiles[i].isCollidable = isCollidable;
-        } catch (IOException e) {
-            e.printStackTrace();
+    private TileType tileTypeToEnum(int type) {
+        switch (type) {
+            case 0:
+                return TileType.EMPTY;
+            case 1:
+                return TileType.GRASS;
+            case 2:
+                return TileType.WALL;
+            default:
+                throw new IllegalArgumentException("Unknown tile type: " + type);
         }
     }
 
-    public void loadMap(String mapTxt) {
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapTxt + ".txt");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    public void loadMap(String mapName) throws IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        int y = 0;
 
-            int x = 0;
-            int y = 0;
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] ids = line.split(" ");
 
-            while ((x < gp.getMaxScreenCol()) && (y < gp.getMaxScreenRow())) {
-                String line = bufferedReader.readLine();
-                String[] numbers = line.split(" ");
-
-                while (x < gp.getMaxScreenCol()) {
-                    mapTileData[x][y] = Integer.parseInt(numbers[x]);
-                    x++;
-                }
-                if (x == gp.getMaxScreenCol()) {
-                    x = 0;
-                    y++;
-                }
+            for (int x = 0; x < ids.length; x++) {
+                int tileType = Integer.parseInt(ids[x]);
+                setTile(x, y, tileTypeToEnum(tileType));
             }
-            bufferedReader.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            y++;
         }
+
+        bufferedReader.close();
     }
 
     public void draw(Graphics2D g2) {
-        int tileX = 0;
-        int tileY = 0;
+        int tileSize = gp.getTileSize();
+        int mapWidth = this.getWidth();
+        int mapHeight = this.getHeight();
         int x = 0;
         int y = 0;
 
-        while ((tileX < gp.getMaxScreenCol()) && (tileY < gp.getMaxScreenRow())) {
-            int tileID = mapTileData[tileX][tileY];
+        while ((x < mapWidth) && (y < mapHeight)) {
+            Tile tile = this.getTile(x, y);
+            if (tile != null) {
+                BufferedImage image = tile.getImage();
+                    if (image != null) {
+                        g2.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize, null);
+                    }
+            }
+            x++;
 
-            g2.drawImage(tiles[tileID].image, x, y, gp.getTileSize(), gp.getTileSize(), null);
-            tileX++;
-
-            x += gp.getTileSize();
-
-            if (tileX == gp.getMaxScreenCol()) {
-                tileX = 0;
+            if (x == mapWidth) {
                 x = 0;
-                tileY++;
-                y += gp.getTileSize();
+                y++;
             }
         }
     }

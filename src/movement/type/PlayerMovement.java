@@ -1,6 +1,6 @@
 package movement.type;
 
-import entity.Entity;
+import entity.type.Entity;
 import main.KeyHandler;
 
 public class PlayerMovement implements Movement {

@@ -1,7 +1,7 @@
 package main;
 
+import entity.type.Player;
 import entity.*;
-import entity.enemy.*;
 import movement.*;
 import movement.type.*;
 import tile.TileManager;
@@ -30,8 +30,10 @@ public class GamePanel extends JPanel implements Runnable {
     private final MouseHandler mouseHandler;
     private final CollisionHandler collisionHandler;
     private final EntityManager entityManager;
-    private List<MovementHandler> movementHandlers;
+    private final List<MovementHandler> movementHandlers;
     final TileManager tileManager;
+    
+    final Player player;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -41,13 +43,13 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager = new TileManager(this);
         movementHandlers = new ArrayList<>();
 
-        Player player = new Player(this, keyHandler, mouseHandler);
+        player = new Player(this, keyHandler, mouseHandler);
         entityManager.addEntity(player);
         MovementHandler playerMovementHandler = new MovementHandler(player, collisionHandler, new PlayerMovement(keyHandler));
         movementHandlers.add(playerMovementHandler);
         
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.WHITE);
+        this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
@@ -107,10 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Tiles
         tileManager.draw(g2);
-
-        // Entities
         entityManager.draw(g2);
 
         if (keyHandler.isDebugMode()) {
@@ -127,8 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setFont(new Font("Arial", Font.BOLD, 14));
         g2.setColor(Color.WHITE);
         g2.drawString("FPS: " + FPS, 10, 20);
-//        g2.drawString("X: " + player.getX(), 10, 40);
-//        g2.drawString("Y: " + player.getY(), 10, 60);
-//        g2.drawString("equip1: " + player.getWeaponName(), 10, 80);
+        g2.drawString("X: " + player.getX(), 10, 40);
+        g2.drawString("Y: " + player.getY(), 10, 60);
     }
 }

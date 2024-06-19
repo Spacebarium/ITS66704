@@ -1,4 +1,4 @@
-package entity;
+package entity.type;
 
 import main.GamePanel;
 import main.KeyHandler;
@@ -14,15 +14,13 @@ public class Player extends Entity {
     private Weapon equippedWeapon;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
-        super(gp, 48, 48, 48, 48);
+        super(gp, EntityType.PLAYER, "Player", 48, 48, 48, 48);
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         this.weaponSlot1 = null;
         this.weaponSlot2 = null;
         this.equippedWeapon = null;
 
-        setName("Player");
-        setEntityType(Type.PLAYER);
         setSpeed(4);
         getImage();
     }
