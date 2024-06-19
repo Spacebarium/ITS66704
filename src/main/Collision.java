@@ -11,19 +11,19 @@ public class Collision {
     }
 
     private double top(Entity entity) {
-        return entity.getY() + entity.getHitBox().y;
+        return entity.getY() + entity.getHitbox().y;
     }
 
     private double bot(Entity entity) {
-        return entity.getY() + entity.getHitBox().y + entity.getHitBox().height;
+        return entity.getY() + entity.getHitbox().y + entity.getHitbox().height;
     }
 
     private double left(Entity entity) {
-        return entity.getX() + entity.getHitBox().x;
+        return entity.getX() + entity.getHitbox().x;
     }
 
     private double right(Entity entity) {
-        return entity.getX() + entity.getHitBox().x + entity.getHitBox().width;
+        return entity.getX() + entity.getHitbox().x + entity.getHitbox().width;
     }
 
     private double topRow(Entity entity) {
@@ -46,7 +46,7 @@ public class Collision {
         try {
             int tileNum1 = gp.tileManager.getMapTileNum((int) col1, entityRow);
             int tileNum2 = gp.tileManager.getMapTileNum((int) col2, entityRow);
-            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
+            return gp.tileManager.getTile(tileNum1).isCollidable || gp.tileManager.getTile(tileNum2).isCollidable;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
@@ -57,7 +57,7 @@ public class Collision {
         try {
             int tileNum1 = gp.tileManager.getMapTileNum(entityCol, (int) row1);
             int tileNum2 = gp.tileManager.getMapTileNum(entityCol, (int) row2);
-            return gp.tileManager.getTile(tileNum1).collision || gp.tileManager.getTile(tileNum2).collision;
+            return gp.tileManager.getTile(tileNum1).isCollidable || gp.tileManager.getTile(tileNum2).isCollidable;
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;

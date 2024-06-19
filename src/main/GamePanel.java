@@ -25,8 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
     int calcedFPS;
 
     private Thread gameThread;
-    private KeyHandler keyHandler = new KeyHandler();
-    private MouseHandler mouseHandler = new MouseHandler();
+    private final KeyHandler keyHandler = new KeyHandler();
+    private final MouseHandler mouseHandler = new MouseHandler();
     public Collision colChecker = new Collision(this);
     public EntityManager entityManager = new EntityManager(this);
 

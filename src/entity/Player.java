@@ -6,16 +6,18 @@ import main.MouseHandler;
 import weapon.*;
 
 public class Player extends Entity {
-    private KeyHandler keyHandler;
-    private MouseHandler mouseHandler;
-    private Weapon equip1, equip2;
+
+    private final KeyHandler keyHandler;
+    private final MouseHandler mouseHandler;
+    private Weapon weaponSlot1, weaponSlot2, equippedWeapon;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
-        super(gp);
-        this.mouseHandler = mouseHandler;
+        super(gp, 12, 23, 26, 27);
         this.keyHandler = keyHandler;
-        this.equip1 = new Sword();
-        this.equip2 = null;
+        this.mouseHandler = mouseHandler;
+        this.weaponSlot1 = null;
+        this.weaponSlot2 = null;
+        this.equippedWeapon = null;
 
         setName("Player");
         setEntityType(Type.PLAYER);
@@ -74,10 +76,10 @@ public class Player extends Entity {
     }
     
     public void equipWeapon(Weapon weapon) {
-        this.equip1 = weapon;
+        this.weaponSlot1 = weapon;
     }
     
     public String getWeaponName() {
-        return this.equip1.getName();
+        return this.equippedWeapon.getName();
     }
 }
