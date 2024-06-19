@@ -10,7 +10,7 @@ public class WhiteNinja extends NPC {
         setName("White Ninja");
         setEntityType(Type.ENEMY);
 
-        setDefault(390, 250, 5 * 2);
+        setDefault(390, 250, 8 * 2);
         getImage();
     }
 
