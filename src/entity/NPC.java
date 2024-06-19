@@ -29,28 +29,28 @@ public class NPC extends Entity {
 
         if (i > 0 && i <= 20) {
             setDirection("up");
-            gp.colChecker.checkTop(this);
+            getGp().colChecker.checkTop(this);
             if (topCol()) {
                 updateY(-getSpeed());
             }
         }
         if (i > 80 && i <= 100) {
             setDirection("down");
-            gp.colChecker.checkBot(this);
+            getGp().colChecker.checkBot(this);
             if (botCol()) {
                 updateY(getSpeed());
             }
         }
         if (j > 0 && j <= 20) {
             setDirection("left");
-            gp.colChecker.checkLeft(this);
+            getGp().colChecker.checkLeft(this);
             if (leftCol()) {
                 updateX(-getSpeed());
             }
         }
         if (j > 80 && j <= 100){
             setDirection("right");
-            gp.colChecker.checkRight(this);
+            getGp().colChecker.checkRight(this);
             if (rightCol()) {
                 updateX(getSpeed());
             }

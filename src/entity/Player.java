@@ -6,6 +6,7 @@ import main.MouseHandler;
 import weapon.*;
 
 public class Player extends Entity {
+
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private Weapon weaponSlot1, weaponSlot2, equippedWeapon;
@@ -38,36 +39,36 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (keyHandler.upPressed) {
+        if (keyHandler.getUpPressed()) {
             setDirection("up");
-            gp.colChecker.checkTop(this);
+            getGp().colChecker.checkTop(this);
             if (topCol()) {
                 updateY(-getSpeed());
             }
         }
-        if (keyHandler.downPressed) {
+        if (keyHandler.getDownPressed()) {
             setDirection("down");
-            gp.colChecker.checkBot(this);
+            getGp().colChecker.checkBot(this);
             if (botCol()) {
                 updateY(getSpeed());
             }
         }
-        if (keyHandler.rightPressed) {
+        if (keyHandler.getRightPressed()) {
             setDirection("right");
-            gp.colChecker.checkRight(this);
+            getGp().colChecker.checkRight(this);
             if (rightCol()) {
                 updateX(getSpeed());
             }
         }
-        if (keyHandler.leftPressed) {
-            gp.colChecker.checkLeft(this);
+        if (keyHandler.getLeftPressed()) {
+            getGp().colChecker.checkLeft(this);
             setDirection("left");
             if (leftCol()) {
                 updateX(-getSpeed());
             }
         }
 
-        if (!keyHandler.leftPressed && !keyHandler.rightPressed && !keyHandler.upPressed && !keyHandler.downPressed){
+        if (!keyHandler.getLeftPressed() && !keyHandler.getRightPressed() && !keyHandler.getUpPressed() && !keyHandler.getDownPressed()){
                 setDirection("idle");
                 return;
             }

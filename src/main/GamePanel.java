@@ -124,7 +124,7 @@ public class GamePanel extends JPanel implements Runnable {
             entity.draw(g2D);
         }
         
-        if (keyHandler.isDebugMode) {
+        if (keyHandler.getIsDebugMode()) {
             renderDebugInfo(g2D);
         }
 

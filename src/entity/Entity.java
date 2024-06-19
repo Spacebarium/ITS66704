@@ -15,7 +15,7 @@ public abstract class Entity {
         NPC,
         OBJECT
     }
-    
+  
     public GamePanel gp;
 
     private Type    entityType;
@@ -38,6 +38,7 @@ public abstract class Entity {
     
     private boolean topCol, botCol, leftCol, rightCol;
     private final Rectangle hitbox;
+
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
@@ -50,6 +51,9 @@ public abstract class Entity {
         this.hitbox = new Rectangle(x, y, width, height);
     }
 
+    public GamePanel getGp(){
+        return gp;
+    }
     // Getters and setters
     public int getX() {
         return x;

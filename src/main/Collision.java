@@ -4,7 +4,7 @@ import entity.Entity;
 
 public class Collision {
 
-    GamePanel gp;
+    private GamePanel gp;
 
     public Collision(GamePanel gp) {
         this.gp = gp;
