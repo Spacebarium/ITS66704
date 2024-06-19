@@ -16,7 +16,7 @@ public abstract class Entity {
         OBJECT
     }
     
-    public GamePanel gp;
+    private GamePanel gp;
     private Type entityType;
     private int x, y;
     private int speed;
@@ -37,6 +37,9 @@ public abstract class Entity {
         this.gp = gp;
     }
 
+    public GamePanel getGp(){
+        return gp;
+    }
     // Getters and setters
     public int getX() {
         return x;

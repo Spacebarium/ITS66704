@@ -5,7 +5,27 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, isDebugMode;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, isDebugMode;
+
+    public boolean getUpPressed(){
+        return upPressed;
+    }
+
+    public boolean getDownPressed(){
+        return downPressed;
+    }
+
+    public boolean getLeftPressed(){
+        return leftPressed;
+    }
+
+    public boolean getRightPressed(){
+        return rightPressed;
+    }
+
+    public boolean getIsDebugMode(){
+        return isDebugMode;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
