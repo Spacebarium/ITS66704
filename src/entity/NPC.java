@@ -19,7 +19,7 @@ public abstract class NPC extends Entity {
         int j = -1;
         Random random = new Random();
 
-       if (actionLockCounter == 30) {
+       if (actionLockCounter == 10) {
            for (int x = 0; x <= 5; x++){
                i = random.nextInt(100) + 1;
                j = random.nextInt(100) + 1;
@@ -33,28 +33,34 @@ public abstract class NPC extends Entity {
             if (topCol()) {
                 updateY(-getSpeed());
             }
-        }
-        if (i > 80 && i <= 100) {
-            setDirection("down");
-            getGp().colChecker.checkBot(this);
-            if (botCol()) {
+            else {
                 updateY(getSpeed());
             }
         }
+//        if (i > 80 && i <= 100) {
+//            setDirection("down");
+//            getGp().colChecker.checkBot(this);
+//            if (botCol()) {
+//                updateY(getSpeed());
+//            }
+//        }
         if (j > 0 && j <= 20) {
             setDirection("left");
             getGp().colChecker.checkLeft(this);
             if (leftCol()) {
                 updateX(-getSpeed());
             }
-        }
-        if (j > 80 && j <= 100){
-            setDirection("right");
-            getGp().colChecker.checkRight(this);
-            if (rightCol()) {
+            else {
                 updateX(getSpeed());
             }
         }
+//        if (j > 80 && j <= 100){
+//            setDirection("right");
+//            getGp().colChecker.checkRight(this);
+//            if (rightCol()) {
+//                updateX(getSpeed());
+//            }
+//        }
 
         if ((i > 20 && i <=80) && (j > 20 && j <=80)){
             setDirection("idle");
