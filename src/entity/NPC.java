@@ -4,7 +4,7 @@ import main.GamePanel;
 
 import java.util.Random;
 
-public class NPC extends Entity {
+public abstract class NPC extends Entity {
 
     private int actionLockCounter = 0;
 

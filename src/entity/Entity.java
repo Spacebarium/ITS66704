@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import utility.UtilityTool;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -51,9 +52,10 @@ public abstract class Entity {
         this.hitbox = new Rectangle(x, y, width, height);
     }
 
-    public GamePanel getGp(){
+    public GamePanel getGp() {
         return gp;
     }
+
     // Getters and setters
     public int getX() {
         return x;
@@ -200,7 +202,7 @@ public abstract class Entity {
         this.down2 = down2;
     }
 
-    public void setIdle(BufferedImage idle){
+    public void setIdle(BufferedImage idle) {
         this.idle = idle;
     }
 
@@ -230,13 +232,15 @@ public abstract class Entity {
 
     }
 
-    public void setEntityImage(){
+    public void setEntityImage() {
         if (entityCounter > 12) {
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }
         entityCounter++;
     }
+
+    public abstract void getImage();
 
     public void update() {
         setAction();
