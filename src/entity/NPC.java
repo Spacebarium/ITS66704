@@ -9,7 +9,7 @@ public class NPC extends Entity {
     private int actionLockCounter = 0;
 
     public NPC(GamePanel gp) {
-        super(gp);
+        super(gp, 12, 13, 26, 27);
     }
 
     @Override

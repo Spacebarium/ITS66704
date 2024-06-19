@@ -16,26 +16,40 @@ public abstract class Entity {
         NPC,
         OBJECT
     }
+  
+    public GamePanel gp;
 
-    private GamePanel gp;
-    private Type entityType;
-    private int x, y;
-    private int speed;
-    private int entityCounterFrames = 12;
-    private int entityCounter = entityCounterFrames;
-    private int entityImage;
-    private String direction = "idle";
-    private String name;
-    private int maxHealth;
-    private int health;
-    private int damage;
-    private boolean inCombat = false;
-    private boolean topCol, botCol, leftCol, rightCol = false;
-    private Rectangle hitBox = new Rectangle(12, 23, 26, 27);
+    private Type    entityType;
+    private String  name;
+    private int     x;
+    private int     y;
+    private int     width;
+    private int     height;
+    private int     health;
+    private int     maxHealth;
+    
+    private int     speed;
+    private int     damage;
+    private boolean inCombat;
+    
+    private int     entityCounterFrames = 12;
+    private int     entityCounter = entityCounterFrames;
+    private int     entityImage;
+    private String  direction = "idle";
+    
+    private boolean topCol, botCol, leftCol, rightCol;
+    private final Rectangle hitbox;
+    
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
-    public Entity(GamePanel gp) {
+
+    public Entity(GamePanel gp, int x, int y, int width, int height) {
         this.gp = gp;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.hitbox = new Rectangle(x, y, width, height);
     }
 
     public GamePanel getGp() {
@@ -120,8 +134,8 @@ public abstract class Entity {
         this.entityType = entityType;
     }
 
-    public Rectangle getHitBox() {
-        return hitBox;
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 
     public boolean topCol() {
@@ -208,9 +222,9 @@ public abstract class Entity {
         return image;
     }
 
-    public void setDefault(int row, int column, int speed) {
-        this.x = row;
-        this.y = column;
+    public void setDefault(int x, int y, int speed) {
+        this.x = x;
+        this.y = y;
         this.speed = speed;
     }
 
@@ -248,7 +262,7 @@ public abstract class Entity {
                 case "left" -> left2;
                 case "right" -> right2;
                 default -> idle;
-            };
+	        };
         } else {
             image = idle;
         }

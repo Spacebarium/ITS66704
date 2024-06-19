@@ -24,8 +24,8 @@ public class TileManager {
         loadMap("Test");
     }
 
-    public int getMapTileNum(int col, int row) {
-        return mapTileNum[col][row];
+    public int getMapTileNum(int x, int y) {
+        return mapTileNum[x][y];
     }
 
     public Tile getTile(int num) {
@@ -37,14 +37,14 @@ public class TileManager {
         tileSetup(1, "wall", true);
     }
 
-    public void tileSetup(int index, String imageName, boolean collision) {
+    public void tileSetup(int index, String imageName, boolean isCollidable) {
         UtilityTool uTool = new UtilityTool();
 
         try {
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize(), gp.getTileSize());
-            tile[index].collision = collision;
+            tile[index].isCollidable = isCollidable;
 
         } catch (IOException e) {
             e.printStackTrace();
