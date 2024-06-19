@@ -6,12 +6,15 @@ import main.MouseHandler;
 import weapon.*;
 
 public class Player extends Entity {
+
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
-    private Weapon weaponSlot1, weaponSlot2, equippedWeapon;
+    private Weapon weaponSlot1;
+    private Weapon weaponSlot2;
+    private Weapon equippedWeapon;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
-        super(gp, 12, 23, 26, 27);
+        super(gp, 48, 48, 48, 48);
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         this.weaponSlot1 = null;
@@ -20,7 +23,7 @@ public class Player extends Entity {
 
         setName("Player");
         setEntityType(Type.PLAYER);
-        setDefault(48, 48, 4);
+        setSpeed(4);
         getImage();
     }
 
@@ -36,49 +39,11 @@ public class Player extends Entity {
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
 
-    @Override
-    public void update() {
-        if (keyHandler.upPressed) {
-            setDirection("up");
-            gp.colChecker.checkTop(this);
-            if (topCol()) {
-                updateY(-getSpeed());
-            }
-        }
-        if (keyHandler.downPressed) {
-            setDirection("down");
-            gp.colChecker.checkBot(this);
-            if (botCol()) {
-                updateY(getSpeed());
-            }
-        }
-        if (keyHandler.rightPressed) {
-            setDirection("right");
-            gp.colChecker.checkRight(this);
-            if (rightCol()) {
-                updateX(getSpeed());
-            }
-        }
-        if (keyHandler.leftPressed) {
-            gp.colChecker.checkLeft(this);
-            setDirection("left");
-            if (leftCol()) {
-                updateX(-getSpeed());
-            }
-        }
-
-        if (!keyHandler.leftPressed && !keyHandler.rightPressed && !keyHandler.upPressed && !keyHandler.downPressed){
-                setDirection("idle");
-                return;
-            }
-        setEntityImage();
-    }
-    
     public void equipWeapon(Weapon weapon) {
         this.weaponSlot1 = weapon;
     }
-    
+
     public String getWeaponName() {
-        return this.equippedWeapon.getName();
+        return (this.equippedWeapon != null) ? this.equippedWeapon.getName() : null;
     }
 }

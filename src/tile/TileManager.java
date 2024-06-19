@@ -13,23 +13,23 @@ import java.io.InputStreamReader;
 public class TileManager {
 
     GamePanel gp;
-    Tile[] tile;
-    int[][] mapTileNum;
+    Tile[] tiles;
+    int[][] mapTileData;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[2];
-        mapTileNum = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
+        tiles = new Tile[2];
+        mapTileData = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
         getTileImage();
         loadMap("Test");
     }
 
     public int getMapTileNum(int x, int y) {
-        return mapTileNum[x][y];
+        return mapTileData[x][y];
     }
 
     public Tile getTile(int num) {
-        return tile[num];
+        return tiles[num];
     }
 
     public void getTileImage() {
@@ -37,15 +37,13 @@ public class TileManager {
         tileSetup(1, "wall", true);
     }
 
-    public void tileSetup(int index, String imageName, boolean isCollidable) {
-        UtilityTool uTool = new UtilityTool();
+    public void tileSetup(int i, String imageName, boolean isCollidable) {
+        UtilityTool util = new UtilityTool();
 
         try {
-            tile[index] = new Tile();
-            tile[index].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
-            tile[index].image = uTool.scaleImage(tile[index].image, gp.getTileSize(), gp.getTileSize());
-            tile[index].isCollidable = isCollidable;
-
+            tiles[i] = new Tile();
+            tiles[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + imageName + ".png"));
+            tiles[i].isCollidable = isCollidable;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,29 +51,26 @@ public class TileManager {
 
     public void loadMap(String mapTxt) {
         try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("map/" + mapTxt + ".txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapTxt + ".txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            int col = 0;
-            int row = 0;
+            int x = 0;
+            int y = 0;
 
-            while ((col < gp.getMaxScreenCol()) && row < (gp.getMaxScreenRow())) {
-                String line = br.readLine();
+            while ((x < gp.getMaxScreenCol()) && (y < gp.getMaxScreenRow())) {
+                String line = bufferedReader.readLine();
+                String[] numbers = line.split(" ");
 
-                while (col < gp.getMaxScreenCol()) {
-                    String[] numbers = line.split(" ");
-
-                    int num = Integer.parseInt(numbers[col]);
-
-                    mapTileNum[col][row] = num;
-                    col++;
+                while (x < gp.getMaxScreenCol()) {
+                    mapTileData[x][y] = Integer.parseInt(numbers[x]);
+                    x++;
                 }
-                if (col == gp.getMaxScreenCol()) {
-                    col = 0;
-                    row++;
+                if (x == gp.getMaxScreenCol()) {
+                    x = 0;
+                    y++;
                 }
             }
-            br.close();
+            bufferedReader.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,23 +78,23 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2) {
-        int col = 0;
-        int row = 0;
+        int tileX = 0;
+        int tileY = 0;
         int x = 0;
         int y = 0;
 
-        while ((col < gp.getMaxScreenCol()) && (row < gp.getMaxScreenRow())) {
-            int tileNum = mapTileNum[col][row];
+        while ((tileX < gp.getMaxScreenCol()) && (tileY < gp.getMaxScreenRow())) {
+            int tileID = mapTileData[tileX][tileY];
 
-            g2.drawImage(tile[tileNum].image, x, y, null);
-            col++;
+            g2.drawImage(tiles[tileID].image, x, y, gp.getTileSize(), gp.getTileSize(), null);
+            tileX++;
 
             x += gp.getTileSize();
 
-            if (col == gp.getMaxScreenCol()) {
-                col = 0;
+            if (tileX == gp.getMaxScreenCol()) {
+                tileX = 0;
                 x = 0;
-                row++;
+                tileY++;
                 y += gp.getTileSize();
             }
         }

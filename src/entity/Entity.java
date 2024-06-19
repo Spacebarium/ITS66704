@@ -18,26 +18,26 @@ public abstract class Entity {
     
     public GamePanel gp;
 
-    private Type    entityType;
-    private String  name;
-    private int     x;
-    private int     y;
-    private int     width;
-    private int     height;
-    private int     health;
-    private int     maxHealth;
+    private Type      type;
+    private String    name;
+    private int       x;
+    private int       y;
+    private int       width;
+    private int       height;
+    private Rectangle hitbox;
     
-    private int     speed;
-    private int     damage;
-    private boolean inCombat;
+    private int       health;
+    private int       maxHealth;
+    private int       speed;
+    private int       damage;
+    private boolean   inCombat;
     
-    private int     entityCounterFrames = 12;
-    private int     entityCounter = entityCounterFrames;
-    private int     entityImage;
-    private String  direction = "idle";
+    private int       entityCounterFrames = 12;
+    private int       entityCounter = entityCounterFrames;
+    private int       entityImage;
+    private String    direction = "idle";
     
     private boolean topCol, botCol, leftCol, rightCol;
-    private final Rectangle hitbox;
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
@@ -48,89 +48,41 @@ public abstract class Entity {
         this.width = width;
         this.height = height;
         this.hitbox = new Rectangle(x, y, width, height);
+        this.speed = 2;
     }
 
-    // Getters and setters
-    public int getX() {
-        return x;
-    }
+    public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
 
-    public void updateX(int x) {
-        this.x += x;
-    }
+    public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
+    
+    public int getWidth() { return width; }
+    
+    public int getHeight() { return height; }
 
-    public int getY() {
-        return y;
-    }
+    public int getSpeed() { return speed; }
+    public void setSpeed(int speed) { this.speed = speed; }
 
-    public void updateY(int y) {
-        this.y += y;
-    }
+    public String getDirection() { return direction; }
+    public void setDirection(String direction) { this.direction = direction; }
 
-    public int getSpeed() {
-        return speed;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void updateSpeed(int speed) {
-        this.speed = speed;
-    }
+    public int getMaxHealth() { return maxHealth; }
+    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
 
-    public String getDirection() {
-        return direction;
-    }
+    public int getHealth() { return health; }
+    public void setHealth(int health) { this.health = health; }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
+    public int getDamage() { return damage; }
+    public void setDamage(int damage) { this.damage = damage; }
 
-    public String getName() {
-        return name;
-    }
+    public Type getEntityType() { return type; }
+    public final void setEntityType(Type entityType) { this.type = entityType; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    // Setter for maxHealth
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
-    // Getter for health
-    public int getHealth() {
-        return health;
-    }
-
-    // Setter for health
-    public void updateHealth(int health) {
-        this.health = health;
-    }
-
-    // Getter for damage
-    public int getDamage() {
-        return damage;
-    }
-
-    // Setter for damage
-    public void updateDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public Type getEntityType() {
-        return entityType;
-    }
-
-    public final void setEntityType(Type entityType) {
-        this.entityType = entityType;
-    }
-
-    public Rectangle getHitbox() {
-        return hitbox;
-    }
+    public Rectangle getHitbox() { return hitbox; }
 
     public boolean topCol() {
         return !topCol;
@@ -163,52 +115,26 @@ public abstract class Entity {
     public void setRightCol(boolean rightCol) {
         this.rightCol = rightCol;
     }
+    
+    public void setLeft1(BufferedImage left1) { this.left1 = left1; }
+    public void setLeft2(BufferedImage left2) { this.left2 = left2; }
+    public void setRight1(BufferedImage right1) { this.right1 = right1; }
+    public void setRight2(BufferedImage right2) { this.right2 = right2; }
+    public void setUp1(BufferedImage up1) { this.up1 = up1; }
+    public void setUp2(BufferedImage up2) { this.up2 = up2; }
+    public void setDown1(BufferedImage down1) { this.down1 = down1; }
+    public void setDown2(BufferedImage down2) { this.down2 = down2; }
+    public void setIdle(BufferedImage idle){ this.idle = idle; }
 
-    public void setLeft1(BufferedImage left1) {
-        this.left1 = left1;
-    }
-
-    public void setLeft2(BufferedImage left2) {
-        this.left2 = left2;
-    }
-
-    public void setRight1(BufferedImage right1) {
-        this.right1 = right1;
-    }
-
-    public void setRight2(BufferedImage right2) {
-        this.right2 = right2;
-    }
-
-    public void setUp1(BufferedImage up1) {
-        this.up1 = up1;
-    }
-
-    public void setUp2(BufferedImage up2) {
-        this.up2 = up2;
-    }
-
-    public void setDown1(BufferedImage down1) {
-        this.down1 = down1;
-    }
-
-    public void setDown2(BufferedImage down2) {
-        this.down2 = down2;
-    }
-
-    public void setIdle(BufferedImage idle){
-        this.idle = idle;
-    }
-
-    //Methods
-    //Import images
+    // Methods
+    // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
-        UtilityTool uTool = new UtilityTool();
+        UtilityTool util = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,18 +142,12 @@ public abstract class Entity {
         return image;
     }
 
-    public void setDefault(int x, int y, int speed) {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-    }
-
     public void setAction() {
 
     }
 
     public void setEntityImage(){
-        if (entityCounter > 12) {
+        if (entityCounter > 12) { // change sprite every 12 frames
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }
@@ -235,12 +155,10 @@ public abstract class Entity {
     }
 
     public void update() {
-        setAction();
-        setEntityImage();
+        hitbox.setLocation(x, y);
     }
 
-    //draw in GP
-    public void draw(Graphics2D g2D) {
+    public void draw(Graphics2D g2) {
         if (entityImage == 1) {
             image = switch (direction) {
                 case "up" -> up1;
@@ -260,7 +178,10 @@ public abstract class Entity {
         } else {
             image = idle;
         }
+        setEntityImage();
 
-        g2D.drawImage(image, x, y, null);
+        g2.drawImage(image, x, y, null);
+        g2.setColor(Color.RED);
+        g2.drawRect(x, y, width, height);
     }
 }

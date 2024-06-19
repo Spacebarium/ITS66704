@@ -1,49 +1,53 @@
 package entity;
 
+import java.awt.Graphics2D;
 import main.GamePanel;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EntityManager {
 
     GamePanel gp;
-    List<ArrayList<Entity>> entities = new CopyOnWriteArrayList<>();
-    ArrayList<Entity> player = new ArrayList<>();
-    ArrayList<Entity> newEnemy = new ArrayList<>();
-    ArrayList<Entity> newNPC = new ArrayList<>();
-    ArrayList<Entity> newObject = new ArrayList<>();
-    ArrayList<Entity> entitySort = new ArrayList<>();
+    private List<Entity> entities;
 
-    public EntityManager(GamePanel gp){
+    public EntityManager(GamePanel gp) {
         this.gp = gp;
+        entities = new ArrayList<>();
+    }
 
-        for (Entity.Type entityType : Entity.Type.values()){
-            entities.add(new ArrayList<>());
+    public void addEntity(Entity entity) {
+        entities.add(entity);
+    }
+
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
+    }
+
+    public void update() {
+//        for (Object entityObject : entities) {
+//            switch (entityObject) {
+//                case Player player:
+//                    player.update();
+//                    break;
+//                default: System.out.println("No entity found!");
+//            }
+//        }
+
+        for (Entity entity : entities) {
+            entity.update();
         }
     }
 
-    public synchronized void setupEntity(Entity entity) {
-        switch (entity.getEntityType()) {
-            case PLAYER -> entities.get(Entity.Type.PLAYER.ordinal()).add(entity);
+    public void draw(Graphics2D g2) {
+//        for (Object entityObject : entities) {
+//            Entity entity = (Entity) entityObject;
+//            entity.draw(g2);
+//        }
 
-            case ENEMY -> entities.get(Entity.Type.ENEMY.ordinal()).add(entity);
-
-            case NPC -> entities.get(Entity.Type.NPC.ordinal()).add(entity);
-
-            case OBJECT -> entities.get(Entity.Type.OBJECT.ordinal()).add(entity);
-
+        for (Entity entity : entities) {
+            entity.draw(g2);
         }
     }
 
-    public List<Entity> sortedEntities() {
-        List<Entity> sortedList = new ArrayList<>();
-        for (ArrayList<Entity> entityType : entities) {
-            sortedList.addAll(entityType);
-        }
-        sortedList.sort(Comparator.comparingInt(Entity::getY));
-        return sortedList;
-    }
 }

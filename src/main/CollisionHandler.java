@@ -2,28 +2,28 @@ package main;
 
 import entity.Entity;
 
-public class Collision {
+public class CollisionHandler {
 
     GamePanel gp;
 
-    public Collision(GamePanel gp) {
+    public CollisionHandler(GamePanel gp) {
         this.gp = gp;
     }
 
     private double top(Entity entity) {
-        return entity.getY() + entity.getHitbox().y;
+        return entity.getHitbox().y;
     }
 
     private double bot(Entity entity) {
-        return entity.getY() + entity.getHitbox().y + entity.getHitbox().height;
+        return entity.getHitbox().y + entity.getHitbox().height;
     }
 
     private double left(Entity entity) {
-        return entity.getX() + entity.getHitbox().x;
+        return entity.getHitbox().x;
     }
 
     private double right(Entity entity) {
-        return entity.getX() + entity.getHitbox().x + entity.getHitbox().width;
+        return entity.getHitbox().x + entity.getHitbox().width;
     }
 
     private double topRow(Entity entity) {
