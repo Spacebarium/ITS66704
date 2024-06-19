@@ -137,6 +137,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2D.drawString("FPS: " + calcedFPS, 10, 20);
         g2D.drawString("X: " + player.getX(), 10, 40);
         g2D.drawString("Y: " + player.getY(), 10, 60);
-        g2D.drawString("equip1: " + player.getWeaponName(), 10, 80);
+        //g2D.drawString("equip1: " + player.getWeaponName(), 10, 80);
     }
 }

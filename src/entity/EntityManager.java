@@ -11,11 +11,6 @@ public class EntityManager {
 
     GamePanel gp;
     List<ArrayList<Entity>> entities = new CopyOnWriteArrayList<>();
-    ArrayList<Entity> player = new ArrayList<>();
-    ArrayList<Entity> newEnemy = new ArrayList<>();
-    ArrayList<Entity> newNPC = new ArrayList<>();
-    ArrayList<Entity> newObject = new ArrayList<>();
-    ArrayList<Entity> entitySort = new ArrayList<>();
 
     public EntityManager(GamePanel gp){
         this.gp = gp;
