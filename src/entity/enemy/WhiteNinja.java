@@ -3,6 +3,7 @@ package entity.enemy;
 import entity.NPC;
 import main.GamePanel;
 
+//enemy
 public class WhiteNinja extends NPC {
 
     public WhiteNinja(GamePanel gp) {
