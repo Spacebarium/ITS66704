@@ -7,16 +7,12 @@ import weapon.*;
 
 public class Player extends Entity {
 
-    private final KeyHandler keyHandler;
-    private final MouseHandler mouseHandler;
     private Weapon weaponSlot1;
     private Weapon weaponSlot2;
     private Weapon equippedWeapon;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
-        super(gp, EntityType.PLAYER, "Player", 48, 48, 48, 48);
-        this.keyHandler = keyHandler;
-        this.mouseHandler = mouseHandler;
+        super(gp, EntityType.PLAYER, "Player", 48, 48, 48, 48, 9, 12, 30, 36);
         this.weaponSlot1 = null;
         this.weaponSlot2 = null;
         this.equippedWeapon = null;

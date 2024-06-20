@@ -1,7 +1,6 @@
 package tile;
 
 import main.GamePanel;
-import utility.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -49,23 +48,27 @@ public class TileManager {
         }
     }
 
-    public void loadMap(String mapName) throws IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        int y = 0;
-
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] ids = line.split(" ");
-
-            for (int x = 0; x < ids.length; x++) {
-                int tileType = Integer.parseInt(ids[x]);
-                setTile(x, y, tileTypeToEnum(tileType));
+    public void loadMap(String mapName){
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            int y = 0;
+            
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] ids = line.split(" ");
+                
+                for (int x = 0; x < ids.length; x++) {
+                    int tileType = Integer.parseInt(ids[x]);
+                    setTile(x, y, tileTypeToEnum(tileType));
+                }
+                y++;
             }
-            y++;
-        }
 
-        bufferedReader.close();
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -74,11 +77,13 @@ public class TileManager {
         int mapHeight = this.getHeight();
         int x = 0;
         int y = 0;
-
-        while ((x < mapWidth) && (y < mapHeight)) {
-            Tile tile = this.getTile(x, y);
+        Tile tile;
+        BufferedImage image;
+        
+        while (x < mapWidth && y < mapHeight) {
+            tile = this.getTile(x, y);
             if (tile != null) {
-                BufferedImage image = tile.getImage();
+                image = tile.getImage();
                     if (image != null) {
                         g2.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize, null);
                     }

@@ -17,6 +17,10 @@ public abstract class Entity {
     private int y;
     private int width;
     private int height;
+    private int hitboxOffsetX;
+    private int hitboxOffsetY;
+    private int hitboxWidth;
+    private int hitboxHeight;
     private Rectangle hitbox;
 
     private int health;
@@ -30,11 +34,10 @@ public abstract class Entity {
     private int entityImage;
     private String direction = "idle";
     
-    private boolean topCol, botCol, leftCol, rightCol;
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
-    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height) {
+    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
         this.gp = gp;
         this.type = type;
         this.name = name;
@@ -42,7 +45,13 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.hitbox = new Rectangle(x, y, width, height);
+        
+        this.hitboxOffsetX = hitboxOffsetX;
+        this.hitboxOffsetY = hitboxOffsetY;
+        this.hitboxWidth = hitboxWidth;
+        this.hitboxHeight = hitboxHeight;
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        
         this.speed = 2;
     }
 
@@ -108,7 +117,7 @@ public abstract class Entity {
 
     }
 
-    public void setEntityImage(){
+    public void setEntityImage() {
         if (entityCounter > 12) { // change sprite every 12 frames
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
@@ -117,7 +126,7 @@ public abstract class Entity {
     }
 
     public void update() {
-        hitbox.setLocation(x, y);
+        hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 
     public void draw(Graphics2D g2) {
@@ -143,7 +152,14 @@ public abstract class Entity {
         setEntityImage();
 
         g2.drawImage(image, x, y, null);
+        
+        // image box
         g2.setColor(Color.RED);
         g2.drawRect(x, y, width, height);
+        
+        // hitbox
+        g2.setColor(new Color(0, 0, 255, 128));
+        g2.fillRect(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        
     }
 }

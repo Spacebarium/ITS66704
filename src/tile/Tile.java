@@ -6,9 +6,9 @@ import javax.imageio.ImageIO;
 
 public class Tile {
 
-    private TileType type;
-    private boolean walkable;
-    private BufferedImage image;
+    private final TileType type;
+    private final boolean walkable;
+    private final BufferedImage image;
 
     public Tile(TileType type) {
         this.type = type;
@@ -42,7 +42,6 @@ public class Tile {
 
     private BufferedImage loadImage(String name) {
         try {
-            System.out.println(name);
             return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
