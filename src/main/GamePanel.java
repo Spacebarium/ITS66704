@@ -157,7 +157,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (playerMovementHandler != null) {
             g2.drawString("DX: " + playerMovementHandler.getDx(), 10, 120);
             g2.drawString("DY: " + playerMovementHandler.getDy(), 10, 140);
-            g2.drawString("Speed: " + playerMovementHandler.getSpeed(), 10, 160);
+            g2.drawString("Speed: " + String.format("%.2f", playerMovementHandler.getSpeed()), 10, 160);
         }
     }
 }

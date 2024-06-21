@@ -25,8 +25,8 @@ public class CollisionHandler {
         
         int startTileX = newX / tileSize;
         int startTileY = newY / tileSize;
-        int endTileX = (newX + width) / tileSize;
-        int endTileY = (newY + height) / tileSize;
+        int endTileX = (newX + width - 1) / tileSize;
+        int endTileY = (newY + height - 1) / tileSize;
         
         for (int tileX = startTileX; tileX <= endTileX; tileX++) {
             for (int tileY = startTileY; tileY <= endTileY; tileY++) {
@@ -35,7 +35,6 @@ public class CollisionHandler {
                 }
             }
         }
-        
         
         return true; // no collision detected
     }

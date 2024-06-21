@@ -8,14 +8,14 @@ public class MovementHandler {
 
     private final Entity entity;
     private final CollisionHandler collisionHandler;
-    private final Movement baseMovement;
+    private final Movement movement;
     private int dx;
     private int dy;
 
     public MovementHandler(Entity entity, CollisionHandler collisionHandler, Movement movement) {
         this.entity = entity;
         this.collisionHandler = collisionHandler;
-        this.baseMovement = movement;
+        this.movement = movement;
     }
 
     public Entity getEntity() {
@@ -35,27 +35,38 @@ public class MovementHandler {
     }
 
     public void update() {
-        int[] movement = baseMovement.getMovement(entity);
-        dx = movement[0];
-        dy = movement[1];
+        int[] vector = movement.getMovement(entity);
+        dx = vector[0];
+        dy = vector[1];
+        int stepX = Integer.signum(dx);
+        int stepY = Integer.signum(dy);
         
-        if (collisionHandler.canMove(entity, dx, 0)) {
-            if (dy != 0 && collisionHandler.canMove(entity, 0, dy)) {
-                dx = (int) Math.round(dx / Math.sqrt(2));
-            }
-        } else {
-            dx = 0;
+        if (dx != 0 && dy != 0 && collisionHandler.canMove(entity, stepX, stepY)) {
+            dx = (int) Math.round(dx / Math.sqrt(2));
+            dy = (int) Math.round(dy / Math.sqrt(2));
         }
         
-        if (collisionHandler.canMove(entity, 0, dy)) {
-            if (dx != 0 && collisionHandler.canMove(entity, dx, 0)) {
-                dy = (int) Math.round(dy / Math.sqrt(2));
+        int stepsX = dx;
+        int stepsY = dy;
+
+        while (stepsX != 0) {
+            if (collisionHandler.canMove(entity, stepX, 0)) {
+                entity.setX(entity.getX() + stepX);
+                stepsX -= stepX;
+            } else {
+                dx = 0;
+                break;
             }
-        } else {
-            dy = 0;
         }
-        
-        entity.setX(entity.getX() + dx);
-        entity.setY(entity.getY() + dy);
+
+        while (stepsY != 0) {
+            if (collisionHandler.canMove(entity, 0, stepY)) {
+                entity.setY(entity.getY() + stepY);
+                stepsY -= stepY;
+            } else {
+                dy = 0;
+                break;
+            }
+        }
     }
 }

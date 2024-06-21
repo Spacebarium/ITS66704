@@ -60,10 +60,16 @@ public abstract class Entity {
     public String getName() { return name; }
 
     public int getX() { return x; }
-    public void setX(int x) { this.x = x; }
+    public void setX(int x) {
+        this.x = x;
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
 
     public int getY() { return y; }
-    public void setY(int y) { this.y = y; }
+    public void setY(int y) {
+        this.y = y;
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
     
     public int getWidth() { return width; }
     
@@ -126,7 +132,7 @@ public abstract class Entity {
     }
 
     public void update() {
-        hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+
     }
 
     public void draw(Graphics2D g2) {
