@@ -1,7 +1,7 @@
 package entity;
 
-import entity.type.Entity;
 import java.awt.Graphics2D;
+import entity.type.Entity;
 import main.GamePanel;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 public class EntityManager {
 
     GamePanel gp;
-    private List<Entity> entities;
+    private final List<Entity> entities;
 
     public EntityManager(GamePanel gp) {
         this.gp = gp;
@@ -26,6 +26,10 @@ public class EntityManager {
     public void removeEntity(Entity entity) {
         entities.remove(entity);
     }
+    
+    public List<Entity> getEntities() {
+        return entities;
+    }
 
     public void update() {
 //        for (Object entityObject : entities) {
@@ -37,9 +41,7 @@ public class EntityManager {
 //            }
 //        }
 
-        for (Entity entity : entities) {
-            entity.update();
-        }
+        for (Entity entity : entities) { entity.update(); }
     }
 
     public void draw(Graphics2D g2) {
@@ -50,9 +52,7 @@ public class EntityManager {
 //            entity.draw(g2);
 //        }
 
-        for (Entity entity : entities) {
-            entity.draw(g2);
-        }
+        for (Entity entity : entities) { entity.draw(g2); }
     }
 
 }

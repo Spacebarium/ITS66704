@@ -1,8 +1,8 @@
 package weapon;
 
-public class Sword extends Weapon {
+public class Gun extends Weapon {
 
-    public Sword(String name, int damage, int range, int attackRate) {
+    public Gun(String name, int damage, int range, int attackRate) {
         super(name, damage, range, attackRate);
     }
 
@@ -10,5 +10,5 @@ public class Sword extends Weapon {
     public void use() {
         System.out.printf("%s used\n", getName());
     }
-    
+
 }

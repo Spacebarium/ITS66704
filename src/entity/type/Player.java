@@ -1,5 +1,7 @@
 package entity.type;
 
+import java.util.ArrayList;
+import java.util.List;
 import main.GamePanel;
 import main.KeyHandler;
 import main.MouseHandler;
@@ -7,16 +9,20 @@ import weapon.*;
 
 public class Player extends Entity {
 
-    private Weapon weaponSlot1;
-    private Weapon weaponSlot2;
-    private Weapon equippedWeapon;
+    private final KeyHandler keyHandler;
+    private final MouseHandler mouseHandler;
+    private final List<Weapon> storedWeapons;
+    private int equippedWeaponIndex;
+    private static final int MAX_WEAPON_COUNT = 2;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler) {
         super(gp, EntityType.PLAYER, "Player", 48, 48, 48, 48, 9, 12, 30, 36);
-        this.weaponSlot1 = null;
-        this.weaponSlot2 = null;
-        this.equippedWeapon = null;
-
+        this.keyHandler = keyHandler;
+        this.mouseHandler = mouseHandler;
+        this.storedWeapons = new ArrayList<>();
+        this.storedWeapons.add(new Sword("Dull Blade", 2, 38, 500));
+        this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200));
+        this.equippedWeaponIndex = 0;
         setSpeed(4);
         getImage();
     }
@@ -32,12 +38,58 @@ public class Player extends Entity {
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
-
-    public void equipWeapon(Weapon weapon) {
-        this.weaponSlot1 = weapon;
+    
+    public int getEquippedWeaponIndex() {
+        return equippedWeaponIndex;
     }
 
-    public String getWeaponName() {
-        return (this.equippedWeapon != null) ? this.equippedWeapon.getName() : null;
+    public void removeWeaponFromSlot(int slot) {
+        if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
+            this.storedWeapons.set(slot, null);
+        }
+    }
+    
+    public void addWeaponToSlot(Weapon weapon, int slot) {
+        if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
+            this.storedWeapons.set(slot, weapon);
+        }
+    }
+    
+    public void switchEquippedWeapon(int slot) {
+        if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
+            this.equippedWeaponIndex = slot;
+        }
+    }
+    
+    public void useEquippedWeapon() {
+        Weapon weapon = this.storedWeapons.get(this.equippedWeaponIndex);
+        if (weapon != null) {
+            weapon.use();
+        }
+    }
+    
+    public Weapon getEquippedWeapon() {
+        return this.storedWeapons.get(this.equippedWeaponIndex);
+    }
+    
+    public Weapon getWeaponFromSlot(int slot) {
+        if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
+            return this.storedWeapons.get(slot);
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public void update() {
+        if (keyHandler.isOne()) {
+            switchEquippedWeapon(0);
+        }
+        if (keyHandler.isTwo()) {
+            switchEquippedWeapon(1);
+        }
+        if (mouseHandler.isLmb()) {
+            useEquippedWeapon();
+        }
     }
 }

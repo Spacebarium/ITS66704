@@ -1,36 +1,32 @@
 package main;
 
+import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-public class MouseHandler implements MouseListener {
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int code = e.getButton();
-
-        switch (code) {
-            case 1 -> System.out.println("left");
-            case 2 -> System.out.println("middle");
-            case 3 -> System.out.println("right");
-            default -> {}
-        }
-    }
+public class MouseHandler extends MouseInputAdapter {
+    
+    private boolean lmb, rmb, mmb;
+    public boolean isLmb() { return lmb; }
+    public boolean isRmb() { return rmb; }
+    public boolean isMmb() { return mmb; }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        switch (e.getButton()) {
+            case MouseEvent.BUTTON1 -> lmb = true;
+            case MouseEvent.BUTTON2 -> mmb = true;
+            case MouseEvent.BUTTON3 -> rmb = true;
+            default -> {}
+        }
     }
-
+    
     @Override
     public void mouseReleased(MouseEvent e) {
+        switch (e.getButton()) {
+            case MouseEvent.BUTTON1 -> lmb = false;
+            case MouseEvent.BUTTON2 -> mmb = false;
+            case MouseEvent.BUTTON3 -> rmb = false;
+            default -> {}
+        }
     }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
 }

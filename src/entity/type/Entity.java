@@ -3,7 +3,8 @@ package entity.type;
 import main.GamePanel;
 import utility.UtilityTool;
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -50,7 +51,7 @@ public abstract class Entity {
         this.hitboxOffsetY = hitboxOffsetY;
         this.hitboxWidth = hitboxWidth;
         this.hitboxHeight = hitboxHeight;
-        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        setHitbox();
         
         this.speed = 2;
     }
@@ -62,20 +63,22 @@ public abstract class Entity {
     public int getX() { return x; }
     public void setX(int x) {
         this.x = x;
-        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        setHitbox();
     }
 
     public int getY() { return y; }
     public void setY(int y) {
         this.y = y;
-        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        setHitbox();
     }
     
     public int getWidth() { return width; }
-    
     public int getHeight() { return height; }
 
     public Rectangle getHitbox() { return hitbox; }
+    private void setHitbox() {
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
 
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
@@ -158,14 +161,5 @@ public abstract class Entity {
         setEntityImage();
 
         g2.drawImage(image, x, y, null);
-        
-        // image box
-        g2.setColor(Color.RED);
-        g2.drawRect(x, y, width, height);
-        
-        // hitbox
-        g2.setColor(new Color(0, 0, 255, 128));
-        g2.fillRect(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
-        
     }
 }

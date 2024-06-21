@@ -6,7 +6,7 @@ import movement.*;
 import movement.type.*;
 import tile.TileManager;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     int updatesPerSecond = 60;
     int FPS = 0;
-    double updateTime;
-    double renderTime;
-    double updateDuration;
-    double renderDuration;
+    long updateTime;
+    long renderTime;
+    long updateDuration;
+    long renderDuration;
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
@@ -79,18 +79,18 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
         double drawInterval = 1_000_000_000 / updatesPerSecond;
         double delta = 0;
-        long   lastTime = System.nanoTime();
-        long   currentTime;
+        long   previous = System.nanoTime();
+        long   current;
         long   timer = 0;
         int    drawCount = 0; // FPS
         double cycleStart;
 
         // game loop
         while (gameThread != null) {
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += currentTime - lastTime;
-            lastTime = currentTime;
+            current = System.nanoTime();
+            delta += (current - previous) / drawInterval;
+            timer += current - previous;
+            previous = current;
             
             if (delta >= 1) {
                 cycleStart = System.nanoTime();
@@ -108,8 +108,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (timer >= 1_000_000_000) {
                 FPS = drawCount;
-                updateDurationPerSecond = updateDuration / 1_000_000;
-                renderDurationPerSecond = renderDuration / 1_000_000;
+                updateDurationPerSecond = (double) updateDuration / 1_000_000;
+                renderDurationPerSecond = (double) renderDuration / 1_000_000;
                 
                 drawCount = 0;
                 updateDuration = 0;
@@ -120,13 +120,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        for (MovementHandler handler : movementHandlers) {
-                handler.update();
-            }
-        
+        for (MovementHandler handler : movementHandlers) { handler.update(); }
         entityManager.update();
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -134,9 +132,7 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager.draw(g2);
         entityManager.draw(g2);
 
-//        if (keyHandler.isDebugMode()) {
-//            renderDebugInfo(g2);
-//        }
+//        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
         renderDebugInfo(g2);
 
         g2.dispose();
@@ -158,6 +154,21 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("DX: " + playerMovementHandler.getDx(), 10, 120);
             g2.drawString("DY: " + playerMovementHandler.getDy(), 10, 140);
             g2.drawString("Speed: " + String.format("%.2f", playerMovementHandler.getSpeed()), 10, 160);
+        }
+        
+        g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
+        g2.drawString("slot1: " + player.getWeaponFromSlot(1).getName(), 10, 220);
+        g2.drawString("equip slot: " + player.getEquippedWeaponIndex(), 10, 240);
+        
+        for (Entity entity : entityManager.getEntities()) {
+            // image box
+            g2.setColor(Color.RED);
+            g2.drawRect(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+            
+            // collision box
+            Rectangle hitbox = entity.getHitbox();
+            g2.setColor(new Color(0, 0, 255, 128));
+            g2.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         }
     }
 }

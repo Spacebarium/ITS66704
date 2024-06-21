@@ -1,16 +1,16 @@
 package weapon;
 
 public abstract class Weapon {
-    String name;
-    int    damage;
-    double range;
-    double cooldown;
+    private String name;
+    private int    damage;
+    private int    range;
+    private int    attackRate;
     
-    public Weapon(String name, int damage, double range, double cooldown) {
+    public Weapon(String name, int damage, int range, int attackRate) {
         this.name = name;
         this.damage = damage;
         this.range = range;
-        this.cooldown = cooldown;
+        this.attackRate = attackRate; // in milliseconds
     }
 
     public String getName() {
@@ -21,12 +21,12 @@ public abstract class Weapon {
         return damage;
     }
 
-    public double getRange() {
+    public int getRange() {
         return range;
     }
 
-    public double getCooldown() {
-        return cooldown;
+    public int getAttackRate() {
+        return attackRate;
     }
     
     public abstract void use();

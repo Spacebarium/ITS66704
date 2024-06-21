@@ -5,7 +5,7 @@ import main.KeyHandler;
 
 public class PlayerMovement implements Movement {
 
-    private KeyHandler keyHandler;
+    private final KeyHandler keyHandler;
 
     public PlayerMovement(KeyHandler keyHandler) {
         this.keyHandler = keyHandler;

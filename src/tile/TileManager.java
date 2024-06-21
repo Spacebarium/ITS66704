@@ -84,9 +84,9 @@ public class TileManager {
             tile = this.getTile(x, y);
             if (tile != null) {
                 image = tile.getImage();
-                    if (image != null) {
-                        g2.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize, null);
-                    }
+                if (image != null) {
+                    g2.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize, null);
+                }
             }
             x++;
 
