@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public abstract class Entity {
 
+    public Entity(GamePanel gp) {
+    }
+
     public enum Type {
         PLAYER,
         ENEMY,

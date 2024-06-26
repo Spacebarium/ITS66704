@@ -83,4 +83,6 @@ public class Collision {
         int rightCol = (int) ((right(entity) + entity.getSpeed()) / gp.getTileSize());
         entity.setRightCol(isXCollision(topRow(entity), botRow(entity), rightCol));
     }
+
+
 }
