@@ -31,7 +31,7 @@ public class EntityManager {
         return entities;
     }
 
-    public void update() {
+    public synchronized void update() {
 //        for (Object entityObject : entities) {
 //            switch (entityObject) {
 //                case Player player:

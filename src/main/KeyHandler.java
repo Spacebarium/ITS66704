@@ -10,7 +10,6 @@ public class KeyHandler extends KeyAdapter {
     public boolean isDown() { return down; }
     public boolean isLeft() { return left; }
     public boolean isRight() { return right; }
-    public boolean isDebugMode() { return debugMode; }
     public boolean isOne() { return one; }
     public boolean isTwo() { return two; }
 
