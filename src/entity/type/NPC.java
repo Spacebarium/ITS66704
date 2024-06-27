@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-package entity.type;
-=======
+
 //package entity.type;
->>>>>>> 724e511fdc8f90f84b4f817e4be172a4f13851b8
+
 //
 //import main.GamePanel;
 //
