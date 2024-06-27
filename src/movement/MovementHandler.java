@@ -53,6 +53,7 @@ public class MovementHandler {
             if (collisionHandler.canMove(entity, stepX, 0)) {
                 entity.setX(entity.getX() + stepX);
                 stepsX -= stepX;
+
             } else {
                 dx = 0;
                 break;

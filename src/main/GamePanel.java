@@ -159,6 +159,7 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
         g2.drawString("slot1: " + player.getWeaponFromSlot(1).getName(), 10, 220);
         g2.drawString("equip slot: " + player.getEquippedWeaponIndex(), 10, 240);
+        g2.drawString("direction: " + player.getDirection(), 10 , 260);
         
         for (Entity entity : entityManager.getEntities()) {
             // image box
