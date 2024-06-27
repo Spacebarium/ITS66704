@@ -1,5 +1,8 @@
+//package entity.type;
+
+
 //package entity;
-//
+
 //import main.GamePanel;
 //
 //import java.util.Random;
