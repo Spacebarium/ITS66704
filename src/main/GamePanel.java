@@ -2,6 +2,7 @@ package main;
 
 import entity.*;
 import entity.type.*;
+import entity.enemy.*;
 import movement.*;
 import movement.type.*;
 import tile.TileManager;
@@ -38,9 +39,11 @@ public class GamePanel extends JPanel implements Runnable {
     private final EntityManager entityManager;
     private final List<MovementHandler> movementHandlers;
     private final MovementHandler playerMovementHandler;
+    private final MovementHandler enemyMovementHandler;
     final TileManager tileManager;
     
     final Player player;
+    final WhiteNinja whiteNinja;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -55,7 +58,13 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager.addEntity(player);
         playerMovementHandler = new MovementHandler(player, collisionHandler, new PlayerMovement(keyHandler));
         movementHandlers.add(playerMovementHandler);
-        
+
+        //setup enemy
+        //White ninja
+        //enemyMovementHandler = new MovementHandler(whiteNinja)
+        whiteNinja = new WhiteNinja(this);
+        entityManager.addEntity(whiteNinja);
+
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
