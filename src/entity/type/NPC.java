@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package entity.type;
+=======
+//package entity.type;
+>>>>>>> 724e511fdc8f90f84b4f817e4be172a4f13851b8
 //
 //import main.GamePanel;
 //
@@ -9,7 +13,7 @@ package entity.type;
 //    private int actionLockCounter = 0;
 //
 //    public NPC(GamePanel gp) {
-//        super(gp, 200, 200, 8, 16, 32, 32);
+//        super(gp, EntityType.ENEMY,  8, 16, 32, 32);
 //    }
 //
 //    @Override

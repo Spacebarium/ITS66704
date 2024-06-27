@@ -32,6 +32,7 @@ public class EntityManager {
         return entities;
     }
 
+<<<<<<< HEAD
     public void update() {
         for (Object entityObject : entities) {
             switch (entityObject) {
@@ -41,6 +42,17 @@ public class EntityManager {
                 default: System.out.println("No entity found!");
             }
         }
+=======
+    public synchronized void update() {
+//        for (Object entityObject : entities) {
+//            switch (entityObject) {
+//                case Player player:
+//                    player.update();
+//                    break;
+//                default: System.out.println("No entity found!");
+//            }
+//        }
+>>>>>>> 724e511fdc8f90f84b4f817e4be172a4f13851b8
 
         for (Entity entity : entities) { entity.update(); }
     }
