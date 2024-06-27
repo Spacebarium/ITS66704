@@ -1,6 +1,7 @@
 package entity.type;
 
 import main.GamePanel;
+import utility.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -106,23 +107,14 @@ public abstract class Entity {
     public void setIdle(BufferedImage idle){ this.idle = idle; }
 
     // Methods
-    public BufferedImage scaleImage(BufferedImage originalImage, int width, int height) {
-
-        BufferedImage scaledImage = new BufferedImage(width, height, originalImage.getType());
-        Graphics2D g2 = scaledImage.createGraphics();
-        g2.drawImage(originalImage, 0, 0, width, height, null);
-        g2.dispose();
-
-        return scaledImage;
-    }
-
     // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
+        UtilityTool util = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
         }

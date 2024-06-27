@@ -1,7 +1,8 @@
-
 //package entity.type;
 
-//
+
+//package entity;
+
 //import main.GamePanel;
 //
 //import java.util.Random;
@@ -11,7 +12,7 @@
 //    private int actionLockCounter = 0;
 //
 //    public NPC(GamePanel gp) {
-//        super(gp, EntityType.ENEMY,  8, 16, 32, 32);
+//        super(gp, 200, 200, 8, 16, 32, 32);
 //    }
 //
 //    @Override
