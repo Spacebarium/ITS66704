@@ -97,7 +97,12 @@ public abstract class Entity {
     public void setDirection(String direction) { this.direction = direction; }
     
     public MovementHandler getMovementHandler() { return movementHandler; }
-    
+
+    public boolean getCombatStatus(){ return inCombat; }
+    public void setCombatStatus(boolean inCombat) {
+        this.inCombat = inCombat;
+    }
+
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
     public void setLeft2(BufferedImage left2) { this.left2 = left2; }
     public void setRight1(BufferedImage right1) { this.right1 = right1; }

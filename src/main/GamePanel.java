@@ -2,6 +2,8 @@ package main;
 
 import entity.*;
 import entity.type.*;
+import entity.enemy.*;
+import movement.*;
 import movement.type.*;
 import tile.TileManager;
 
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     final TileManager tileManager;
     
     final Player player;
+    final WhiteNinja whiteNinja;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -47,7 +50,12 @@ public class GamePanel extends JPanel implements Runnable {
         // setup player
         player = new Player(this, keyHandler, mouseHandler, playerMovement);
         entityManager.addEntity(player);
-        
+
+        // setup enemy
+        // White ninja
+        whiteNinja = new WhiteNinja(this, new EnemyMovement());
+        entityManager.addEntity(whiteNinja);
+
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -83,14 +91,14 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (current - previous) / drawInterval;
             timer += current - previous;
             previous = current;
-            
+
             if (delta >= 1) {
                 cycleStart = System.nanoTime();
                 update();
                 updateTime = System.nanoTime();
                 repaint();
                 renderTime = System.nanoTime();
-                
+
                 updateDuration += updateTime - cycleStart;
                 renderDuration += renderTime - updateTime;
 
@@ -113,6 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         entityManager.update();
+        player.update();
     }
 
     @Override
