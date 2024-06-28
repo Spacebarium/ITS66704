@@ -7,10 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import main.CollisionHandler;
+import movement.MovementHandler;
+import movement.type.Movement;
 
 public abstract class Entity {
     
     public GamePanel gp;
+    private final MovementHandler movementHandler;
 
     private final EntityType type;
     private final String name;
@@ -20,8 +24,6 @@ public abstract class Entity {
     private int height;
     private int hitboxOffsetX;
     private int hitboxOffsetY;
-    private int hitboxWidth;
-    private int hitboxHeight;
     private Rectangle hitbox;
 
     private int health;
@@ -29,7 +31,7 @@ public abstract class Entity {
     private int speed;
     private int damage;
     private boolean inCombat;
-
+    
     private int entityCounterFrames = 12;
     private int entityCounter = entityCounterFrames;
     private int entityImage;
@@ -38,8 +40,9 @@ public abstract class Entity {
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
-    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
+    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
         this.gp = gp;
+        this.movementHandler = new MovementHandler(this, new CollisionHandler(gp), movement);
         this.type = type;
         this.name = name;
         this.x = x;
@@ -49,9 +52,7 @@ public abstract class Entity {
         
         this.hitboxOffsetX = hitboxOffsetX;
         this.hitboxOffsetY = hitboxOffsetY;
-        this.hitboxWidth = hitboxWidth;
-        this.hitboxHeight = hitboxHeight;
-        setHitbox();
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
         
         this.speed = 2;
     }
@@ -77,7 +78,7 @@ public abstract class Entity {
 
     public Rectangle getHitbox() { return hitbox; }
     private void setHitbox() {
-        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
 
     public int getSpeed() { return speed; }
@@ -94,7 +95,8 @@ public abstract class Entity {
 
     public String getDirection() { return direction; }
     public void setDirection(String direction) { this.direction = direction; }
-
+    
+    public MovementHandler getMovementHandler() { return movementHandler; }
     
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
     public void setLeft2(BufferedImage left2) { this.left2 = left2; }
@@ -122,10 +124,6 @@ public abstract class Entity {
         return image;
     }
 
-    public void setAction() {
-
-    }
-
     public void setEntityImage() {
         if (entityCounter > 12) { // change sprite every 12 frames
             entityImage = (entityImage == 1) ? 2 : 1;
@@ -135,8 +133,8 @@ public abstract class Entity {
     }
 
     public void update() {
-
-    }
+        getMovementHandler().update();
+    };
 
     public void draw(Graphics2D g2) {
         if (entityImage == 1) {

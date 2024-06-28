@@ -28,6 +28,7 @@ public class CollisionHandler {
         int endTileX = (newX + width - 1) / tileSize;
         int endTileY = (newY + height - 1) / tileSize;
         
+        // tile check
         for (int tileX = startTileX; tileX <= endTileX; tileX++) {
             for (int tileY = startTileY; tileY <= endTileY; tileY++) {
                 if (!gp.tileManager.getTile(tileX, tileY).isWalkable()) {
@@ -36,6 +37,9 @@ public class CollisionHandler {
             }
         }
         
+        // enemy check
+        
+
         return true; // no collision detected
     }
 }

@@ -2,14 +2,11 @@ package main;
 
 import entity.*;
 import entity.type.*;
-import movement.*;
 import movement.type.*;
 import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -34,10 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     private Thread gameThread;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
-    private final CollisionHandler collisionHandler;
     private final EntityManager entityManager;
-    private final List<MovementHandler> movementHandlers;
-    private final MovementHandler playerMovementHandler;
+    private final PlayerMovement playerMovement;
     final TileManager tileManager;
     
     final Player player;
@@ -45,16 +40,13 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
-        collisionHandler = new CollisionHandler(this);
         entityManager = new EntityManager(this);
         tileManager = new TileManager(this);
-        movementHandlers = new ArrayList<>();
-
+        playerMovement = new PlayerMovement(keyHandler);
+        
         // setup player
-        player = new Player(this, keyHandler, mouseHandler);
+        player = new Player(this, keyHandler, mouseHandler, playerMovement);
         entityManager.addEntity(player);
-        playerMovementHandler = new MovementHandler(player, collisionHandler, new PlayerMovement(keyHandler));
-        movementHandlers.add(playerMovementHandler);
         
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -120,7 +112,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        for (MovementHandler handler : movementHandlers) { handler.update(); }
         entityManager.update();
     }
 
@@ -150,10 +141,10 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString("X: " + player.getX(), 10, 80);
         g2.drawString("Y: " + player.getY(), 10, 100);
         
-        if (playerMovementHandler != null) {
-            g2.drawString("DX: " + playerMovementHandler.getDx(), 10, 120);
-            g2.drawString("DY: " + playerMovementHandler.getDy(), 10, 140);
-            g2.drawString("Speed: " + String.format("%.2f", playerMovementHandler.getSpeed()), 10, 160);
+        if (player != null) {
+            g2.drawString("DX: " + player.getMovementHandler().getDx(), 10, 120);
+            g2.drawString("DY: " + player.getMovementHandler().getDy(), 10, 140);
+            g2.drawString("Speed: " + String.format("%.2f", player.getMovementHandler().getSpeed()), 10, 160);
         }
         
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
