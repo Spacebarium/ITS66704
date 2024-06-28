@@ -61,9 +61,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         //setup enemy
         //White ninja
-        //enemyMovementHandler = new MovementHandler(whiteNinja)
         whiteNinja = new WhiteNinja(this);
+        enemyMovementHandler = new MovementHandler(whiteNinja, collisionHandler, new EnemyMovement());
         entityManager.addEntity(whiteNinja);
+        movementHandlers.add(enemyMovementHandler);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -160,9 +161,9 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString("Y: " + player.getY(), 10, 100);
         
         if (playerMovementHandler != null) {
-            g2.drawString("DX: " + playerMovementHandler.getDx(), 10, 120);
-            g2.drawString("DY: " + playerMovementHandler.getDy(), 10, 140);
-            g2.drawString("Speed: " + String.format("%.2f", playerMovementHandler.getSpeed()), 10, 160);
+            g2.drawString("DX: " + enemyMovementHandler.getDx(), 10, 120);
+            g2.drawString("DY: " + enemyMovementHandler.getDy(), 10, 140);
+            g2.drawString("Speed: " + String.format("%.2f", enemyMovementHandler.getSpeed()), 10, 160);
         }
         
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);

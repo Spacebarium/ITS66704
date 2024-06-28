@@ -49,6 +49,20 @@ public class MovementHandler {
         int stepsX = dx;
         int stepsY = dy;
 
+        if (stepsX > 0){
+            entity.setDirection("right");
+        } else if (stepsX < 0){
+            entity.setDirection("left");
+        }
+        if (stepsY > 0){
+            entity.setDirection("down");
+        } else if (stepsY < 0){
+            entity.setDirection("up");
+        }
+        if ((stepsX == 0) && (stepsY == 0)){
+            entity.setDirection("idle");
+        }
+
         while (stepsX != 0) {
             if (collisionHandler.canMove(entity, stepX, 0)) {
                 entity.setX(entity.getX() + stepX);
