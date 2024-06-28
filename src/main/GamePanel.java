@@ -101,14 +101,14 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (current - previous) / drawInterval;
             timer += current - previous;
             previous = current;
-            
+
             if (delta >= 1) {
                 cycleStart = System.nanoTime();
                 update();
                 updateTime = System.nanoTime();
                 repaint();
                 renderTime = System.nanoTime();
-                
+
                 updateDuration += updateTime - cycleStart;
                 renderDuration += renderTime - updateTime;
 
@@ -132,6 +132,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         for (MovementHandler handler : movementHandlers) { handler.update(); }
         entityManager.update();
+        player.update();
     }
 
     @Override
