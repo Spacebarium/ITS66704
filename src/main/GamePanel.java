@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final EntityManager entityManager;
     private final List<MovementHandler> movementHandlers;
     private final MovementHandler playerMovementHandler;
-    private final MovementHandler enemyMovementHandler;
+    //private final MovementHandler enemyMovementHandler;
     final TileManager tileManager;
     
     final Player player;
