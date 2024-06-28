@@ -9,7 +9,7 @@ public class WhiteNinja extends Entity {
     public WhiteNinja(GamePanel gp) {
         super(gp, EntityType.ENEMY, "White ninja", 232, 200, 48, 48, 9, 12, 30, 36);
 
-        setSpeed(10);
+        setSpeed(4);
         getImage();
     }
 
