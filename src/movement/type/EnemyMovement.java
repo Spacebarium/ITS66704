@@ -9,76 +9,64 @@ public class EnemyMovement implements Movement {
     int dx;
     int dy;
     int actionLockCounter = 0;
-    int randomVertical;
-    int randomHorizontal;
-    int directionMultiplier;
+    Random random = new Random();
+    int targetX, targetY;
+
+    public EnemyMovement() {
+        setNewTarget();
+    }
 
     @Override
     public int[] getMovement(Entity entity) {
-//        if see player:
-//            get player last seen coordinate
-//            do math
-//            move to coordinate based on speed
-//        
-//        if idle:
-//            pick random walkable spot within like 10 units range
-//            do math
-//            move to the spot
-//                    
-//        if agro on player:
-//            get player coordinate
-//            do math
-//            keep moving towards player or something
-
         dx = 0;
         dy = 0;
 
         if (!entity.getCombatStatus()) {
-
-            passive(entity);
+            if (actionLockCounter == 60) {
+                setNewTarget();
+                actionLockCounter = 0;
+            } else {
+                actionLockCounter++;
+            }
+            smoothMove(entity);
         } else {
             aggro();
         }
+
         return new int[]{dx, dy};
     }
 
-    public void passive(Entity entity) {
-        Random random = new Random();
+    private void setNewTarget() {
+        targetX = random.nextInt(100) - 50; // Example range, adjust as needed
+        targetY = random.nextInt(100) - 50; // Example range, adjust as needed
+    }
 
-        if (actionLockCounter == 10) {
-            randomVertical = random.nextInt(101);
-            randomHorizontal = random.nextInt(101);
-            directionMultiplier = random.nextInt(10) + 1;
-            actionLockCounter = 0;
+    private void smoothMove(Entity entity) {
+        float speed = entity.getSpeed();
 
-            dy += entity.getSpeed() * directionMultiplier;
-            dx += entity.getSpeed() * directionMultiplier;
-//            if (randomVertical > 5 && randomVertical <= 15) {
-//                dy -= entity.getSpeed()*directionMultiplier;
-//            }
-//            if (randomVertical > 30 && randomVertical <= 45){
-//                dy += entity.getSpeed()*directionMultiplier;
-//            }
-//            if (randomHorizontal > 5 && randomHorizontal <= 15){
-//                dx -= entity.getSpeed()*directionMultiplier;
-//            }
-//            if (randomHorizontal > 30 && randomHorizontal <= 45){
-//                dx += entity.getSpeed()*directionMultiplier;
-//            }
-
+        // Move towards the target position
+        if (Math.abs(targetX) > speed) {
+            dx += (targetX > 0) ? speed : -speed;
+            targetX -= (targetX > 0) ? speed : -speed;
         } else {
-            actionLockCounter++;
-            randomVertical = 0;
-            randomHorizontal = 0;
-            directionMultiplier = 0;
+            dx += targetX;
+            targetX = 0;
+        }
+
+        if (Math.abs(targetY) > speed) {
+            dy += (targetY > 0) ? speed : -speed;
+            targetY -= (targetY > 0) ? speed : -speed;
+        } else {
+            dy += targetY;
+            targetY = 0;
         }
     }
 
     public void aggro() {
-
+        // Implement aggro behavior
     }
 
     public void attack() {
-
+        // Implement attack behavior
     }
 }
