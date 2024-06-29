@@ -25,5 +25,4 @@ public class WhiteNinja extends Entity {
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
-
 }
