@@ -30,25 +30,19 @@ public class EnemyMovement implements Movement {
     }
     @Override
     public int[] getMovement(Entity entity) {
-        if (!boundInitialized){
-            setMovementBound(entity);
-            boundInitialized = true;
-        }
         dx = 0;
         dy = 0;
 
-        if (movementBound.contains(entity.getX(), entity.getY())){
-            if (!entity.getCombatStatus()) {
-                if (actionLockCounter == 60) {
-                    setLocation();
-                    actionLockCounter = 0;
-                } else {
-                    actionLockCounter++;
-                }
-                passive(entity);
+        if (!entity.getCombatStatus()) {
+            if (actionLockCounter == 60) {
+                setLocation();
+                actionLockCounter = 0;
             } else {
-                aggro();
+                actionLockCounter++;
             }
+            passive(entity);
+        } else {
+            aggro();
         }
 
         return new int[]{dx, dy};
@@ -70,22 +64,29 @@ public class EnemyMovement implements Movement {
 
     private void passive(Entity entity) {
         int speed = entity.getSpeed();
+
+        if (!boundInitialized){
+            setMovementBound(entity);
+            boundInitialized = true;
+        }
+
         if (Math.abs(locationX) > 0) {
-            if (locationX > 0) {
+            if (locationX > 0 && ((entity.getHitbox().x + entity.getHitbox().width) <= (movementBound.x + movementBound.width))) {
                 dx += speed;
                 locationX = Math.max(locationX - speed, 0);
             }
-            else {
+            else if (entity.getHitbox().x >= movementBound.x){
                 dx += -speed;
                 locationX = Math.min(locationX + speed, 0);
             }
         }
 
         if (Math.abs(locationY) > 0) {
-            if (locationY > 0) {
+            if (locationY > 0 && ((entity.getHitbox().y + entity.getHitbox().height) <= (movementBound.y + movementBound.height))) {
                 dy += speed;
                 locationY = Math.max(locationY - speed, 0);
-            } else {
+            }
+            else if (entity.getHitbox().y >= movementBound.y){
                 dy += -speed;
                 locationY = Math.min(locationY + speed, 0);
             }
