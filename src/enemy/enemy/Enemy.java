@@ -13,6 +13,8 @@ public class Enemy extends Entity {
     int coolDown = 2 * 60;
     public int attackRange = 16;
     int attackCoolDown = coolDown;
+    boolean canAttack = true;
+
     public Enemy(GamePanel gp, EnemyMovement enemyMovement, Player player) {
         super(gp, EntityType.ENEMY, "White ninja", 200, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
 
@@ -78,13 +80,20 @@ public class Enemy extends Entity {
         }
     }
 
-    public void attack(){
+    public void coolDownCounter(){
         if (attackCoolDown == coolDown){
-            player.setHealth(player.getHealth() - 1);
-            attackCoolDown = 0;
+           canAttack = true;
         }
         else{
             attackCoolDown++;
+            canAttack = false;
+        }
+    }
+
+    public void attack(){
+        if (canAttack){
+            player.setHealth(player.getHealth() - 1);
+            attackCoolDown = 0;
         }
     }
 }
