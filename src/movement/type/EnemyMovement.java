@@ -49,6 +49,16 @@ public class EnemyMovement implements Movement {
         return enemy.getHitbox().y >= movementBound.y;
     }
 
+    private boolean setActionLock(){
+        if (actionLockCounter == 60) {
+            actionLockCounter = 0;
+            return true;
+        } else {
+            actionLockCounter++;
+            return false;
+        }
+    }
+
     @Override
     public int[] getMovement(Entity entity) {
         Enemy enemy = (Enemy) entity;
@@ -70,17 +80,13 @@ public class EnemyMovement implements Movement {
                 move(enemy.getEntityCentreX() - initialX, enemy.getEntityCentreY() - initialY, enemy.getSpeed());
             }
             else {
-                if (actionLockCounter == 60) {
+                if (setActionLock())
                     setLocation();
-                    actionLockCounter = 0;
-                } else {
-                    actionLockCounter++;
-                }
-                passive(enemy);
+                else
+                    passive(enemy);
             }
         }
         else {
-            actionLockCounter = 0;
             aggro(enemy);
         }
 
@@ -108,7 +114,12 @@ public class EnemyMovement implements Movement {
     public void aggro(Enemy enemy) {
         distanceX = enemy.getXDistance();
         distanceY = enemy.getYDistance();
-        move(distanceX, distanceY, enemy.getSpeed());
+
+        if (enemy.getDistance() <= enemy.attackRange + enemy.getPlayerHitBox()){
+            enemy.attack();
+        }
+        else
+            move(distanceX, distanceY, enemy.getSpeed());
     }
 
     public void move(int distanceX, int distanceY, int speed){
@@ -172,6 +183,4 @@ public class EnemyMovement implements Movement {
             }
         }
     }
-
-
 }

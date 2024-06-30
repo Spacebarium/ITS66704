@@ -9,8 +9,10 @@ import movement.type.EnemyMovement;
 public class Enemy extends Entity {
 
     Player player;
-    final int aggroDistance = 100;
-
+    final int aggroDistance = 140;
+    int coolDown = 2 * 60;
+    public int attackRange = 16;
+    int attackCoolDown = coolDown;
     public Enemy(GamePanel gp, EnemyMovement enemyMovement, Player player) {
         super(gp, EntityType.ENEMY, "White ninja", 200, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
 
@@ -30,6 +32,10 @@ public class Enemy extends Entity {
         setRight1(imageSetup("whiteNinja", "whiteRight1"));
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
         setIdle(imageSetup("blackNinja", "blackDown1"));
+    }
+
+    public int getPlayerHitBox(){
+        return player.getHitbox().height;
     }
 
     public int getPlayerXCentre() {
@@ -69,6 +75,16 @@ public class Enemy extends Entity {
         }
         else {
             setCombatStatus(false);
+        }
+    }
+
+    public void attack(){
+        if (attackCoolDown == coolDown){
+            player.setHealth(player.getHealth() - 1);
+            attackCoolDown = 0;
+        }
+        else{
+            attackCoolDown++;
         }
     }
 }
