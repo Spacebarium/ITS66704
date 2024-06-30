@@ -115,6 +115,8 @@ public class EnemyMovement implements Movement {
         distanceX = enemy.getXDistance();
         distanceY = enemy.getYDistance();
 
+        enemy.coolDownCounter();
+
         if (enemy.getDistance() <= enemy.attackRange + enemy.getPlayerHitBox()){
             enemy.attack();
         }
