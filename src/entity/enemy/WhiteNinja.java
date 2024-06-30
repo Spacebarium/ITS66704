@@ -8,7 +8,7 @@ import movement.type.EnemyMovement;
 public class WhiteNinja extends Entity {
 
     public WhiteNinja(GamePanel gp, EnemyMovement enemyMovement) {
-        super(gp, EntityType.ENEMY, "White ninja", 232, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
+        super(gp, EntityType.ENEMY, "White ninja", 145, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
 
         setSpeed(4);
         getImage();
