@@ -1,4 +1,4 @@
-package entity.type;
+package enemy.type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Player extends Entity {
         this.storedWeapons.add(new Sword("Dull Blade", 2, 38, 500));
         this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200));
         this.equippedWeaponIndex = 0;
-        setSpeed(4);
+        setSpeed(6);
         getImage();
         
     }

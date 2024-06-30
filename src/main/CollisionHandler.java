@@ -1,6 +1,6 @@
 package main;
 
-import entity.type.Entity;
+import enemy.type.Entity;
 import java.awt.Rectangle;
 
 public class CollisionHandler {
@@ -22,7 +22,7 @@ public class CollisionHandler {
         
         int newX = x + dx;
         int newY = y + dy;
-        
+
         int startTileX = newX / tileSize;
         int startTileY = newY / tileSize;
         int endTileX = (newX + width - 1) / tileSize;

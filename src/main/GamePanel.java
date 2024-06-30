@@ -1,9 +1,8 @@
 package main;
 
-import entity.*;
-import entity.type.*;
-import entity.enemy.*;
-import movement.*;
+import enemy.*;
+import enemy.type.*;
+import enemy.enemy.*;
 import movement.type.*;
 import tile.TileManager;
 
@@ -38,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     final TileManager tileManager;
     
     final Player player;
-    final WhiteNinja whiteNinja;
+    final Enemy whiteNinja;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -53,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // setup enemy
         // White ninja
-        whiteNinja = new WhiteNinja(this, new EnemyMovement());
+        whiteNinja = new Enemy(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));

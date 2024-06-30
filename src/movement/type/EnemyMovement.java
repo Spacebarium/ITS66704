@@ -1,6 +1,7 @@
 package movement.type;
 
-import entity.type.Entity;
+import enemy.enemy.Enemy;
+import enemy.type.Entity;
 
 import java.awt.*;
 import java.util.Random;
@@ -9,40 +10,78 @@ public class EnemyMovement implements Movement {
 
     int dx;
     int dy;
-    int actionLockCounter = 0;
+
+    int initialX, initialY;
+
     Random random;
-    int locationX, locationY, multiplier = 1;
+    int actionLockCounter = 0;
+    int distanceX, distanceY, multiplier = 1;
     int idleCount;
 
     Rectangle movementBound;
-    int boundX, boundY;
-    int entityCentreX, entityCentreY;
-
     boolean boundInitialized;
+    boolean originInitialized;
 
-    private void setMovementBound(Entity entity){
-        boundX = entity.getWidth() + 200;
-        boundY = entity.getHeight() + 200;
-        entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
-        entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
-        movementBound = new Rectangle(entityCentreX - (int) Math.round(boundX / 2.0), entityCentreY - (int) Math.round(boundY / 2.0), boundX, boundY);
-
+    private void setOrigin(Enemy enemy){
+        initialX = enemy.getEntityCentreX();
+        initialY = enemy.getEntityCentreY();
     }
+
+    private void setMovementBound(Enemy enemy){
+        final int boundX = enemy.getWidth() + 200;
+        final int boundY = enemy.getHeight() + 200;
+        movementBound = new Rectangle(enemy.getEntityCentreX()- (int) Math.round(boundX / 2.0), enemy.getEntityCentreY() - (int) Math.round(boundY / 2.0), boundX, boundY);
+    }
+
+    private boolean rightXBoundCheck(Enemy enemy){
+        return (enemy.getHitbox().x + enemy.getHitbox().width) <= (movementBound.x + movementBound.width);
+    }
+
+    private boolean leftXBoundCheck(Enemy enemy){
+        return enemy.getHitbox().x >= movementBound.x;
+    }
+
+    private boolean downYBoundCheck(Enemy enemy){
+        return (enemy.getHitbox().y + enemy.getHitbox().height) <= (movementBound.y + movementBound.height);
+    }
+
+    private boolean upYBoundCheck(Enemy enemy){
+        return enemy.getHitbox().y >= movementBound.y;
+    }
+
     @Override
     public int[] getMovement(Entity entity) {
+        Enemy enemy = (Enemy) entity;
         dx = 0;
         dy = 0;
 
+        if (!originInitialized){
+            setOrigin(enemy);
+            originInitialized = true;
+        }
+
+        if (!boundInitialized){
+            setMovementBound(enemy);
+            boundInitialized = true;
+        }
+
         if (!entity.getCombatStatus()) {
-            if (actionLockCounter == 60) {
-                setLocation();
-                actionLockCounter = 0;
-            } else {
-                actionLockCounter++;
+            if (!movementBound.contains(enemy.getEntityCentreX(), enemy.getEntityCentreY())){
+                move(enemy.getEntityCentreX() - initialX, enemy.getEntityCentreY() - initialY, enemy.getSpeed());
             }
-            passive(entity);
-        } else {
-            aggro();
+            else {
+                if (actionLockCounter == 60) {
+                    setLocation();
+                    actionLockCounter = 0;
+                } else {
+                    actionLockCounter++;
+                }
+                passive(enemy);
+            }
+        }
+        else {
+            actionLockCounter = 0;
+            aggro(enemy);
         }
 
         return new int[]{dx, dy};
@@ -53,8 +92,8 @@ public class EnemyMovement implements Movement {
         multiplier = random.nextInt(7);
 
         if (idleCount < 5) {
-            locationX = (random.nextInt(51) - 25) * multiplier;
-            locationY = (random.nextInt(51) - 25) * multiplier;
+            distanceX = (random.nextInt(51) - 25) * multiplier;
+            distanceY = (random.nextInt(51) - 25) * multiplier;
             idleCount++;
         }
         else {
@@ -62,42 +101,77 @@ public class EnemyMovement implements Movement {
         }
     }
 
-    private void passive(Entity entity) {
-        int speed = entity.getSpeed();
+    private void passive(Enemy enemy) {
+        move(distanceX, distanceY, enemy.getSpeed(), enemy);
+    }
 
-        if (!boundInitialized){
-            setMovementBound(entity);
-            boundInitialized = true;
+    public void aggro(Enemy enemy) {
+        distanceX = enemy.getXDistance();
+        distanceY = enemy.getYDistance();
+        move(distanceX, distanceY, enemy.getSpeed());
+    }
+
+    public void move(int distanceX, int distanceY, int speed){
+        distanceX = -distanceX;
+        distanceY = -distanceY;
+        if (Math.abs(distanceX) > 0) {
+            if (distanceX > 0) {
+                dx += Math.min(speed, distanceX);
+                this.distanceX = Math.max(distanceX - speed, 0);
+            }
+            else if (distanceX < 0){
+                dx += Math.max(-speed, distanceX);
+                this.distanceX = Math.min(distanceX + speed, 0);
+            }
+            else{
+                this.distanceX = 0;
+            }
         }
 
-        if (Math.abs(locationX) > 0) {
-            if (locationX > 0 && ((entity.getHitbox().x + entity.getHitbox().width) <= (movementBound.x + movementBound.width))) {
-                dx += speed;
-                locationX = Math.max(locationX - speed, 0);
+        if (Math.abs(distanceY) > 0) {
+            if (distanceY > 0) {
+                dy += Math.min(speed, distanceY);
+                this.distanceY = Math.max(distanceY - speed, 0);
             }
-            else if (entity.getHitbox().x >= movementBound.x){
-                dx += -speed;
-                locationX = Math.min(locationX + speed, 0);
+            else if (distanceY < 0){
+                dy += Math.max(-speed, distanceY);
+                this.distanceY = Math.min(distanceY + speed, 0);
             }
-        }
-
-        if (Math.abs(locationY) > 0) {
-            if (locationY > 0 && ((entity.getHitbox().y + entity.getHitbox().height) <= (movementBound.y + movementBound.height))) {
-                dy += speed;
-                locationY = Math.max(locationY - speed, 0);
-            }
-            else if (entity.getHitbox().y >= movementBound.y){
-                dy += -speed;
-                locationY = Math.min(locationY + speed, 0);
+            else {
+                this.distanceY = 0;
             }
         }
     }
 
-    public void aggro() {
-        // Implement aggro behavior
+    public void move(int distanceX, int distanceY, int speed, Enemy enemy){
+        if (Math.abs(distanceX) > 0) {
+            if (distanceX > 0 && rightXBoundCheck(enemy)) {
+                dx += Math.min(speed, distanceX);
+                this.distanceX = Math.max(distanceX - speed, 0);
+            }
+            else if (distanceX < 0 && leftXBoundCheck(enemy)){
+                dx += Math.max(-speed, distanceX);
+                this.distanceX = Math.min(distanceX + speed, 0);
+            }
+            else{
+                this.distanceX = 0;
+            }
+        }
+
+        if (Math.abs(distanceY) > 0) {
+            if (distanceY > 0 && downYBoundCheck(enemy)) {
+                dy += Math.min(speed, distanceY);
+                this.distanceY = Math.max(distanceY - speed, 0);
+            }
+            else if (distanceY < 0 && upYBoundCheck(enemy)){
+                dy += Math.max(-speed, distanceY);
+                this.distanceY = Math.min(distanceY + speed, 0);
+            }
+            else{
+                this.distanceY = 0;
+            }
+        }
     }
 
-    public void attack() {
-        // Implement attack behavior
-    }
+
 }
