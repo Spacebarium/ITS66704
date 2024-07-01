@@ -34,7 +34,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final EntityManager entityManager;
-    private final PlayerMovement playerMovement;
     final TileManager tileManager;
     
     final Player player;
@@ -45,10 +44,9 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
         tileManager = new TileManager(this);
-        playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, playerMovement);
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
 
         // setup enemy
@@ -121,7 +119,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         entityManager.update();
-        player.update();
     }
 
     @Override
@@ -132,8 +129,8 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager.draw(g2);
         entityManager.draw(g2);
 
-//        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
-        renderDebugInfo(g2);
+        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
+//        renderDebugInfo(g2);
 
         g2.dispose();
     }
