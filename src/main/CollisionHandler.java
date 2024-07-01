@@ -1,6 +1,6 @@
 package main;
 
-import entity.type.Entity;
+import enemy.type.Entity;
 import java.awt.Rectangle;
 
 public class CollisionHandler {
@@ -14,15 +14,15 @@ public class CollisionHandler {
     }
     
     public boolean canMove(Entity entity, int dx, int dy) {
-        Rectangle hitbox = entity.getHitbox();
-        int x = hitbox.x;
-        int y = hitbox.y;
-        int width = hitbox.width;
-        int height = hitbox.height;
+        Rectangle hitBox = entity.getHitbox();
+        int x = hitBox.x;
+        int y = hitBox.y;
+        int width = hitBox.width;
+        int height = hitBox.height;
         
         int newX = x + dx;
         int newY = y + dy;
-        
+
         int startTileX = newX / tileSize;
         int startTileY = newY / tileSize;
         int endTileX = (newX + width - 1) / tileSize;

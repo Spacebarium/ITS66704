@@ -1,4 +1,4 @@
-package entity.type;
+package enemy.type;
 
 import main.GamePanel;
 import utility.UtilityTool;
@@ -31,7 +31,7 @@ public abstract class Entity {
     private int speed;
     private int damage;
     private boolean inCombat;
-    
+
     private int entityCounterFrames = 12;
     private int entityCounter = entityCounterFrames;
     private int entityImage;

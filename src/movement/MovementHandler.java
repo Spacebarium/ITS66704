@@ -1,6 +1,6 @@
 package movement;
 
-import entity.type.Entity;
+import enemy.type.Entity;
 import main.CollisionHandler;
 import movement.type.Movement;
 
@@ -40,12 +40,11 @@ public class MovementHandler {
         dy = vector[1];
         int stepX = Integer.signum(dx);
         int stepY = Integer.signum(dy);
-        
         if (dx != 0 && dy != 0 && collisionHandler.canMove(entity, stepX, stepY)) {
             dx = (int) Math.round(dx / Math.sqrt(2));
             dy = (int) Math.round(dy / Math.sqrt(2));
         }
-        
+
         int stepsX = dx;
         int stepsY = dy;
 

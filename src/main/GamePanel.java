@@ -1,9 +1,8 @@
 package main;
 
-import entity.*;
-import entity.type.*;
-import entity.enemy.*;
-import movement.*;
+import enemy.*;
+import enemy.type.*;
+import enemy.enemy.*;
 import movement.type.*;
 import tile.TileManager;
 
@@ -37,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     final TileManager tileManager;
     
     final Player player;
-    final WhiteNinja whiteNinja;
+    final Enemy whiteNinja;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -51,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // setup enemy
         // White ninja
-        whiteNinja = new WhiteNinja(this, new EnemyMovement());
+        whiteNinja = new Enemy(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -151,6 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("DX: " + player.getMovementHandler().getDx(), 10, 120);
             g2.drawString("DY: " + player.getMovementHandler().getDy(), 10, 140);
             g2.drawString("Speed: " + String.format("%.2f", player.getMovementHandler().getSpeed()), 10, 160);
+            g2.drawString("Health: " + player.getHealth(), 10, 180);
         }
         
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
@@ -166,6 +166,16 @@ public class GamePanel extends JPanel implements Runnable {
             Rectangle hitbox = entity.getHitbox();
             g2.setColor(new Color(0, 0, 255, 128));
             g2.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+
+            int boundX = entity.getWidth() + 200;
+            int boundY = entity.getHeight() + 200;
+            int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
+            int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
+            Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+            g2.setColor(new Color(128, 0, 255, 128));
+
+
+            g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
     }
 }

@@ -1,4 +1,4 @@
-package entity.type;
+package enemy.type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Player extends Entity {
     private static final int MAX_WEAPON_COUNT = 2;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 48, 48, 48, 48, 9, 12, 30, 36, playerMovement);
+        super(gp, EntityType.PLAYER, "Player", 400, 200, 48, 48, 9, 12, 30, 36, playerMovement);
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         
@@ -25,9 +25,11 @@ public class Player extends Entity {
         this.storedWeapons.add(new Sword("Dull Blade", 2, 38, 500));
         this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200));
         this.equippedWeaponIndex = 0;
-        setSpeed(4);
+        setSpeed(6);
         getImage();
-        
+
+        setMaxHealth(10);
+        setHealth(getMaxHealth());
     }
 
     public void getImage() {
