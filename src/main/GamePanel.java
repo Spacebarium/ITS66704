@@ -169,13 +169,15 @@ public class GamePanel extends JPanel implements Runnable {
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
-            int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
-            int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+            int entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
+            int entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
+            Rectangle movementBound = new Rectangle(entityCentreX - (int) Math.round(boundX / 2.0), entityCentreY - (int) Math.round(boundY / 2.0), boundX, boundY);
             g2.setColor(new Color(128, 0, 255, 128));
-
 
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
+        
+        int r = player.getWidth() / 2;
+        g2.fillOval(player.weaponP.x - r, player.weaponP.y - r, 2 * r, 2 * r);
     }
 }
