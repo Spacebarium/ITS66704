@@ -10,12 +10,13 @@ public class UI {
     Font arial_40, arial_80B;
 
     //BufferedImage keyimage;
-    public boolean messageOn = false;
-    public String message = "";
-    private Graphics2D g2;
-    public int commandNum = 0;
+    private boolean messageOn = false;
+    private String message = "";
 
-    public UI(GamePanel gp){
+    private int commandNum;
+    private final int maxCommandNum = 3;
+
+    public UI(GamePanel gp) {
 
         this.gp = gp;
 
@@ -24,34 +25,28 @@ public class UI {
 
     }
 
-    /**public void showMessage(String text){ //MIGHT DELETE THIS
+    /**
+     * public void showMessage(String text){ //MIGHT DELETE THIS
+     * <p>
+     * message = text;
+     * messageOn = true;
+     * }
+     **/
 
-     message = text;
-     messageOn = true;
-     }**/
+    public int getCommandNum() {
+        return commandNum;
+    }
 
-    public void draw(Graphics2D g2){
+    public void setCommandNum(int commandNum) {
+        this.commandNum = commandNum;
+    }
 
-        this.g2 = g2;
-
-        g2.setFont(arial_40);
-        g2.setColor(Color.white);
-        //g2.drawString("MAK KAU HIJAU", 50, 50);
-
-        //TITLE STATE
-        if (gp.getGameState() == gp.getTitleState()){
-            drawTitleScreen();
-        }
-
-        //PAUSE STATE
-        /**if (gp.gameState == gp.pauseState) {
-         drawPauseScreen();
-         }**/
-
+    public int getMaxCommandNum() {
+        return maxCommandNum;
     }
 
     //TITLE SCREEN
-    public void drawTitleScreen(){
+    public void drawTitleScreen(Graphics2D g2) {
 
         //SET BACKGROUND COLOR
         g2.setColor(new Color(0, 0, 0));
@@ -59,12 +54,12 @@ public class UI {
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 66F));
         String text = "Echoes Of The Forest";
-        int x = getXforCenteredText(text); //CENTERING THE TEXT
-        int y = gp.getTileSize()*3; //LOWERING THE TEXT
+        int x = getXforCenteredText(text, g2); //CENTERING THE TEXT
+        int y = gp.getTileSize() * 3; //LOWERING THE TEXT
 
         //SHADOW
         g2.setColor(Color.GRAY);
-        g2.drawString(text, x+5, y+5);
+        g2.drawString(text, x + 5, y + 5);
 
         //TEXTCOLOR
         g2.setColor(Color.WHITE);
@@ -79,57 +74,54 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 
         text = "NEW GAME";
-        x = getXforCenteredText(text);
-        y +=  gp.getTileSize()*5;
+        x = getXforCenteredText(text, g2);
+        y += gp.getTileSize() * 5;
         g2.drawString(text, x, y);
-        if(commandNum == 0){
-            g2.drawString(">", x-gp.getTileSize(), y);
+        if (commandNum == 0) {
+            g2.drawString(">", x - gp.getTileSize(), y);
         }
 
         text = "LOAD GAME";
-        x = getXforCenteredText(text);
-        y +=  gp.getTileSize();
+        x = getXforCenteredText(text, g2);
+        y += gp.getTileSize();
         g2.drawString(text, x, y);
-        if(commandNum == 1){
-            g2.drawString(">", x-gp.getTileSize(), y);
+        if (commandNum == 1) {
+            g2.drawString(">", x - gp.getTileSize(), y);
         }
 
         text = "SETTINGS";
-        x = getXforCenteredText(text);
-        y +=  gp.getTileSize();
+        x = getXforCenteredText(text, g2);
+        y += gp.getTileSize();
         g2.drawString(text, x, y);
-        if(commandNum == 2){
-            g2.drawString(">", x-gp.getTileSize(), y);
+        if (commandNum == 2) {
+            g2.drawString(">", x - gp.getTileSize(), y);
         }
 
         text = "QUIT";
-        x = getXforCenteredText(text);
-        y +=  gp.getTileSize();
+        x = getXforCenteredText(text, g2);
+        y += gp.getTileSize();
         g2.drawString(text, x, y);
-        if(commandNum == 3){
-            g2.drawString(">", x-gp.getTileSize(), y);
+        if (commandNum == 3) {
+            g2.drawString(">", x - gp.getTileSize(), y);
         }
-
-
     }
 
     //PAUSE SCREEN
-    /**public void drawPauseScreen() {
-     String text = "PAUSED";
+    public void drawPauseScreen(Graphics2D g2) {
+        String text = "PAUSED";
 
-     g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));
-     g2.setFont(arial_80B);
-     int x = getXforCenteredText(text);
-     int y = gp.screenHeight / 2;
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));
+        g2.setFont(arial_80B);
+        int x = getXforCenteredText(text, g2);
+        int y = gp.getScreenHeight() / 2;
 
-     g2.setColor(Color.WHITE);
-     g2.drawString(text, x, y);
-     }**/
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x, y);
+    }
 
-    public int getXforCenteredText(String text){
-
-        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        int x = gp.getScreenWidth()/2 - length/2;
+    public int getXforCenteredText(String text, Graphics2D g2) {
+        int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = gp.getScreenWidth() / 2 - length / 2;
         return x;
 
     }

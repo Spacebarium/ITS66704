@@ -37,7 +37,7 @@ public class KeyHandler extends KeyAdapter {
             case KeyEvent.VK_A, KeyEvent.VK_LEFT -> left = false;
             case KeyEvent.VK_S, KeyEvent.VK_DOWN -> down = false;
             case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> right = false;
-            
+            case KeyEvent.VK_ENTER -> enter = false;
             case KeyEvent.VK_1 -> one = false;
             case KeyEvent.VK_2 -> two = false;
             default -> {}
