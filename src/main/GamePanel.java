@@ -29,16 +29,24 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
+    final int pressNHoldCd = 10;
+    boolean canPressNHold;
+    int pressNHold = pressNHoldCd;
+
+    private int gameState;
+    private final int titleState = 0, playState = 1, pauseState = 2;
+
     private Thread gameThread;
+    private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final EntityManager entityManager;
     final TileManager tileManager;
-    
     final Player player;
     final Enemy whiteNinja;
 
     public GamePanel() {
+        ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
@@ -66,6 +74,30 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
+    public int getScreenWidth(){ return screenWidth;}
+    public int getScreenHeight(){ return screenHeight;}
+
+    public void pressNHold(){
+        if (pressNHold == pressNHoldCd) {
+            canPressNHold = true;
+        }
+        else{
+            pressNHold ++;
+            canPressNHold = false;
+        }
+    }
+    public void setGameState(){
+        pressNHold();
+        if (canPressNHold) {
+            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
+                ui.setCommandNum(ui.getCommandNum() - 1);
+                pressNHold = 0;
+            } else if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
+                ui.setCommandNum((ui.getCommandNum() + 1));
+                pressNHold = 0;
+            }
+        }
+    }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -117,7 +149,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        entityManager.update();
+        setGameState();
+        if (gameState == playState)
+            entityManager.update();
     }
 
     @Override
@@ -125,11 +159,30 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
-        entityManager.draw(g2);
+        //Title Screen
+        if (gameState == titleState){
+            ui.drawTitleScreen(g2);
 
-        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
-//        renderDebugInfo(g2);
+            if (keyHandler.isEnter()){
+                switch(ui.getCommandNum()){
+                    case 0 -> gameState = playState;
+                    case 1 -> gameState = pauseState;
+                    //case 2 -> gameState = settingState;
+                    case 3 -> System.exit(0);
+                    default -> gameState = titleState;
+                }
+            }
+        }
+        else if (gameState == playState){
+            //drawing elements and entities
+            tileManager.draw(g2);
+            entityManager.draw(g2);
+
+            //DEBUG
+            if (keyHandler.isDebugMode()){
+                renderDebugInfo(g2);
+            }
+        }
 
         g2.dispose();
     }
