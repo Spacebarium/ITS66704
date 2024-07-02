@@ -1,7 +1,6 @@
 package enemy.type;
 
 import main.GamePanel;
-import utility.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import main.CollisionHandler;
 import movement.MovementHandler;
 import movement.type.Movement;
+import static utility.UtilityTool.scaleImage;
 
 public abstract class Entity {
     
@@ -116,12 +116,11 @@ public abstract class Entity {
     // Methods
     // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
-        UtilityTool util = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
         }
