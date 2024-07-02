@@ -29,6 +29,10 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
+    final int pressNHoldCd = 10;
+    boolean canPressNHold;
+    int pressNHold = pressNHoldCd;
+
     private int gameState;
     private final int titleState = 0, playState = 1, pauseState = 2;
 
@@ -74,11 +78,27 @@ public class GamePanel extends JPanel implements Runnable {
     public int getMaxScreenRow() { return maxScreenRow; }
     public int getScreenWidth(){ return screenWidth;}
     public int getScreenHeight(){ return screenHeight;}
-    public int getGameState(){ return gameState;}
-    public int getTitleState(){return titleState;}
 
-    public void setupGame(){
-        gameState = titleState;
+    public void pressNHold(){
+        if (pressNHold == pressNHoldCd) {
+            canPressNHold = true;
+        }
+        else{
+            pressNHold ++;
+            canPressNHold = false;
+        }
+    }
+    public void setGameState(){
+        pressNHold();
+        if (canPressNHold) {
+            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
+                ui.setCommandNum(ui.getCommandNum() - 1);
+                pressNHold = 0;
+            } else if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
+                ui.setCommandNum((ui.getCommandNum() + 1));
+                pressNHold = 0;
+            }
+        }
     }
 
     public void startGameThread() {
@@ -131,6 +151,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        setGameState();
         if (gameState == playState)
             entityManager.update();
     }
@@ -140,14 +161,18 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        //UI
-        ui.draw(g2);
-
         //Title Screen
         if (gameState == titleState){
-            ui.drawTitleScreen();
+            ui.drawTitleScreen(g2);
+
             if (keyHandler.isEnter()){
-                gameState = playState;
+                switch(ui.getCommandNum()){
+                    case 0 -> gameState = playState;
+                    case 1 -> gameState = pauseState;
+                    //case 2 -> gameState = settingState;
+                    case 3 -> System.exit(0);
+                    default -> gameState = titleState;
+                }
             }
         }
         else if (gameState == playState){
@@ -156,7 +181,9 @@ public class GamePanel extends JPanel implements Runnable {
             entityManager.draw(g2);
 
             //DEBUG
-            renderDebugInfo(g2);
+            if (keyHandler.isDebugMode()){
+                renderDebugInfo(g2);
+            }
         }
 
 
