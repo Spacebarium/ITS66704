@@ -9,7 +9,7 @@ import movement.type.EnemyMovement;
 public class Enemy extends Entity {
 
     Player player;
-    final int aggroDistance = 140;
+    final int aggroDistance = 160;
     int coolDown = 2 * 60;
     public int attackRange = 16;
     int attackCoolDown = coolDown;

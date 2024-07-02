@@ -29,17 +29,21 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
+    private int gameState;
+    private final int titleState = 0, playState = 1, pauseState = 2;
+
     private Thread gameThread;
+    private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final EntityManager entityManager;
     private final PlayerMovement playerMovement;
     final TileManager tileManager;
-    
     final Player player;
     final Enemy whiteNinja;
 
     public GamePanel() {
+        ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
@@ -68,6 +72,14 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
+    public int getScreenWidth(){ return screenWidth;}
+    public int getScreenHeight(){ return screenHeight;}
+    public int getGameState(){ return gameState;}
+    public int getTitleState(){return titleState;}
+
+    public void setupGame(){
+        gameState = titleState;
+    }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -119,7 +131,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        entityManager.update();
+        if (gameState == playState)
+            entityManager.update();
     }
 
     @Override
@@ -127,11 +140,26 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
-        entityManager.draw(g2);
+        //UI
+        ui.draw(g2);
 
-//        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
-        renderDebugInfo(g2);
+        //Title Screen
+        if (gameState == titleState){
+            ui.drawTitleScreen();
+            if (keyHandler.isEnter()){
+                gameState = playState;
+            }
+        }
+        else if (gameState == playState){
+            //drawing elements and entities
+            tileManager.draw(g2);
+            entityManager.draw(g2);
+
+            //DEBUG
+            renderDebugInfo(g2);
+        }
+
+
 
         g2.dispose();
     }
