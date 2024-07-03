@@ -16,7 +16,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tiles = new Tile[gp.getMaxScreenRow()][gp.getMaxScreenCol()];
+        this.tiles = new Tile[gp.getMaxScreenRow()][gp.getMaxScreenCol()];
     }
 
     public void setTile(int x, int y, TileType type) {

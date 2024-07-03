@@ -2,7 +2,6 @@ package entity.type;
 
 import main.GamePanel;
 import movement.type.EnemyMovement;
-import movement.type.Movement;
 
 public class Enemy extends Entity {
 

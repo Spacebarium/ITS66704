@@ -1,7 +1,7 @@
 package main;
 
 import entity.*;
-import entity.enemy.BasicEnemy;
+import entity.enemy.*;
 import entity.type.*;
 import movement.type.*;
 import tile.TileManager;
@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int titleState = 0, playState = 1, pauseState = -1, settingState = 2;
 
     private Thread gameThread;
+
     private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
@@ -44,7 +45,9 @@ public class GamePanel extends JPanel implements Runnable {
     private final PlayerMovement playerMovement;
     final TileManager tileManager;
     final Player player;
-    final BasicEnemy whiteNinja;
+    final WhiteNinja whiteNinja;
+    final FinalBoss finalBoss;
+    final Boss boss;
 
     public GamePanel() {
         ui = new UI(this);
@@ -60,8 +63,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         // setup enemy
         // White ninja
-        whiteNinja = new BasicEnemy(this, new EnemyMovement(), player);
+        whiteNinja = new WhiteNinja(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
+        //Boss
+        boss = new Boss(this, new EnemyMovement(), player);
+        entityManager.addEntity(boss);
+        //Final boss
+        finalBoss = new FinalBoss(this, new EnemyMovement(), player);
+        entityManager.addEntity(finalBoss);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -71,6 +80,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseListener(mouseHandler);
         
         tileManager.loadMap("Test");
+    }
+
+    public int getScale(){
+        return scale;
     }
 
     public int getTileSize() { return tileSize; }
@@ -152,8 +165,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         setGameState();
-        if (gameState == playState)
+        if (gameState == playState) {
             entityManager.update();
+        }
     }
 
     @Override

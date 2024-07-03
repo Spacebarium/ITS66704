@@ -17,7 +17,7 @@ public class Player extends Entity {
     private static final int MAX_WEAPON_COUNT = 2;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 400, 200, 48, 48, 9, 12, 30, 36, playerMovement);
+        super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         
