@@ -38,4 +38,11 @@ public class CollisionHandler {
         
         return true; // no collision detected
     }
+
+    public void checkTile(Entity entity){
+        int entityLeftWorldX=entity.worldX + entity.solidArea.x;
+        int entityRightWorldX=entity.worldX + entity.solidArea.x + entity.solidArea.width;
+        int entityTopWorldY=entity.worldY + entity.solidArea.y;
+        int entityBotWorldY=entity.worldY + entity.solidArea.y + entity.solidArea.height;
+    }
 }

@@ -13,6 +13,7 @@ public class KeyHandler extends KeyAdapter {
     public boolean isDebugMode() { return debugMode; }
     public boolean isOne() { return one; }
     public boolean isTwo() { return two; }
+    public boolean isEnter() { return enter; }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -25,6 +26,7 @@ public class KeyHandler extends KeyAdapter {
             
             case KeyEvent.VK_1 -> one = true;
             case KeyEvent.VK_2 -> two = true;
+            case KeyEvent.VK_ENTER -> enter = true;
             default -> {}
         }
     }
@@ -39,6 +41,7 @@ public class KeyHandler extends KeyAdapter {
             
             case KeyEvent.VK_1 -> one = false;
             case KeyEvent.VK_2 -> two = false;
+            case KeyEvent.VK_ENTER -> enter = false;
             default -> {}
         }
 

@@ -1,5 +1,6 @@
 package entity.type;
 
+import entity.enemy.BossLJ;
 import main.GamePanel;
 import utility.UtilityTool;
 import javax.imageio.ImageIO;
@@ -7,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 public abstract class Entity {
     
@@ -34,6 +36,11 @@ public abstract class Entity {
     private int entityCounter = entityCounterFrames;
     private int entityImage;
     private String direction = "idle";
+    public int worldX, worldY;
+    public int spriteNum=1;
+    public boolean attacking=false;
+    public int actionLockCounter=0;
+    public boolean boss;
     
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
@@ -139,6 +146,7 @@ public abstract class Entity {
     }
 
     public void draw(Graphics2D g2) {
+
         if (entityImage == 1) {
             image = switch (direction) {
                 case "up" -> up1;
@@ -161,5 +169,153 @@ public abstract class Entity {
         setEntityImage();
 
         g2.drawImage(image, x, y, null);
+
+        //Lee Jon's boss code
+        int screenX=worldX- gp.getPlayer().worldX + gp.getPlayer().screenX;
+        int screenY=worldY- gp.getPlayer().worldY + gp.getPlayer().screenY;
+
+        if(worldX + gp.getTileSize() *5 > gp.getPlayer().worldX - gp.getPlayer().screenX &&
+                worldX - gp.getTileSize() < gp.getPlayer().worldX + gp.getPlayer().screenX &&
+                worldY + gp.getTileSize() *5 > gp.getPlayer().worldY - gp.getPlayer().screenY &&
+                worldY - gp.getTileSize() < gp.getPlayer().worldY + gp.getPlayer().screenY){
+
+            int tempScreenX=screenX;
+            int tempScreenY=screenY;
+
+            switch(direction){ //method to execute attack images
+                case "up":
+                    if(attacking==false){
+                        if(spriteNum==1){image=up1;}
+                        if(spriteNum==2){image=up2;}
+                    }
+                    if(attacking==true){
+                        tempScreenY=screenY-up1.getHeight();
+                        if(spriteNum==1){image=attackUp1;} //how should I implement the images?
+                        if(spriteNum==2){image=attackUp2;}
+                    }
+                    break;
+                case "down":
+                    if(attacking==false){
+                        if(spriteNum==1){image=down1;}
+                        if(spriteNum==2){image=down2;}
+                    }
+                    if(attacking==true){
+                        if(spriteNum==1){image=attackDown1;}
+                        if(spriteNum==2){image=attackDOwn2;}
+                    }
+                    break;
+                case "left":
+                    if(attacking==false){
+                        if(spriteNum==1){image=left1;}
+                        if(spriteNum==2){image=left2;}
+                    }
+                    if(attacking==true){
+                        tempScreenX=screenX-left1.getWidth();
+                        if(spriteNum==1){image=attackLeft1;}
+                        if(spriteNum==2){image=attackLeft2;}
+                    }
+                    break;
+                case "right":
+                    if(attacking==false){
+                        if(spriteNum==1){image=right1;}
+                        if(spriteNum==2){image=right2;}
+                    }
+                    if(attacking==true){
+                        //tempScreenY=screenY-left1.getWidth();
+                        if(spriteNum==1){image=attackRight1;}
+                        if(spriteNum==2){image=attackRight2;}
+                    }
+                    break;
+            }
+        }
+    }
+
+    public int getCenterX(){
+        int centerX=worldX + left1.getWidth()/2; //width of LJ image
+        return centerX;
+    }
+    public int getCenterY(){
+        int centerY=worldY + up1.getHeight()/2; //height of LJ image
+        return centerY;
+    }
+    public int getXdistance(Entity target){
+        int xDistance=Math.abs(getCenterX()-target.getCenterX());
+        return xDistance;
+    }
+    public int getYdistance(Entity target){
+        int yDistance=Math.abs(getCenterY()-target.getCenterY());
+        return yDistance;
+    }
+
+    public void checkAttackOrNot(int rate, int straight, int horizontal){
+
+        GamePanel gp=new GamePanel();
+        boolean targetInRange=false;
+        int xDia=getXdistance(gp.getPlayer()); 
+        int yDia=getYdistance(gp.getPlayer());
+
+        switch(direction){
+            case "up":
+                if(gp.getPlayer().getCenterY() < getCenterY() && yDia < straight && xDia < horizontal){
+                    targetInRange=true;
+                }
+                break;
+            case "down":
+                if(gp.getPlayer().getCenterY() > getCenterY() && yDia < straight && xDia < horizontal){
+                    targetInRange=true;
+                }
+                break;
+            case "left":
+                if(gp.getPlayer().getCenterX() < getCenterX() && yDia < straight && xDia < horizontal){
+                    targetInRange=true;
+                }
+                break;
+            case "right":
+                if(gp.getPlayer().getCenterX() > getCenterX() && yDia < straight && xDia < horizontal){
+                    targetInRange=true;
+                }
+                break;
+        }
+    }
+
+    public void getRandomDirection(int interval){ //dk if it's useful or not
+        actionLockCounter++; //where's the actionLockCounter located in the Entity?
+        if(actionLockCounter>interval){
+            Random random=new Random();
+            int i=random.nextInt(100)+1;
+            if(i<=25){direction="up";}
+            if(i>25 && i<50){direction="down";}
+            if(i>50 && i<75){direction="left";}
+            if(i>75 && i<=100){direction="right";}
+            actionLockCounter=0;
+        }
+    }
+
+    public void moveTowardPlayer(int interval){
+        actionLockCounter++;
+        if(actionLockCounter>interval){
+            if(getXdistance(gp.getPlayer()) > getYdistance(gp.getPlayer())){
+                if(gp.getPlayer().getCenterX() < getCenterX()){
+                    direction="left";
+                }
+                else{
+                    direction="right";
+                }
+            }
+            else if(getXdistance(gp.getPlayer()) < getYdistance(gp.getPlayer())){
+                if(gp.getPlayer().getCenterY() < getCenterY()){
+                    direction="up";
+                }
+                else{
+                    direction="down";
+                }
+            }
+            actionLockCounter=0;
+        }
+    }
+
+    public void setKnockBack(Entity entity, int knockBackPower){
+        entity.speed+=knockBackPower;
+        entity.knockBack=true;
     }
 }

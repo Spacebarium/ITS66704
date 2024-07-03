@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -40,7 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final MovementHandler playerMovementHandler;
     final TileManager tileManager;
     
-    final Player player;
+    private final Player player;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -69,6 +70,20 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
+
+    //GAME STATE
+    public int gameState;
+    public final int titleState = 0;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
+    //SYSTEM FOR UI
+    public UI ui = new UI(this);
+
+
+    public void setupGame(){
+        gameState = titleState;
+    }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -170,5 +185,9 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(new Color(0, 0, 255, 128));
             g2.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         }
+    }
+
+    public Player getPlayer(){
+        return player;
     }
 }

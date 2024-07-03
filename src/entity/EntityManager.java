@@ -3,7 +3,7 @@ package entity;
 import java.awt.Graphics2D;
 import entity.type.Entity;
 import main.GamePanel;
-
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,5 +54,4 @@ public class EntityManager {
 
         for (Entity entity : entities) { entity.draw(g2); }
     }
-
 }
