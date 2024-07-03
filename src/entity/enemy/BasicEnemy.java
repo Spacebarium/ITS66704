@@ -16,8 +16,8 @@ public class BasicEnemy extends Enemy {
     boolean canAttack = true;
 
 
-    public BasicEnemy(GamePanel gp, EnemyMovement enemyMovement, Player player) {
-        super(gp, "whiteNinja", 200, 200, 48, 48, 9, 12, 30, 36, enemyMovement, player);
+    public BasicEnemy(GamePanel gp) {
+        super(gp, "whiteNinja", 200, 200, 48, 48, 9, 12, 30, 36);
         setSpeed(2);
         getImage();
     }

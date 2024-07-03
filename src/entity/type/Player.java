@@ -1,6 +1,7 @@
 package entity.type;
 
 import entity.EntityManager;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -18,16 +19,23 @@ public class Player extends Entity {
     private final List<Weapon> storedWeapons;
     private int equippedWeaponIndex;
     private static final int MAX_WEAPON_COUNT = 2;
+    public final int screenX;
+    public final int screenY;
+    private final EntityManager entityManager;
 
-    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
+    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
         super(gp, EntityType.PLAYER, "Player", 400, 200, 48, 48, 9, 12, 30, 36, playerMovement);
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
+        this.entityManager = gp.entityManager;
         
         this.storedWeapons = new ArrayList<>();
         this.storedWeapons.add(new Sword("Dull Blade", 2, 48, 500, entityManager));
         this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200, entityManager));
         this.equippedWeaponIndex = 0;
+        
+        this.screenX = gp.getScreenWidth() / 2 - getWidth() / 2;
+        this.screenY = gp.getScreenHeight() / 2 - getHeight() / 2;
         
         setSpeed(4);
         getImage();
@@ -131,5 +139,31 @@ public class Player extends Entity {
         } else {
             getEquippedWeapon().setPosition(null);
         }
+    }
+    
+    @Override
+    public void draw(Graphics2D g2) {
+        if (entityImage == 1) {
+            image = switch (direction) {
+                case "up" -> up1;
+                case "down" -> down1;
+                case "left" -> left1;
+                case "right" -> right1;
+                default -> idle;
+            };
+        } else if (entityImage == 2) {
+            image = switch (direction) {
+                case "up" -> up2;
+                case "down" -> down2;
+                case "left" -> left2;
+                case "right" -> right2;
+                default -> idle;
+	    };
+        } else {
+            image = idle;
+        }
+        setEntityImage();
+
+        g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
     }
 }

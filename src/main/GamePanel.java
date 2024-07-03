@@ -19,6 +19,12 @@ public class GamePanel extends JPanel implements Runnable {
     private final int tileSize = originalTileSize * scale; // 48
     private final int screenWidth = tileSize * maxScreenCol;
     private final int screenHeight = tileSize * maxScreenRow;
+    
+    // WORLD SETTINGS
+    private final int maxWorldCol = 50;
+    private final int maxWorldRow = 50;
+    private final int worldWidth = tileSize * maxWorldCol;
+    private final int worldHeight = tileSize * maxWorldRow;
 
     int updatesPerSecond = 60;
     int FPS = 0;
@@ -40,8 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
-    private final EntityManager entityManager;
-    private final PlayerMovement playerMovement;
+    public final EntityManager entityManager;
     final TileManager tileManager;
     final Player player;
     final BasicEnemy whiteNinja;
@@ -52,15 +57,14 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
 
         // setup enemy
         // White ninja
-        whiteNinja = new BasicEnemy(this, new EnemyMovement(), player);
+        whiteNinja = new BasicEnemy(this);
         entityManager.addEntity(whiteNinja);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -76,8 +80,9 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
-    public int getScreenWidth(){ return screenWidth;}
-    public int getScreenHeight(){ return screenHeight;}
+    public int getScreenWidth() { return screenWidth; }
+    public int getScreenHeight() { return screenHeight; }
+    public Player getPlayer() { return player; }
 
     public void pressNHold(){
         if (pressNHold == pressNHoldCd) {

@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import main.CollisionHandler;
+import main.CollisionChecker;
 import movement.MovementHandler;
 import movement.type.Movement;
 
@@ -34,15 +34,15 @@ public abstract class Entity {
 
     private int entityCounterFrames = 12;
     private int entityCounter = entityCounterFrames;
-    private int entityImage;
-    private String direction = "idle";
+    protected int entityImage;
+    protected String direction = "idle";
     
-    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
+    protected BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
     public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
         this.gp = gp;
-        this.movementHandler = new MovementHandler(this, new CollisionHandler(gp), movement);
+        this.movementHandler = new MovementHandler(this, new CollisionChecker(gp), movement);
         this.type = type;
         this.name = name;
         this.x = x;
@@ -166,6 +166,6 @@ public abstract class Entity {
         }
         setEntityImage();
 
-        g2.drawImage(image, x, y, null);
+        g2.drawImage(image, x, y, gp.getTileSize(), gp.getTileSize(), null);
     }
 }

@@ -18,9 +18,9 @@ public class Enemy extends Entity {
     private int          attackCooldown = cooldown;
     private boolean      canAttack = true;
 
-    public Enemy(GamePanel gp, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, EnemyMovement enemyMovement, Player player) {
-        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, enemyMovement);
-        this.player = player;
+    public Enemy(GamePanel gp, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
+        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
+        this.player = gp.entityManager.getPlayer();
 
         setSpeed(2);
         setHealth(20);

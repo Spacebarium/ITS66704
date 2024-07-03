@@ -1,5 +1,6 @@
 package tile;
 
+import entity.type.Player;
 import main.GamePanel;
 
 import java.awt.*;
@@ -8,15 +9,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileManager {
 
-    GamePanel gp;
+    private final GamePanel gp;
     private Tile[][] tiles;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tiles = new Tile[gp.getMaxScreenRow()][gp.getMaxScreenCol()];
     }
 
     public void setTile(int x, int y, TileType type) {
@@ -27,11 +29,11 @@ public class TileManager {
         return tiles[y][x];
     }
 
-    public int getWidth() {
+    public int getMapTileWidth() {
         return tiles[0].length;
     }
 
-    public int getHeight() {
+    public int getMapTileHeight() {
         return tiles.length;
     }
 
@@ -52,20 +54,27 @@ public class TileManager {
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            List<String> lines = new ArrayList<>();
             String line;
-            int y = 0;
             
             while ((line = bufferedReader.readLine()) != null) {
-                String[] ids = line.split(" ");
-                
+                lines.add(line);
+            }
+            
+            bufferedReader.close();
+
+            int mapHeight = lines.size();
+            int mapWidth = lines.get(0).split(" ").length;
+            tiles = new Tile[mapHeight][mapWidth];
+            System.out.println(mapWidth + ", " + mapHeight);
+
+            for (int y = 0; y < mapHeight; y++) {
+                String[] ids = lines.get(y).split(" ");
                 for (int x = 0; x < ids.length; x++) {
                     int tileType = Integer.parseInt(ids[x]);
                     setTile(x, y, tileTypeToEnum(tileType));
                 }
-                y++;
-            }
-
-            bufferedReader.close();
+            }   
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,26 +82,21 @@ public class TileManager {
 
     public void draw(Graphics2D g2) {
         int tileSize = gp.getTileSize();
-        int mapWidth = this.getWidth();
-        int mapHeight = this.getHeight();
-        int x = 0;
-        int y = 0;
-        Tile tile;
-        BufferedImage image;
-        
-        while (x < mapWidth && y < mapHeight) {
-            tile = this.getTile(x, y);
-            if (tile != null) {
-                image = tile.getImage();
-                if (image != null) {
-                    g2.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize, null);
-                }
-            }
-            x++;
+        int mapTileWidth = this.getMapTileWidth();
+        int mapTileHeight = this.getMapTileHeight();
+        Player player = gp.getPlayer();
 
-            if (x == mapWidth) {
-                x = 0;
-                y++;
+        for (int y = 0; y < mapTileHeight; y++) {
+            for (int x = 0; x < mapTileWidth; x++) {
+                Tile tile = this.getTile(x, y);
+                if (tile == null) { return; }
+                BufferedImage image = tile.getImage();
+                if (image == null) { return; }
+                
+                int screenX = x * tileSize - player.getX() + player.screenX;
+                int screenY = y * tileSize - player.getY() + player.screenY;
+                
+                g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
             }
         }
     }
