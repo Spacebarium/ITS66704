@@ -53,12 +53,12 @@ public class GamePanel extends JPanel implements Runnable {
         ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
-        entityManager = new EntityManager(this);
+        entityManager = new EntityManager();
         tileManager = new TileManager(this);
         playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, playerMovement);
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
 
         // setup enemy
@@ -175,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        //Title Screen
+        // Title Screen
         switch (gameState) {
             case titleState -> {
                 ui.drawTitleScreen(g2);
@@ -191,7 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             case settingState -> ui.drawSettingScreen(g2);
             case playState, pauseState -> {
-                //drawing elements and entities
+                // drawing elements and entities
                 tileManager.draw(g2);
                 entityManager.draw(g2);
 
@@ -202,12 +202,11 @@ public class GamePanel extends JPanel implements Runnable {
                 else{
                     gameState = playState;
                 }
-                //DEBUG
+                // DEBUG
                 if (keyHandler.isDebugMode()) {
                     renderDebugInfo(g2);
                 }
             }
-
         }
         g2.dispose();
     }
@@ -247,13 +246,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
+
             int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
             int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
             Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+
             g2.setColor(new Color(128, 0, 255, 128));
 
-
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
+        }
+        
+        if (player.getEquippedWeapon().getPosition() != null) {
+            int r = player.getEquippedWeapon().getRange();
+            g2.setColor(new Color(128, 0, 255, 128));
+            g2.fillOval(player.getEquippedWeapon().getPosition().x - r, player.getEquippedWeapon().getPosition().y - r, 2 * r, 2 * r);
         }
     }
 }

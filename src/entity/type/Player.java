@@ -1,5 +1,8 @@
 package entity.type;
 
+import entity.EntityManager;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import main.GamePanel;
@@ -16,16 +19,18 @@ public class Player extends Entity {
     private int equippedWeaponIndex;
     private static final int MAX_WEAPON_COUNT = 2;
 
-    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
+    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
         super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
+
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         
         this.storedWeapons = new ArrayList<>();
-        this.storedWeapons.add(new Sword("Dull Blade", 2, 38, 500));
-        this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200));
+        this.storedWeapons.add(new Sword("Dull Blade", 2, 48, 500, entityManager));
+        this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200, entityManager));
         this.equippedWeaponIndex = 0;
-        setSpeed(6);
+        
+        setSpeed(4);
         getImage();
 
         setMaxHealth(10);
@@ -49,30 +54,30 @@ public class Player extends Entity {
     }
 
     public Weapon getEquippedWeapon() {
-        return this.storedWeapons.get(this.equippedWeaponIndex);
+        return storedWeapons.get(equippedWeaponIndex);
     }
     
     public void removeWeaponFromSlot(int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
-            this.storedWeapons.set(slot, null);
+            storedWeapons.set(slot, null);
         }
     }
     
     public void addWeaponToSlot(Weapon weapon, int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
-            this.storedWeapons.set(slot, weapon);
+            storedWeapons.set(slot, weapon);
         }
     }
     
     public void switchEquippedWeapon(int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
-            this.equippedWeaponIndex = slot;
+            equippedWeaponIndex = slot;
         }
     }
     
     public Weapon getWeaponFromSlot(int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
-            return this.storedWeapons.get(slot);
+            return storedWeapons.get(slot);
         } else {
             return null;
         }
@@ -83,6 +88,32 @@ public class Player extends Entity {
         if (weapon != null) {
             weapon.use();
         }
+    }
+    
+    public Point getMousePoint() {
+        Point componentP = gp.getLocationOnScreen();
+        Point mouseScreenP = MouseInfo.getPointerInfo().getLocation();
+        
+        int mX = mouseScreenP.x - componentP.x;
+        int mY = mouseScreenP.y - componentP.y;
+        
+        return new Point(mX, mY);
+    }
+    
+    public void calculateWeaponPoint() {
+        // https://www.desmos.com/calculator/oyir1xuqnd
+        Point mousePoint = getMousePoint();
+
+        int pX = getX() + getWidth() / 2;
+        int pY = getY() + getHeight() / 2;
+
+        int radius = getWidth();
+
+        double deltaX = mousePoint.x - pX;
+        double deltaY = mousePoint.y - pY;
+        double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        getEquippedWeapon().setPosition(new Point((int) ((radius * deltaX / dist) + pX), (int) ((radius * deltaY / dist) + pY)));
     }
     
     @Override
@@ -96,7 +127,10 @@ public class Player extends Entity {
             switchEquippedWeapon(1);
         }
         if (mouseHandler.isLmb()) {
+            calculateWeaponPoint();
             useEquippedWeapon();
+        } else {
+            getEquippedWeapon().setPosition(null);
         }
     }
 }

@@ -2,7 +2,7 @@ package entity;
 
 import java.awt.Graphics2D;
 import entity.type.Entity;
-import main.GamePanel;
+import entity.type.Player;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,24 +10,30 @@ import java.util.List;
 
 public class EntityManager {
 
-    GamePanel gp;
     private final List<Entity> entities;
+    private Player player;
 
-    public EntityManager(GamePanel gp) {
-        this.gp = gp;
+    public EntityManager() {
         entities = new ArrayList<>();
     }
 
     public void addEntity(Entity entity) {
         entities.add(entity);
+        if (entity instanceof Player) {
+            player = (Player) entity;
+        }
     }
 
     public void removeEntity(Entity entity) {
         entities.remove(entity);
     }
-    
+
     public List<Entity> getEntities() {
         return entities;
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 
     public void update() {
@@ -48,12 +54,19 @@ public class EntityManager {
 
     public void draw(Graphics2D g2) {
         List<Entity> sortedEntities;
-        synchronized (entities){
+        synchronized (entities) {
             sortedEntities = new ArrayList<>(entities);
         }
         sortedEntities.sort(Comparator.comparingInt(Entity::getY));
 
-        for (Entity entity : entities) { entity.draw(g2); }
+
+//        for (Object entityObject : entities) {
+//            Entity entity = (Entity) entityObject;
+//            entity.draw(g2);
+//        }
+        for (Entity entity : entities) {
+            entity.draw(g2);
+        }
     }
 
 }
