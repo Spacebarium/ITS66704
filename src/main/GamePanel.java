@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     boolean canPressNHold;
     int pressNHold = pressNHoldCd;
 
-    private int gameState;
+    private int gameState = 1;
     private final int titleState = 0, playState = 1, pauseState = -1, settingState = 2;
 
     private Thread gameThread;
