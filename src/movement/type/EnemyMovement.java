@@ -1,6 +1,6 @@
 package movement.type;
 
-import entity.enemy.Enemy;
+import entity.type.Enemy;
 import entity.type.Entity;
 
 import java.awt.*;
