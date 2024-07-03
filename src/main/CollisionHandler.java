@@ -1,6 +1,6 @@
 package main;
 
-import enemy.type.Entity;
+import entity.type.Entity;
 import java.awt.Rectangle;
 
 public class CollisionHandler {

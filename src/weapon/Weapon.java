@@ -1,42 +1,44 @@
 package weapon;
 
+import entity.EntityManager;
+import java.awt.Point;
+
 public abstract class Weapon {
-    private String name;
-    private int    damage;
-    private int    range;
-    private int    attackRate;
-    private int    currentCooldown;
+    protected String name;
+    protected int    damage;
+    protected int    range;
+    protected int    attackRate;
+    protected long   lastAttackTime;
+    protected Point  position;
+    protected EntityManager entityManager;
     
-    public Weapon(String name, int damage, int range, int attackRate) {
+    public Weapon(String name, int damage, int range, int attackRate, EntityManager entityManager) {
         this.name = name;
         this.damage = damage;
         this.range = range;
-        this.attackRate = attackRate; // in frames @60fps because honestly screw it lol idk a better way to implement this
-        this.currentCooldown = 0;
+        this.attackRate = attackRate; // in milliseconds
+        this.lastAttackTime = 0;
+        this.entityManager = entityManager;
     }
 
-    public String getName() {
-        return name;
+    public String getName() { return name;}
+    public int getDamage() { return damage; }
+    public int getRange() { return range; }
+    public int getAttackRate() { return attackRate; }
+    
+    public void setPosition(Point position) {
+        this.position = position;
     }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public int getRange() {
-        return range;
-    }
-
-    public int getAttackRate() {
-        return attackRate;
+    
+    public Point getPosition() { return position; }
+    public EntityManager getEntityManager() { return entityManager;}
+    
+    public boolean canAttack() {
+        long currentTime = System.currentTimeMillis();
+        return currentTime - lastAttackTime >= attackRate;
     }
     
     public void use() {
-        if (currentCooldown == 0) {
-            currentCooldown = attackRate;
-            System.out.printf("%s used\n", getName());
-        } else {
-            currentCooldown--;
-        }
+        
     };
 }

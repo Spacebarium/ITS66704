@@ -1,8 +1,9 @@
 package main;
 
-import enemy.*;
-import enemy.type.*;
-import enemy.enemy.*;
+import entity.type.Enemy;
+import entity.type.Entity;
+import entity.type.Player;
+import entity.EntityManager;
 import movement.type.*;
 import tile.TileManager;
 
@@ -41,11 +42,11 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
-        entityManager = new EntityManager(this);
+        entityManager = new EntityManager();
         tileManager = new TileManager(this);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
 
         // setup enemy
@@ -129,7 +130,6 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager.draw(g2);
 
         if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
-//        renderDebugInfo(g2);
 
         g2.dispose();
     }
@@ -171,13 +171,16 @@ public class GamePanel extends JPanel implements Runnable {
             int boundY = entity.getHeight() + 200;
             int entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
             int entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - (int) Math.round(boundX / 2.0), entityCentreY - (int) Math.round(boundY / 2.0), boundX, boundY);
+            Rectangle movementBound = new Rectangle(entityCentreX - boundX / 2, entityCentreY - boundY / 2, boundX, boundY);
             g2.setColor(new Color(128, 0, 255, 128));
 
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
         
-        int r = player.getWidth() / 2;
-        g2.fillOval(player.weaponP.x - r, player.weaponP.y - r, 2 * r, 2 * r);
+        if (player.getEquippedWeapon().getPosition() != null) {
+            int r = player.getEquippedWeapon().getRange();
+            g2.setColor(new Color(128, 0, 255, 128));
+            g2.fillOval(player.getEquippedWeapon().getPosition().x - r, player.getEquippedWeapon().getPosition().y - r, 2 * r, 2 * r);
+        }
     }
 }
