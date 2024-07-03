@@ -14,7 +14,7 @@ public class UI {
     private String message = "";
 
     private int commandNum;
-    private final int maxCommandNum = 3;
+    private final int maxCommandNum = 2;
 
     public UI(GamePanel gp) {
 
@@ -73,7 +73,7 @@ public class UI {
         //MENU
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 
-        text = "NEW GAME";
+        text = "START GAME";
         x = getXforCenteredText(text, g2);
         y += gp.getTileSize() * 5;
         g2.drawString(text, x, y);
@@ -81,7 +81,7 @@ public class UI {
             g2.drawString(">", x - gp.getTileSize(), y);
         }
 
-        text = "LOAD GAME";
+        text = "SETTINGS";
         x = getXforCenteredText(text, g2);
         y += gp.getTileSize();
         g2.drawString(text, x, y);
@@ -89,21 +89,26 @@ public class UI {
             g2.drawString(">", x - gp.getTileSize(), y);
         }
 
-        text = "SETTINGS";
+        text = "QUIT";
         x = getXforCenteredText(text, g2);
         y += gp.getTileSize();
         g2.drawString(text, x, y);
         if (commandNum == 2) {
             g2.drawString(">", x - gp.getTileSize(), y);
         }
+    }
 
-        text = "QUIT";
-        x = getXforCenteredText(text, g2);
-        y += gp.getTileSize();
+    //SETTINGS SCREEN
+    public void drawSettingScreen(Graphics2D g2) {
+        String text = "SETTINGS";
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));
+        g2.setFont(arial_80B);
+        int x = getXforCenteredText(text, g2);
+        int y = gp.getScreenHeight() / 2;
+
+        g2.setColor(Color.WHITE);
         g2.drawString(text, x, y);
-        if (commandNum == 3) {
-            g2.drawString(">", x - gp.getTileSize(), y);
-        }
     }
 
     //PAUSE SCREEN
