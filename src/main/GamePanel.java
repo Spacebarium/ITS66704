@@ -1,8 +1,8 @@
 package main;
 
-import enemy.*;
-import enemy.type.*;
-import enemy.enemy.*;
+import entity.*;
+import entity.type.*;
+import entity.enemy.*;
 import movement.type.*;
 import tile.TileManager;
 

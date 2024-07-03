@@ -1,4 +1,4 @@
-package enemy.type;
+package entity.type;
 
 public enum EntityType {
     PLAYER,
