@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final EntityManager entityManager;
+    private final PlayerMovement playerMovement;
     final TileManager tileManager;
     final Player player;
     final Enemy whiteNinja;
@@ -51,9 +52,10 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
         tileManager = new TileManager(this);
+        playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        player = new Player(this, keyHandler, mouseHandler, playerMovement);
         entityManager.addEntity(player);
 
         // setup enemy
@@ -184,6 +186,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
+
+
         g2.dispose();
     }
 
@@ -222,15 +226,13 @@ public class GamePanel extends JPanel implements Runnable {
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
-            int entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
-            int entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - (int) Math.round(boundX / 2.0), entityCentreY - (int) Math.round(boundY / 2.0), boundX, boundY);
+            int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
+            int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
+            Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
             g2.setColor(new Color(128, 0, 255, 128));
+
 
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
-        
-        int r = player.getWidth() / 2;
-        g2.fillOval(player.weaponP.x - r, player.weaponP.y - r, 2 * r, 2 * r);
     }
 }
