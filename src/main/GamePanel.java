@@ -1,7 +1,7 @@
 package main;
 
 import entity.*;
-import entity.enemy.BasicEnemy;
+import entity.enemy.*;
 import entity.type.*;
 import movement.type.*;
 import tile.TileManager;
@@ -33,10 +33,11 @@ public class GamePanel extends JPanel implements Runnable {
     boolean canPressNHold;
     int pressNHold = pressNHoldCd;
 
-    private int gameState;
+    private int gameState = 1;
     private final int titleState = 0, playState = 1, pauseState = -1, settingState = 2;
 
     private Thread gameThread;
+
     private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
@@ -44,24 +45,32 @@ public class GamePanel extends JPanel implements Runnable {
     private final PlayerMovement playerMovement;
     final TileManager tileManager;
     final Player player;
-    final BasicEnemy whiteNinja;
+    final WhiteNinja whiteNinja;
+    final FinalBoss finalBoss;
+    final Boss boss;
 
     public GamePanel() {
         ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
-        entityManager = new EntityManager(this);
+        entityManager = new EntityManager();
         tileManager = new TileManager(this);
         playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
-        player = new Player(this, keyHandler, mouseHandler, playerMovement);
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
 
         // setup enemy
         // White ninja
-        whiteNinja = new BasicEnemy(this, new EnemyMovement(), player);
+        whiteNinja = new WhiteNinja(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
+        //Boss
+        boss = new Boss(this, new EnemyMovement(), player);
+        entityManager.addEntity(boss);
+        //Final boss
+        finalBoss = new FinalBoss(this, new EnemyMovement(), player);
+        entityManager.addEntity(finalBoss);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -71,6 +80,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseListener(mouseHandler);
         
         tileManager.loadMap("Test");
+    }
+
+    public int getScale(){
+        return scale;
     }
 
     public int getTileSize() { return tileSize; }
@@ -152,8 +165,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         setGameState();
-        if (gameState == playState)
+        if (gameState == playState) {
             entityManager.update();
+        }
     }
 
     @Override
@@ -161,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        //Title Screen
+        // Title Screen
         switch (gameState) {
             case titleState -> {
                 ui.drawTitleScreen(g2);
@@ -177,7 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             case settingState -> ui.drawSettingScreen(g2);
             case playState, pauseState -> {
-                //drawing elements and entities
+                // drawing elements and entities
                 tileManager.draw(g2);
                 entityManager.draw(g2);
 
@@ -188,12 +202,11 @@ public class GamePanel extends JPanel implements Runnable {
                 else{
                     gameState = playState;
                 }
-                //DEBUG
+                // DEBUG
                 if (keyHandler.isDebugMode()) {
                     renderDebugInfo(g2);
                 }
             }
-
         }
         g2.dispose();
     }
@@ -233,13 +246,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
+
             int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
             int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
             Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+
             g2.setColor(new Color(128, 0, 255, 128));
 
-
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
+        }
+        
+        if (player.getEquippedWeapon().getPosition() != null) {
+            int r = player.getEquippedWeapon().getRange();
+            g2.setColor(new Color(128, 0, 255, 128));
+            g2.fillOval(player.getEquippedWeapon().getPosition().x - r, player.getEquippedWeapon().getPosition().y - r, 2 * r, 2 * r);
         }
     }
 }

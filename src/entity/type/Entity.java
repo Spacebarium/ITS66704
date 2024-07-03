@@ -80,6 +80,9 @@ public abstract class Entity {
     private void setHitbox() {
         this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
+    
+    public int getCentreX() { return x + width / 2; }
+    public int getCentreY() { return y + height / 2; }
 
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }

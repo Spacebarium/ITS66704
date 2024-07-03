@@ -11,10 +11,10 @@ public class KeyHandler extends KeyAdapter {
     public boolean isLeft() { return left; }
     public boolean isRight() { return right; }
     public boolean isDebugMode() { return debugMode; }
-    public boolean isInteract() { return interact;}
+    public boolean isInteract() { return interact; }
     public boolean isOne() { return one; }
     public boolean isTwo() { return two; }
-    public boolean isMenu() {return  menu;}
+    public boolean isMenu() {return  menu; }
 
     @Override
     public void keyPressed(KeyEvent e) {
