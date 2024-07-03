@@ -38,7 +38,5 @@ public abstract class Weapon {
         return currentTime - lastAttackTime >= attackRate;
     }
     
-    public void use() {
-        
-    };
+    public abstract void use();
 }

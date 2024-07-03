@@ -28,7 +28,7 @@ public class Sword extends Weapon {
                 }
             }
         }
+        
         lastAttackTime = System.currentTimeMillis();
     }
-    
 }

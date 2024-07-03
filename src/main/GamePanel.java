@@ -1,9 +1,8 @@
 package main;
 
-import entity.type.Enemy;
-import entity.type.Entity;
-import entity.type.Player;
-import entity.EntityManager;
+import entity.*;
+import entity.enemy.BasicEnemy;
+import entity.type.*;
 import movement.type.*;
 import tile.TileManager;
 
@@ -30,20 +29,30 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
+    final int pressNHoldCd = 10;
+    boolean canPressNHold;
+    int pressNHold = pressNHoldCd;
+
+    private int gameState;
+    private final int titleState = 0, playState = 1, pauseState = -1, settingState = 2;
+
     private Thread gameThread;
+    private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final EntityManager entityManager;
+    private final PlayerMovement playerMovement;
     final TileManager tileManager;
-    
     final Player player;
-    final Enemy whiteNinja;
+    final BasicEnemy whiteNinja;
 
     public GamePanel() {
+        ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
+        playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
@@ -51,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // setup enemy
         // White ninja
-        whiteNinja = new Enemy(this, new EnemyMovement(), player);
+        whiteNinja = new BasicEnemy(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -67,6 +76,30 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
+    public int getScreenWidth(){ return screenWidth;}
+    public int getScreenHeight(){ return screenHeight;}
+
+    public void pressNHold(){
+        if (pressNHold == pressNHoldCd) {
+            canPressNHold = true;
+        }
+        else{
+            pressNHold ++;
+            canPressNHold = false;
+        }
+    }
+    public void setGameState(){
+        pressNHold();
+        if (canPressNHold) {
+            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
+                ui.setCommandNum(ui.getCommandNum() - 1);
+                pressNHold = 0;
+            } else if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
+                ui.setCommandNum((ui.getCommandNum() + 1));
+                pressNHold = 0;
+            }
+        }
+    }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -118,7 +151,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        entityManager.update();
+        setGameState();
+        if (gameState == playState)
+            entityManager.update();
     }
 
     @Override
@@ -126,11 +161,39 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.draw(g2);
-        entityManager.draw(g2);
+        // Title Screen
+        switch (gameState) {
+            case titleState -> {
+                ui.drawTitleScreen(g2);
 
-        if (keyHandler.isDebugMode()) { renderDebugInfo(g2); }
+                if (keyHandler.isInteract()) {
+                    switch (ui.getCommandNum()) {
+                        case 0 -> gameState = playState;
+                        case 1 -> gameState = settingState;
+                        case 2 -> System.exit(0);
+                        default -> gameState = titleState;
+                    }
+                }
+            }
+            case settingState -> ui.drawSettingScreen(g2);
+            case playState, pauseState -> {
+                // drawing elements and entities
+                tileManager.draw(g2);
+                entityManager.draw(g2);
 
+                if (keyHandler.isMenu()){
+                    gameState = pauseState;
+                    ui.drawPauseScreen(g2);
+                }
+                else{
+                    gameState = playState;
+                }
+                // DEBUG
+                if (keyHandler.isDebugMode()) {
+                    renderDebugInfo(g2);
+                }
+            }
+        }
         g2.dispose();
     }
 
@@ -169,9 +232,11 @@ public class GamePanel extends JPanel implements Runnable {
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
-            int entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
-            int entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - boundX / 2, entityCentreY - boundY / 2, boundX, boundY);
+
+            int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
+            int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
+            Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+
             g2.setColor(new Color(128, 0, 255, 128));
 
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);

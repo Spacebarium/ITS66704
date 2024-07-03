@@ -1,3 +1,4 @@
+
 package entity.type;
 
 import java.awt.Color;
@@ -6,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import main.GamePanel;
 import movement.type.EnemyMovement;
+
 
 public class Enemy extends Entity {
 
@@ -16,8 +18,8 @@ public class Enemy extends Entity {
     private int          attackCooldown = cooldown;
     private boolean      canAttack = true;
 
-    public Enemy(GamePanel gp, EnemyMovement enemyMovement, Player player) {
-        super(gp, EntityType.ENEMY, "White ninja", 200, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
+    public Enemy(GamePanel gp, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, EnemyMovement enemyMovement, Player player) {
+        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, enemyMovement);
         this.player = player;
 
         setSpeed(2);

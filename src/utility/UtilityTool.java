@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class UtilityTool {
 
     // Scale images before
-    public static BufferedImage scaleImage(BufferedImage originalImage, int width, int height) {
+    public BufferedImage scaleImage(BufferedImage originalImage, int width, int height) {
 
         BufferedImage scaledImage = new BufferedImage(width, height, originalImage.getType());
         Graphics2D g2 = scaledImage.createGraphics();

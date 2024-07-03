@@ -131,10 +131,5 @@ public class Player extends Entity {
         } else {
             getEquippedWeapon().setPosition(null);
         }
-        
-        
-        
-
-        
     }
 }

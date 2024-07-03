@@ -32,10 +32,8 @@ public class Gun extends Weapon {
                     enemy.setHealth(enemy.getHealth() - damage);
                 }
             }
-        }
+        }   
         
         lastAttackTime = System.currentTimeMillis();
-
     }
-
 }
