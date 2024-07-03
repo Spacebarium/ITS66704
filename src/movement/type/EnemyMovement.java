@@ -1,7 +1,7 @@
 package movement.type;
 
-import enemy.enemy.Enemy;
-import enemy.type.Entity;
+import entity.enemy.Enemy;
+import entity.type.Entity;
 
 import java.awt.*;
 import java.util.Random;

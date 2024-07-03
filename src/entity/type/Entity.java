@@ -1,4 +1,4 @@
-package enemy.type;
+package entity.type;
 
 import main.GamePanel;
 import utility.UtilityTool;

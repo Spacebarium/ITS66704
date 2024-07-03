@@ -1,8 +1,8 @@
-package enemy.enemy;
+package entity.enemy;
 
-import enemy.type.Entity;
-import enemy.type.EntityType;
-import enemy.type.Player;
+import entity.type.Entity;
+import entity.type.EntityType;
+import entity.type.Player;
 import main.GamePanel;
 import movement.type.EnemyMovement;
 

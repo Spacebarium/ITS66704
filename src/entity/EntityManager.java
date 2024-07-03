@@ -1,7 +1,7 @@
-package enemy;
+package entity;
 
 import java.awt.Graphics2D;
-import enemy.type.Entity;
+import entity.type.Entity;
 import main.GamePanel;
 
 import java.util.ArrayList;

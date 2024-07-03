@@ -1,6 +1,6 @@
 package movement;
 
-import enemy.type.Entity;
+import entity.type.Entity;
 import main.CollisionHandler;
 import movement.type.Movement;
 
