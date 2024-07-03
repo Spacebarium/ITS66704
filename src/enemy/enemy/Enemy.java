@@ -18,7 +18,7 @@ public class Enemy extends Entity {
     public Enemy(GamePanel gp, EnemyMovement enemyMovement, Player player) {
         super(gp, EntityType.ENEMY, "White ninja", 200, 200, 48, 48, 9, 12, 30, 36, enemyMovement);
 
-        setSpeed(2);
+        setSpeed(4);
         getImage();
 
         this.player = player;
@@ -36,60 +36,62 @@ public class Enemy extends Entity {
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
 
-    public int getPlayerHitBox() {
+    public int getPlayerHitBox(){
         return player.getHitbox().height;
     }
 
     public int getPlayerXCentre() {
-        return player.getX() + (int) (player.getWidth() / 2.0);
+        return player.getX() + (int)(player.getWidth() / 2.0);
     }
 
-    public int getPlayerYCentre() {
-        return player.getY() + (int) (player.getHeight() / 2.0);
+    public int getPlayerYCentre(){
+        return player.getY() + (int)(player.getHeight() / 2.0);
     }
 
-    public int getEntityCentreX() {
+    public int getEntityCentreX(){
         return getX() + (int) Math.round(getWidth() / 2.0);
     }
 
-    public int getEntityCentreY() {
+    public int getEntityCentreY(){
         return getY() + (int) Math.round(getHeight() / 2.0);
     }
 
-    public int getXDistance() {
+    public int getXDistance(){
         return getEntityCentreX() - getPlayerXCentre();
     }
 
-    public int getYDistance() {
+    public int getYDistance(){
         return getEntityCentreY() - getPlayerYCentre();
     }
 
-    public int getDistance() {
+    public int getDistance(){
         //Euclidean distance
-        return (int) (Math.sqrt(Math.pow(getXDistance(), 2) + Math.pow(getYDistance(), 2)));
+        return (int)(Math.sqrt(Math.pow(getXDistance(), 2) + Math.pow(getYDistance(), 2)));
     }
 
     @Override
-    public void update() {
+    public void update(){
         super.update();
-        if (getDistance() <= aggroDistance) {
+        if (getDistance() <= aggroDistance){
             setCombatStatus(true);
-        } else {
+        }
+        else {
             setCombatStatus(false);
         }
     }
 
-    public void coolDownCounter() {
-        if (attackCoolDown == coolDown) {
-            canAttack = true;
-        } else {
+    public void coolDownCounter(){
+        if (attackCoolDown == coolDown){
+           canAttack = true;
+        }
+        else{
             attackCoolDown++;
             canAttack = false;
         }
     }
 
-    public void attack() {
-        if (canAttack) {
+    public void attack(){
+        if (canAttack){
             player.setHealth(player.getHealth() - 1);
             attackCoolDown = 0;
         }
