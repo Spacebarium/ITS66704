@@ -19,6 +19,12 @@ public class GamePanel extends JPanel implements Runnable {
     private final int tileSize = originalTileSize * scale; // 48
     private final int screenWidth = tileSize * maxScreenCol;
     private final int screenHeight = tileSize * maxScreenRow;
+    
+    // WORLD SETTINGS
+    private final int maxWorldCol = 50;
+    private final int maxWorldRow = 50;
+    private final int worldWidth = tileSize * maxWorldCol;
+    private final int worldHeight = tileSize * maxWorldRow;
 
     int updatesPerSecond = 60;
     int FPS = 0;
@@ -37,8 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
-    private final EntityManager entityManager;
-    private final PlayerMovement playerMovement;
+    public final EntityManager entityManager;
     final TileManager tileManager;
     final Player player;
     final WhiteNinja whiteNinja;
@@ -51,11 +56,9 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        playerMovement = new PlayerMovement(keyHandler);
         
         // setup player
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
-        entityManager.addEntity(player);
 
         // setup enemy
         // White ninja
@@ -85,8 +88,9 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getMaxScreenCol() { return maxScreenCol; }
     public int getMaxScreenRow() { return maxScreenRow; }
-    public int getScreenWidth(){ return screenWidth;}
-    public int getScreenHeight(){ return screenHeight;}
+    public int getScreenWidth() { return screenWidth; }
+    public int getScreenHeight() { return screenHeight; }
+    public Player getPlayer() { return player; }
 
 
 
@@ -225,7 +229,7 @@ public class GamePanel extends JPanel implements Runnable {
         for (Entity entity : entityManager.getEntities()) {
             // image box
             g2.setColor(Color.RED);
-            g2.drawRect(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+            g2.drawRect(entity.getScreenX(), entity.getScreenY(), entity.getWidth(), entity.getHeight());
             
             // collision box
             Rectangle hitbox = entity.getHitbox();
@@ -244,10 +248,11 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
         
+        // draw weapon range
         if (player.getEquippedWeapon().getPosition() != null) {
             int r = player.getEquippedWeapon().getRange();
             g2.setColor(new Color(128, 0, 255, 128));
-            g2.fillOval(player.getEquippedWeapon().getPosition().x - r, player.getEquippedWeapon().getPosition().y - r, 2 * r, 2 * r);
+            g2.fillOval(player.getEquippedWeapon().getPosition().x - r - player.getX() + player.getScreenX(), player.getEquippedWeapon().getPosition().y - r - player.getY() + player.getScreenY(), 2 * r, 2 * r);
         }
     }
 }

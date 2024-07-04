@@ -1,6 +1,7 @@
 package entity.type;
 
 import entity.EntityManager;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -18,17 +19,22 @@ public class Player extends Entity {
     private final List<Weapon> storedWeapons;
     private int equippedWeaponIndex;
     private static final int MAX_WEAPON_COUNT = 2;
+    private final EntityManager entityManager;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
         super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
 
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
+        this.entityManager = gp.entityManager;
         
         this.storedWeapons = new ArrayList<>();
         this.storedWeapons.add(new Sword("Dull Blade", 2, 48, 500, entityManager));
         this.storedWeapons.add(new Gun("Pew Pew", 1, 240, 200, entityManager));
         this.equippedWeaponIndex = 0;
+        
+        this.screenX = gp.getScreenWidth() / 2 - getWidth() / 2;
+        this.screenY = gp.getScreenHeight() / 2 - getHeight() / 2;
         
         setSpeed(4);
         getImage();
@@ -49,9 +55,7 @@ public class Player extends Entity {
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
     
-    public int getEquippedWeaponIndex() {
-        return equippedWeaponIndex;
-    }
+    public int getEquippedWeaponIndex() { return equippedWeaponIndex; }
 
     public Weapon getEquippedWeapon() {
         return storedWeapons.get(equippedWeaponIndex);
@@ -63,7 +67,7 @@ public class Player extends Entity {
         }
     }
     
-    public void addWeaponToSlot(Weapon weapon, int slot) {
+    public void setWeaponToSlot(Weapon weapon, int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
             storedWeapons.set(slot, weapon);
         }
@@ -109,8 +113,8 @@ public class Player extends Entity {
 
         int radius = getWidth();
 
-        double deltaX = mousePoint.x - pX;
-        double deltaY = mousePoint.y - pY;
+        int deltaX = mousePoint.x - screenX;
+        int deltaY = mousePoint.y - screenY;
         double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
         getEquippedWeapon().setPosition(new Point((int) ((radius * deltaX / dist) + pX), (int) ((radius * deltaY / dist) + pY)));
@@ -132,5 +136,31 @@ public class Player extends Entity {
         } else {
             getEquippedWeapon().setPosition(null);
         }
+    }
+    
+    @Override
+    public void draw(Graphics2D g2) {
+        if (entityImage == 1) {
+            image = switch (direction) {
+                case "up" -> up1;
+                case "down" -> down1;
+                case "left" -> left1;
+                case "right" -> right1;
+                default -> idle;
+            };
+        } else if (entityImage == 2) {
+            image = switch (direction) {
+                case "up" -> up2;
+                case "down" -> down2;
+                case "left" -> left2;
+                case "right" -> right2;
+                default -> idle;
+	    };
+        } else {
+            image = idle;
+        }
+        setEntityImage();
+
+        g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
     }
 }

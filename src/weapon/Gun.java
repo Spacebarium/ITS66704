@@ -25,7 +25,7 @@ public class Gun extends Weapon {
             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;;
 
-                Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+                Rectangle enemyBox = new Rectangle(enemy.getScreenX(), enemy.getScreenY(), enemy.getWidth(), enemy.getHeight());
                 Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
 
                 if (enemyBox.contains(playerMousePoint) && weaponRange.intersects(enemyBox)) {

@@ -31,7 +31,7 @@ public abstract class Weapon {
     }
     
     public Point getPosition() { return position; }
-    public EntityManager getEntityManager() { return entityManager;}
+    public EntityManager getEntityManager() { return entityManager; }
     
     public boolean canAttack() {
         long currentTime = System.currentTimeMillis();
