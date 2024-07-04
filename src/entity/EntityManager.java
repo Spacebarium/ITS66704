@@ -50,6 +50,11 @@ public class EntityManager {
         }
         sortedEntities.sort(Comparator.comparingInt(Entity::getY));
 
+
+//        for (Object entityObject : entities) {
+//            Entity entity = (Entity) entityObject;
+//            entity.draw(g2);
+//        }
         for (Entity entity : entities) {
             entity.draw(g2);
         }

@@ -21,8 +21,9 @@ public class Player extends Entity {
     private static final int MAX_WEAPON_COUNT = 2;
     private final EntityManager entityManager;
 
-    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 400, 200, 48, 48, 9, 12, 30, 36, playerMovement);
+    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
+        super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
+
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         this.entityManager = gp.entityManager;
@@ -35,7 +36,7 @@ public class Player extends Entity {
         this.screenX = gp.getScreenWidth() / 2 - getWidth() / 2;
         this.screenY = gp.getScreenHeight() / 2 - getHeight() / 2;
         
-        setSpeed(4);
+        setSpeed(5);
         getImage();
 
         setMaxHealth(10);

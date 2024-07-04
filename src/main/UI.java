@@ -128,6 +128,5 @@ public class UI {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = gp.getScreenWidth() / 2 - length / 2;
         return x;
-
     }
 }

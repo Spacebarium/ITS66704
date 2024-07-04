@@ -1,7 +1,7 @@
 package main;
 
 import entity.*;
-import entity.enemy.BasicEnemy;
+import entity.enemy.WhiteNinja;
 import entity.type.*;
 import movement.type.*;
 import tile.TileManager;
@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int scale = 3;
     private final int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    
+
     // WORLD SETTINGS
     private final int maxWorldCol = 50;
     private final int maxWorldRow = 50;
@@ -52,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        
+
         initialiseEntities();
 
         this.setPreferredSize(screenSize);
@@ -61,19 +61,20 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
-        
+
         tileManager.loadMap("Test");
     }
 
     public int getTileSize() { return tileSize; }
     public int getScreenWidth() { return screenSize.width; }
     public int getScreenHeight() { return screenSize.height; }
-    
+    public int getScale() {return scale;}
+
     public void initialiseEntities() {
-        Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
-        
-        BasicEnemy whiteNinja = new BasicEnemy(this);
+
+        WhiteNinja whiteNinja = new WhiteNinja(this);
         entityManager.addEntity(whiteNinja);
     }
 
@@ -139,7 +140,7 @@ public class GamePanel extends JPanel implements Runnable {
                 FPS = drawCount;
                 updateDurationPerSecond = (double) updateDuration / 1_000_000;
                 renderDurationPerSecond = (double) renderDuration / 1_000_000;
-                
+
                 drawCount = 0;
                 updateDuration = 0;
                 renderDuration = 0;
@@ -207,21 +208,21 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString("Render duration: " + String.format("%.2f", renderDurationPerSecond) + "ms", 10, 60);
         g2.drawString("X: " + player.getX(), 10, 80);
         g2.drawString("Y: " + player.getY(), 10, 100);
-        
+
         g2.drawString("DX: " + player.getMovementHandler().getDx(), 10, 120);
         g2.drawString("DY: " + player.getMovementHandler().getDy(), 10, 140);
         g2.drawString("Speed: " + String.format("%.2f", player.getMovementHandler().getSpeed()), 10, 160);
         g2.drawString("Health: " + player.getHealth(), 10, 180);
-        
+
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
         g2.drawString("slot1: " + player.getWeaponFromSlot(1).getName(), 10, 220);
         g2.drawString("equip slot: " + player.getEquippedWeaponIndex(), 10, 240);
-        
+
         for (Entity entity : entityManager.getEntities()) {
             // image box
             g2.setColor(Color.RED);
             g2.drawRect(entity.getScreenX(), entity.getScreenY(), entity.getWidth(), entity.getHeight());
-            
+
             // hitbox
             Rectangle hitbox = entity.getHitbox();
             g2.setColor(new Color(0, 0, 255, 128));
@@ -238,7 +239,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             g2.drawRect(movementBound.x - player.getX() + player.getScreenX(), movementBound.y - player.getY() + player.getScreenY(), movementBound.width, movementBound.height);
         }
-        
+
         // draw weapon range
         if (player.getEquippedWeapon().getPosition() != null) {
             int r = player.getEquippedWeapon().getRange();

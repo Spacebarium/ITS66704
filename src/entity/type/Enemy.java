@@ -8,7 +8,6 @@ import java.awt.RenderingHints;
 import main.GamePanel;
 import movement.type.EnemyMovement;
 
-
 public class Enemy extends Entity {
 
     private final Player player;
@@ -36,7 +35,7 @@ public class Enemy extends Entity {
         setLeft2(imageSetup("whiteNinja", "whiteLeft2"));
         setRight1(imageSetup("whiteNinja", "whiteRight1"));
         setRight2(imageSetup("whiteNinja", "whiteRight2"));
-        setIdle(imageSetup("blackNinja", "blackDown1"));
+        setIdle(imageSetup("whiteNinja", "whiteDown1"));
     }
 
     public int getPlayerHitbox() {
@@ -60,7 +59,7 @@ public class Enemy extends Entity {
         int deltaX = getXDistance();
         int deltaY = getYDistance();
         
-        return (int) Math.sqrt(deltaX * deltaX + deltaY + deltaY);
+        return (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
     public void cooldownCounter() {
