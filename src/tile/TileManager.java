@@ -1,9 +1,9 @@
 package tile;
 
 import entity.type.Player;
+import java.awt.Graphics2D;
 import main.GamePanel;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +19,6 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        this.tiles = new Tile[gp.getMaxScreenRow()][gp.getMaxScreenCol()];
     }
 
     public void setTile(int x, int y, TileType type) {
@@ -38,7 +37,7 @@ public class TileManager {
         return tiles.length;
     }
 
-    private TileType tileTypeToEnum(int type) {
+    private TileType tileIDToEnum(int type) {
         switch (type) {
             case 0:
                 return TileType.EMPTY;
@@ -52,8 +51,7 @@ public class TileManager {
     }
 
     public void loadMap(String mapName){
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt");
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt")) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<String> lines = new ArrayList<>();
             String line;
@@ -64,15 +62,15 @@ public class TileManager {
             
             bufferedReader.close();
 
-            int mapHeight = lines.size();
-            int mapWidth = lines.get(0).split(" ").length;
-            tiles = new Tile[mapHeight][mapWidth];
+            int mapTileHeight = lines.size();
+            int mapTileWidth = lines.get(0).split(" ").length;
+            tiles = new Tile[mapTileHeight][mapTileWidth];
 
-            for (int y = 0; y < mapHeight; y++) {
-                String[] ids = lines.get(y).split(" ");
-                for (int x = 0; x < ids.length; x++) {
-                    int tileType = Integer.parseInt(ids[x]);
-                    setTile(x, y, tileTypeToEnum(tileType));
+            for (int y = 0; y < mapTileHeight; y++) {
+                String[] tileIds = lines.get(y).split(" ");
+                for (int x = 0; x < tileIds.length; x++) {
+                    int tileId = Integer.parseInt(tileIds[x]);
+                    setTile(x, y, tileIDToEnum(tileId));
                 }
             }   
         } catch (IOException e) {
@@ -84,7 +82,7 @@ public class TileManager {
         int tileSize = gp.getTileSize();
         int mapTileWidth = this.getMapTileWidth();
         int mapTileHeight = this.getMapTileHeight();
-        Player player = gp.getPlayer();
+        Player player = gp.entityManager.getPlayer();
 
         for (int y = 0; y < mapTileHeight; y++) {
             for (int x = 0; x < mapTileWidth; x++) {

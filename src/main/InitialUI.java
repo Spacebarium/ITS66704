@@ -23,12 +23,12 @@ public class InitialUI extends JPanel {
 
         JButton startButton = new JButton("Start Game");
 
-//        startButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                switchGamePanel();
-//            }
-//        });
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchGamePanel();
+            }
+        });
 
         setLayout(new BorderLayout());
         add(startButton, BorderLayout.NORTH);
@@ -87,6 +87,7 @@ public class InitialUI extends JPanel {
     public void switchGamePanel(){
         cardLayout.show(mainPanel, "GamePanel");
         gp.startGameThread();
+      //  gp.setGameState(1);
     }
 }
 

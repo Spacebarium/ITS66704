@@ -36,7 +36,7 @@ public class Player extends Entity {
         this.screenX = gp.getScreenWidth() / 2 - getWidth() / 2;
         this.screenY = gp.getScreenHeight() / 2 - getHeight() / 2;
         
-        setSpeed(4);
+        setSpeed(5);
         getImage();
 
         setMaxHealth(10);
