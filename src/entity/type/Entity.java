@@ -13,7 +13,7 @@ import movement.type.Movement;
 
 public abstract class Entity {
     
-    public GamePanel gp;
+    protected final GamePanel gp;
     private final MovementHandler movementHandler;
 
     private final EntityType type;
@@ -57,7 +57,6 @@ public abstract class Entity {
         this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
         
         this.speed = 2;
-        gp.entityManager.addEntity(this);
     }
 
     public EntityType getEntityType() { return type; }
@@ -173,7 +172,7 @@ public abstract class Entity {
         setEntityImage();
         
         if (type != EntityType.PLAYER) {
-            Player player = gp.getPlayer();
+            Player player = gp.entityManager.getPlayer();
             this.screenX = x - player.getX() + player.getScreenX();
             this.screenY = y - player.getY() + player.getScreenY();
         }

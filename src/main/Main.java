@@ -1,7 +1,10 @@
 package main;
 
+
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.JFrame;
+
 
 public class Main {
 
@@ -11,25 +14,23 @@ public class Main {
         JPanel mainPanel = new JPanel(cardLayout);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        window.setResizable(false);
         window.setTitle("Echoes of the Forest");
+//        window.setResizable(false);
 
         GamePanel gp = new GamePanel();
-
-        InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
+      //  InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
 
         //mainPanel.add(ui, "InitialUI");
         mainPanel.add(gp, "GamePanel");
         gp.startGameThread();
+
         window.add(mainPanel);
         window.pack();
+
+        window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
     }
 }
-
-//TO DO
-/* Add world camera need to change rendering properties
- * Current render renders everything so implement method to render camera jer
- */

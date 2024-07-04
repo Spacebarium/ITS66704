@@ -14,11 +14,8 @@ public class GamePanel extends JPanel implements Runnable {
     // SCREEN SETTINGS
     private final int originalTileSize = 16;
     private final int scale = 3;
-    private final int maxScreenCol = 16;
-    private final int maxScreenRow = 12;
     private final int tileSize = originalTileSize * scale; // 48
-    private final int screenWidth = tileSize * maxScreenCol;
-    private final int screenHeight = tileSize * maxScreenRow;
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     // WORLD SETTINGS
     private final int maxWorldCol = 50;
@@ -42,10 +39,11 @@ public class GamePanel extends JPanel implements Runnable {
     private final MouseHandler mouseHandler;
     public final EntityManager entityManager;
     final TileManager tileManager;
+
     final Player player;
     final WhiteNinja whiteNinja;
-    final FinalBoss finalBoss;
-    final Boss boss;
+//    final FinalBoss finalBoss;
+//    final Boss boss;
 
     public GamePanel() {
         ui = new UI(this);
@@ -53,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        
+
         // setup player
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
 
@@ -61,14 +59,16 @@ public class GamePanel extends JPanel implements Runnable {
         // White ninja
         whiteNinja = new WhiteNinja(this, new EnemyMovement(), player);
         entityManager.addEntity(whiteNinja);
-        //Boss
-        boss = new Boss(this, new EnemyMovement(), player);
-        entityManager.addEntity(boss);
-        //Final boss
-        finalBoss = new FinalBoss(this, new EnemyMovement(), player);
-        entityManager.addEntity(finalBoss);
+//        //Boss
+//        boss = new Boss(this, new EnemyMovement(), player);
+//        entityManager.addEntity(boss);
+//        //Final boss
+//        finalBoss = new FinalBoss(this, new EnemyMovement(), player);
+//        entityManager.addEntity(finalBoss);
 
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        initialiseEntities();
+
+        this.setPreferredSize(screenSize);
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
@@ -83,13 +83,17 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public int getTileSize() { return tileSize; }
-    public int getMaxScreenCol() { return maxScreenCol; }
-    public int getMaxScreenRow() { return maxScreenRow; }
-    public int getScreenWidth() { return screenWidth; }
-    public int getScreenHeight() { return screenHeight; }
-    public Player getPlayer() { return player; }
+    public int getScreenWidth() { return screenSize.width; }
+    public int getScreenHeight() { return screenSize.height; }
+    
+    public void initialiseEntities() {
+        Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
+        entityManager.addEntity(player);
+        entityManager.addEntity(whiteNinja);
 
-    public void startGameThread() {
+    }
+
+    protected void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -190,6 +194,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void renderDebugInfo(Graphics2D g2) {
+        Player player = entityManager.getPlayer();
         g2.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -201,12 +206,10 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString("X: " + player.getX(), 10, 80);
         g2.drawString("Y: " + player.getY(), 10, 100);
         
-        if (player != null) {
-            g2.drawString("DX: " + player.getMovementHandler().getDx(), 10, 120);
-            g2.drawString("DY: " + player.getMovementHandler().getDy(), 10, 140);
-            g2.drawString("Speed: " + String.format("%.2f", player.getMovementHandler().getSpeed()), 10, 160);
-            g2.drawString("Health: " + player.getHealth(), 10, 180);
-        }
+        g2.drawString("DX: " + player.getMovementHandler().getDx(), 10, 120);
+        g2.drawString("DY: " + player.getMovementHandler().getDy(), 10, 140);
+        g2.drawString("Speed: " + String.format("%.2f", player.getMovementHandler().getSpeed()), 10, 160);
+        g2.drawString("Health: " + player.getHealth(), 10, 180);
         
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
         g2.drawString("slot1: " + player.getWeaponFromSlot(1).getName(), 10, 220);
@@ -217,10 +220,10 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(Color.RED);
             g2.drawRect(entity.getScreenX(), entity.getScreenY(), entity.getWidth(), entity.getHeight());
             
-            // collision box
+            // hitbox
             Rectangle hitbox = entity.getHitbox();
             g2.setColor(new Color(0, 0, 255, 128));
-            g2.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            g2.fillRect(hitbox.x - player.getX() + player.getScreenX(), hitbox.y - player.getY() + player.getScreenY(), hitbox.width, hitbox.height);
 
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
@@ -231,7 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             g2.setColor(new Color(128, 0, 255, 128));
 
-            g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
+            g2.drawRect(movementBound.x - player.getX() + player.getScreenX(), movementBound.y - player.getY() + player.getScreenY(), movementBound.width, movementBound.height);
         }
         
         // draw weapon range
