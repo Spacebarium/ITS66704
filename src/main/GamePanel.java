@@ -60,12 +60,10 @@ public class GamePanel extends JPanel implements Runnable {
         
         // setup player
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
-        entityManager.addEntity(player);
 
         // setup enemy
         // White ninja
         whiteNinja = new BasicEnemy(this);
-        entityManager.addEntity(whiteNinja);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -228,7 +226,7 @@ public class GamePanel extends JPanel implements Runnable {
         for (Entity entity : entityManager.getEntities()) {
             // image box
             g2.setColor(Color.RED);
-            g2.drawRect(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+            g2.drawRect(entity.getScreenX(), entity.getScreenY(), entity.getWidth(), entity.getHeight());
             
             // collision box
             Rectangle hitbox = entity.getHitbox();

@@ -1,10 +1,8 @@
 package entity.enemy;
 
 import entity.type.Enemy;
-import entity.type.EntityType;
 import entity.type.Player;
 import main.GamePanel;
-import movement.type.EnemyMovement;
 
 public class BasicEnemy extends Enemy {
 

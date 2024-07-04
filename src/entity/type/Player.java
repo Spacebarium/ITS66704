@@ -19,8 +19,6 @@ public class Player extends Entity {
     private final List<Weapon> storedWeapons;
     private int equippedWeaponIndex;
     private static final int MAX_WEAPON_COUNT = 2;
-    public final int screenX;
-    public final int screenY;
     private final EntityManager entityManager;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
@@ -56,9 +54,7 @@ public class Player extends Entity {
         setIdle(imageSetup("blackNinja", "blackDown1"));
     }
     
-    public int getEquippedWeaponIndex() {
-        return equippedWeaponIndex;
-    }
+    public int getEquippedWeaponIndex() { return equippedWeaponIndex; }
 
     public Weapon getEquippedWeapon() {
         return storedWeapons.get(equippedWeaponIndex);
@@ -70,7 +66,7 @@ public class Player extends Entity {
         }
     }
     
-    public void addWeaponToSlot(Weapon weapon, int slot) {
+    public void setWeaponToSlot(Weapon weapon, int slot) {
         if (slot >= 0 && slot < MAX_WEAPON_COUNT) {
             storedWeapons.set(slot, weapon);
         }
@@ -116,8 +112,8 @@ public class Player extends Entity {
 
         int radius = getWidth();
 
-        double deltaX = mousePoint.x - pX;
-        double deltaY = mousePoint.y - pY;
+        double deltaX = mousePoint.x - screenX;
+        double deltaY = mousePoint.y - screenY;
         double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
         getEquippedWeapon().setPosition(new Point((int) ((radius * deltaX / dist) + pX), (int) ((radius * deltaY / dist) + pY)));

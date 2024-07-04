@@ -66,7 +66,6 @@ public class TileManager {
             int mapHeight = lines.size();
             int mapWidth = lines.get(0).split(" ").length;
             tiles = new Tile[mapHeight][mapWidth];
-            System.out.println(mapWidth + ", " + mapHeight);
 
             for (int y = 0; y < mapHeight; y++) {
                 String[] ids = lines.get(y).split(" ");
@@ -93,10 +92,15 @@ public class TileManager {
                 BufferedImage image = tile.getImage();
                 if (image == null) { return; }
                 
-                int screenX = x * tileSize - player.getX() + player.screenX;
-                int screenY = y * tileSize - player.getY() + player.screenY;
+                int screenX = x * tileSize - player.getX() + player.getScreenX();
+                int screenY = y * tileSize - player.getY() + player.getScreenY();
                 
-                g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+                if ((x + 1) * tileSize > player.getX() - player.getScreenX()
+                        && (x - 1) * tileSize < player.getX() + player.getScreenX()
+                        && (y + 1) * tileSize > player.getY() - player.getScreenY()
+                        && (y - 1) * tileSize < player.getY() + player.getScreenY()) {
+                    g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+                }
             }
         }
     }
