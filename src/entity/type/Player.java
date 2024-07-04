@@ -112,8 +112,8 @@ public class Player extends Entity {
 
         int radius = getWidth();
 
-        double deltaX = mousePoint.x - screenX;
-        double deltaY = mousePoint.y - screenY;
+        int deltaX = mousePoint.x - screenX;
+        int deltaY = mousePoint.y - screenY;
         double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
         getEquippedWeapon().setPosition(new Point((int) ((radius * deltaX / dist) + pX), (int) ((radius * deltaY / dist) + pY)));

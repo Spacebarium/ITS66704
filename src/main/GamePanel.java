@@ -245,10 +245,11 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawRect(movementBound.x, movementBound.y, movementBound.width, movementBound.height);
         }
         
+        // draw weapon range
         if (player.getEquippedWeapon().getPosition() != null) {
             int r = player.getEquippedWeapon().getRange();
             g2.setColor(new Color(128, 0, 255, 128));
-            g2.fillOval(player.getEquippedWeapon().getPosition().x - r, player.getEquippedWeapon().getPosition().y - r, 2 * r, 2 * r);
+            g2.fillOval(player.getEquippedWeapon().getPosition().x - r - player.getX() + player.getScreenX(), player.getEquippedWeapon().getPosition().y - r - player.getY() + player.getScreenY(), 2 * r, 2 * r);
         }
     }
 }

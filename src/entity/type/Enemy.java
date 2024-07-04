@@ -100,6 +100,6 @@ public class Enemy extends Entity {
         g2.setColor(Color.WHITE);
         
         // draw hp
-        g2.drawString(String.valueOf(getHealth()), getX(), getY() - 10);
+        g2.drawString(String.valueOf(getHealth()), getScreenX(), getScreenY() - 10);
     }
 }
