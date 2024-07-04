@@ -23,8 +23,10 @@ public class EnemyMovement implements Movement {
     boolean originInitialized;
 
     private void setOrigin(Enemy enemy) {
-        initialX = enemy.getCentreX();
-        initialY = enemy.getCentreY();
+        initialX = enemy.getX();
+        initialY = enemy.getY();
+        System.out.println("X " + initialX);
+        System.out.println("Y "+initialY);
     }
 
     private void setMovementBound(Enemy enemy) {
