@@ -1,18 +1,18 @@
 package movement;
 
 import entity.type.Entity;
-import main.CollisionHandler;
+import main.CollisionChecker;
 import movement.type.Movement;
 
 public class MovementHandler {
 
     private final Entity entity;
-    private final CollisionHandler collisionHandler;
+    private final CollisionChecker collisionHandler;
     private final Movement movement;
     private int dx;
     private int dy;
 
-    public MovementHandler(Entity entity, CollisionHandler collisionHandler, Movement movement) {
+    public MovementHandler(Entity entity, CollisionChecker collisionHandler, Movement movement) {
         this.entity = entity;
         this.collisionHandler = collisionHandler;
         this.movement = movement;

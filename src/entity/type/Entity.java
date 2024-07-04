@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import main.CollisionHandler;
+import main.CollisionChecker;
 import movement.MovementHandler;
 import movement.type.Movement;
 
@@ -20,6 +20,8 @@ public abstract class Entity {
     private final String name;
     private int x;
     private int y;
+    protected int screenX;
+    protected int screenY;
     private int width;
     private int height;
     private int hitboxOffsetX;
@@ -34,15 +36,15 @@ public abstract class Entity {
 
     private int entityCounterFrames = 12;
     private int entityCounter = entityCounterFrames;
-    private int entityImage;
-    private String direction = "idle";
+    protected int entityImage;
+    protected String direction = "idle";
     
-    private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
+    protected BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
     public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
         this.gp = gp;
-        this.movementHandler = new MovementHandler(this, new CollisionHandler(gp), movement);
+        this.movementHandler = new MovementHandler(this, new CollisionChecker(gp), movement);
         this.type = type;
         this.name = name;
         this.x = x;
@@ -55,6 +57,7 @@ public abstract class Entity {
         this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
         
         this.speed = 2;
+        gp.entityManager.addEntity(this);
     }
 
     public EntityType getEntityType() { return type; }
@@ -80,6 +83,9 @@ public abstract class Entity {
     private void setHitbox() {
         this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
+    
+    public int getScreenX() { return screenX; } 
+    public int getScreenY() { return screenY; }
     
     public int getCentreX() { return x + width / 2; }
     public int getCentreY() { return y + height / 2; }
@@ -165,7 +171,13 @@ public abstract class Entity {
             image = idle;
         }
         setEntityImage();
-
-        g2.drawImage(image, x, y, null);
+        
+        if (type != EntityType.PLAYER) {
+            Player player = gp.getPlayer();
+            this.screenX = x - player.getX() + player.getScreenX();
+            this.screenY = y - player.getY() + player.getScreenY();
+        }
+        
+        g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
     }
 }

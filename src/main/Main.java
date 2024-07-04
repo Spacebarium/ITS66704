@@ -11,10 +11,12 @@ public class Main {
         JPanel mainPanel = new JPanel(cardLayout);
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
+//        window.setResizable(false);
         window.setTitle("Echoes of the Forest");
 
         GamePanel gp = new GamePanel();
+        gp.startGameThread();
+
         InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
 
         mainPanel.add(ui, "InitialUI");
