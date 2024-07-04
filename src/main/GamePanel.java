@@ -29,12 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
-    final int pressNHoldCd = 10;
-    boolean canPressNHold;
-    int pressNHold = pressNHoldCd;
-
-    private int gameState = 1;
-    private final int titleState = 0, playState = 1, pauseState = -1, settingState = 2;
+    private int gameState;
+    private final int playState = 1, pauseState = -1;
 
     private Thread gameThread;
 
@@ -92,27 +88,8 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScreenWidth(){ return screenWidth;}
     public int getScreenHeight(){ return screenHeight;}
 
-    public void pressNHold(){
-        if (pressNHold == pressNHoldCd) {
-            canPressNHold = true;
-        }
-        else{
-            pressNHold ++;
-            canPressNHold = false;
-        }
-    }
-    public void setGameState(){
-        pressNHold();
-        if (canPressNHold) {
-            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
-                ui.setCommandNum(ui.getCommandNum() - 1);
-                pressNHold = 0;
-            } else if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
-                ui.setCommandNum((ui.getCommandNum() + 1));
-                pressNHold = 0;
-            }
-        }
-    }
+
+
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -164,7 +141,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        setGameState();
         if (gameState == playState) {
             entityManager.update();
         }
@@ -176,38 +152,50 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         // Title Screen
-        switch (gameState) {
-            case titleState -> {
-                ui.drawTitleScreen(g2);
-
-                if (keyHandler.isInteract()) {
-                    switch (ui.getCommandNum()) {
-                        case 0 -> gameState = playState;
-                        case 1 -> gameState = settingState;
-                        case 2 -> System.exit(0);
-                        default -> gameState = titleState;
-                    }
-                }
-            }
-            case settingState -> ui.drawSettingScreen(g2);
-            case playState, pauseState -> {
-                // drawing elements and entities
-                tileManager.draw(g2);
-                entityManager.draw(g2);
-
-                if (keyHandler.isMenu()){
-                    gameState = pauseState;
-                    ui.drawPauseScreen(g2);
-                }
-                else{
-                    gameState = playState;
-                }
-                // DEBUG
-                if (keyHandler.isDebugMode()) {
-                    renderDebugInfo(g2);
-                }
-            }
+        tileManager.draw(g2);
+        entityManager.draw(g2);
+        if (keyHandler.isDebugMode()) {
+            renderDebugInfo(g2);
         }
+        if (keyHandler.isMenu()){
+            gameState = pauseState;
+            ui.drawPauseScreen(g2);
+        }
+        else{
+            gameState = playState;
+        }
+//        switch (gameState) {
+//            case titleState -> {
+//                ui.drawTitleScreen(g2);
+//
+//                if (keyHandler.isInteract()) {
+//                    switch (ui.getCommandNum()) {
+//                        case 0 -> gameState = playState;
+//                        case 1 -> gameState = settingState;
+//                        case 2 -> System.exit(0);
+//                        default -> gameState = titleState;
+//                    }
+//                }
+//            }
+//            case settingState -> ui.drawSettingScreen(g2);
+//            case playState, pauseState -> {
+//                // drawing elements and entities
+//                tileManager.draw(g2);
+//                entityManager.draw(g2);
+//
+//                if (keyHandler.isMenu()){
+//                    gameState = pauseState;
+//                    ui.drawPauseScreen(g2);
+//                }
+//                else{
+//                    gameState = playState;
+//                }
+//                // DEBUG
+//                if (keyHandler.isDebugMode()) {
+//                    renderDebugInfo(g2);
+//                }
+//            }
+//        }
         g2.dispose();
     }
 

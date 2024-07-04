@@ -15,6 +15,8 @@ public class Main {
         window.setTitle("Echoes of the Forest");
 
         GamePanel gp = new GamePanel();
+        gp.startGameThread();
+
         InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
 
         mainPanel.add(ui, "InitialUI");
