@@ -8,7 +8,7 @@ import movement.type.EnemyMovement;
 public class GreenNinja extends Enemy {
 
     public GreenNinja(GamePanel gp, EnemyMovement enemyMovement, Player player) {
-        super(gp, "greenNinja", 200, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, enemyMovement, player);
+        super(gp, "greenNinja", 200, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
         setSpeed(4);
         getImage();
     }

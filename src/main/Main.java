@@ -15,14 +15,13 @@ public class Main {
         window.setTitle("Echoes of the Forest");
 
         GamePanel gp = new GamePanel();
-        gp.startGameThread();
 
         InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
 
-        mainPanel.add(ui, "InitialUI");
+        //mainPanel.add(ui, "InitialUI");
         mainPanel.add(gp, "GamePanel");
-        window.add(mainPanel);
         gp.startGameThread();
+        window.add(mainPanel);
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);

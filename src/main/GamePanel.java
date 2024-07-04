@@ -35,9 +35,6 @@ public class GamePanel extends JPanel implements Runnable {
     double updateDurationPerSecond;
     double renderDurationPerSecond;
 
-    private int gameState;
-    private final int playState = 1, pauseState = -1;
-
     private Thread gameThread;
 
     private final UI ui;
@@ -92,9 +89,6 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScreenHeight() { return screenHeight; }
     public Player getPlayer() { return player; }
 
-
-
-
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
@@ -145,9 +139,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState == playState) {
-            entityManager.update();
-        }
+        entityManager.update();
     }
 
     @Override
@@ -155,18 +147,12 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Title Screen
         tileManager.draw(g2);
         entityManager.draw(g2);
+
+        // DEBUG
         if (keyHandler.isDebugMode()) {
             renderDebugInfo(g2);
-        }
-        if (keyHandler.isMenu()){
-            gameState = pauseState;
-            ui.drawPauseScreen(g2);
-        }
-        else{
-            gameState = playState;
         }
 //        switch (gameState) {
 //            case titleState -> {
