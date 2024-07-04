@@ -1,8 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
-import entity.type.Entity;
-import entity.type.Player;
+import entity.type.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +18,7 @@ public class EntityManager {
 
     public void addEntity(Entity entity) {
         entities.add(entity);
-        if (entity instanceof Player) {
+        if (entity.getEntityType() == EntityType.PLAYER) {
             player = (Player) entity;
         }
     }
@@ -37,14 +36,6 @@ public class EntityManager {
     }
 
     public void update() {
-//        for (Object entityObject : entities) {
-//            switch (entityObject) {
-//                case Player player:
-//                    player.update();
-//                    break;
-//                default: System.out.println("No entity found!");
-//            }
-//        }
         synchronized (entities) {
             for (Entity entity : entities) {
                 entity.update();
@@ -59,10 +50,6 @@ public class EntityManager {
         }
         sortedEntities.sort(Comparator.comparingInt(Entity::getY));
 
-//        for (Object entityObject : entities) {
-//            Entity entity = (Entity) entityObject;
-//            entity.draw(g2);
-//        }
         for (Entity entity : entities) {
             entity.draw(g2);
         }
