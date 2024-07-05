@@ -1,12 +1,12 @@
 package weapon;
 
 import entity.EntityManager;
-import entity.type.Enemy;
-import entity.type.Entity;
-import entity.type.Player;
+import entity.type.*;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.util.List;
 
 public class Gun extends Weapon {
 
@@ -19,20 +19,29 @@ public class Gun extends Weapon {
         if (!canAttack()) { return; }
         
         Player player = entityManager.getPlayer();
-        Point playerMousePoint = player.getMousePoint();
+        Point mouse = player.getMousePoint();
+        List<Entity> enemiesInRange = entityManager.getEntitiesInRange(player.getCentreX(), player.getCentreY(), range, EntityType.ENEMY);
+
+        enemiesInRange.stream()
+                .forEach(e -> System.out.println(e.getX() + ", " + e.getY()));
         
-        for (Entity entity : entityManager.getEntities()) {
-            if (entity instanceof Enemy) {
-                Enemy enemy = (Enemy) entity;;
-
-                Rectangle enemyBox = new Rectangle(enemy.getScreenX(), enemy.getScreenY(), enemy.getWidth(), enemy.getHeight());
-                Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
-
-                if (enemyBox.contains(playerMousePoint) && weaponRange.intersects(enemyBox)) {
-                    enemy.setHealth(enemy.getHealth() - damage);
-                }
-            }
-        }   
+        
+        
+//        for (Entity entity : entityManager.getEntities()) {
+//            if (entity instanceof Enemy) {
+//                Enemy enemy = (Enemy) entity;
+//
+//                Rectangle enemyBox = new Rectangle(enemy.getScreenX(), enemy.getScreenY(), enemy.getWidth(), enemy.getHeight());
+//                Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
+//
+//                if (enemyBox.contains(playerMousePoint) && weaponRange.intersects(enemyBox)) {
+//                    enemy.setHealth(enemy.getHealth() - damage);
+//                }
+//            }
+//        }
+        // problems:
+        // 1: check for walls in line
+        // 2: check for other entities in line
         
         lastAttackTime = System.currentTimeMillis();
     }

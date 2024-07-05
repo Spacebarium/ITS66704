@@ -37,7 +37,7 @@ public class TileManager {
         return tiles.length;
     }
 
-    private TileType tileIDToEnum(int type) {
+    private TileType tileIdToEnum(int type) {
         switch (type) {
             case 0:
                 return TileType.EMPTY;
@@ -70,7 +70,7 @@ public class TileManager {
                 String[] tileIds = lines.get(y).split(" ");
                 for (int x = 0; x < tileIds.length; x++) {
                     int tileId = Integer.parseInt(tileIds[x]);
-                    setTile(x, y, tileIDToEnum(tileId));
+                    setTile(x, y, tileIdToEnum(tileId));
                 }
             }   
         } catch (IOException e) {
