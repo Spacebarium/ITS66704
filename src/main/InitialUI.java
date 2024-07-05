@@ -11,9 +11,6 @@ public class InitialUI extends JPanel {
     private final JPanel mainPanel;
     private final GamePanel gp;
     private final KeyHandler keyHandler = new KeyHandler();
-    final int pressNHoldCd = 10;
-    boolean canPressNHold;
-    int pressNHold = pressNHoldCd;
 
     public InitialUI(CardLayout cardLayout, JPanel mainPanel, GamePanel gp) {
         this.ui = new UI(gp);
@@ -21,73 +18,50 @@ public class InitialUI extends JPanel {
         this.mainPanel = mainPanel;
         this.gp = gp;
 
+        setLayout(null);
+
         JButton startButton = new JButton("Start Game");
-
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchGamePanel();
-            }
-        });
-
-        setLayout(new BorderLayout());
+        startButton.setBounds(200, 500, 1000, 1000);
+        startButton.addActionListener(e -> switchGamePanel());
         add(startButton, BorderLayout.NORTH);
-
-        setFocusable(true);
-        requestFocusInWindow();
 
         addKeyListener(keyHandler);
 
-        setupKeyBindings();
-    }
-
-    private void setupKeyBindings(){
-        Action switchPanelAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchGamePanel();
+        Timer timer = new Timer(70, e -> {
+            repaint();
+            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
+                ui.setCommandNum(ui.getCommandNum() - 1);
             }
-        };
+            if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
+                ui.setCommandNum((ui.getCommandNum() + 1));
+            }
+            if (keyHandler.isInteract()) {
+                switch (ui.getCommandNum()) {
+                    case 0 -> switchGamePanel();
+                    //    case 1 -> gameState = settingState;
+                    case 2 -> System.exit(0);
+                }
+            }
+        });
 
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "switchPanel");
-        this.getActionMap().put("switchPanel", switchPanelAction);
+
+        timer.start();
+
+        setFocusable(true);
+        requestFocusInWindow();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
         ui.drawTitleScreen(g2);
-    }
-
-    public void setGameState(){
-        pressNHold();
-        if (canPressNHold) {
-            if (keyHandler.isUp() && ui.getCommandNum() > 0) {
-                ui.setCommandNum(ui.getCommandNum() - 1);
-                pressNHold = 0;
-            } else if (keyHandler.isDown() && ui.getCommandNum() < ui.getMaxCommandNum()) {
-                ui.setCommandNum((ui.getCommandNum() + 1));
-                pressNHold = 0;
-            }
-        }
-    }
-
-    public void pressNHold(){
-        if (pressNHold == pressNHoldCd) {
-            canPressNHold = true;
-        }
-        else{
-            pressNHold ++;
-            canPressNHold = false;
-        }
     }
 
     public void switchGamePanel(){
         cardLayout.show(mainPanel, "GamePanel");
+        gp.requestFocusInWindow();
         gp.startGameThread();
-      //  gp.setGameState(1);
     }
 }
 
