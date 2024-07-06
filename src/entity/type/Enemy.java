@@ -7,23 +7,28 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import main.GamePanel;
 import movement.type.EnemyMovement;
+import movement.type.NoMovement;
 
 public class Enemy extends Entity {
 
     private final Player player;
     private final int    aggroDistance = 140;
     private int          cooldown = 2 * 60;
-    public int           attackRange = 16;
+    private int          attackRange = 16;
     private int          attackCooldown = cooldown;
     private boolean      canAttack = true;
 
     public Enemy(GamePanel gp, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
-        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
+        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new NoMovement());
         this.player = gp.entityManager.getPlayer();
 
         setSpeed(2);
         setHealth(20);
         getImage();
+    }
+    
+    public int getAttackRange() {
+        return attackRange;
     }
 
     public void getImage() {
@@ -59,7 +64,7 @@ public class Enemy extends Entity {
         int deltaX = getXDistance();
         int deltaY = getYDistance();
         
-        return (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        return (int) Math.hypot(deltaX, deltaY);
     }
 
     public void cooldownCounter() {

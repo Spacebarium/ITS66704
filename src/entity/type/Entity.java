@@ -4,6 +4,7 @@ import main.GamePanel;
 import utility.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -83,11 +84,14 @@ public abstract class Entity {
         this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
     
+    public Rectangle getBoundingBox() { return new Rectangle(x, y, width, height); }
+    
     public int getScreenX() { return screenX; } 
     public int getScreenY() { return screenY; }
     
     public int getCentreX() { return x + (width / 2); }
     public int getCentreY() { return y + (height / 2); }
+    public Point getCentre() { return new Point(getCentreX(), getCentreY()); }
 
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }

@@ -84,7 +84,7 @@ public class EnemyMovement implements Movement {
 
         enemy.cooldownCounter();
 
-        if (enemy.getDistanceToPlayer() <= enemy.attackRange + enemy.getPlayerHitbox()) {
+        if (enemy.getDistanceToPlayer() <= enemy.getAttackRange() + enemy.getPlayerHitbox()) {
             enemy.attack();
         } else {
             move(distanceX, distanceY, enemy.getSpeed());

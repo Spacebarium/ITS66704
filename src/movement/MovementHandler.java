@@ -31,7 +31,7 @@ public class MovementHandler {
     }
 
     public double getSpeed() {
-        return Math.sqrt(dx * dx + dy * dy);
+        return Math.hypot(dx, dy);
     }
 
     public void update() {

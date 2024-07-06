@@ -1,7 +1,7 @@
 package weapon;
 
-import entity.EntityManager;
 import java.awt.Point;
+import main.GamePanel;
 
 public abstract class Weapon {
     protected String name;
@@ -10,15 +10,15 @@ public abstract class Weapon {
     protected int    attackRate;
     protected long   lastAttackTime;
     protected Point  position;
-    protected EntityManager entityManager;
+    protected GamePanel gp;
     
-    public Weapon(String name, int damage, int range, int attackRate, EntityManager entityManager) {
+    public Weapon(String name, int damage, int range, int attackRate, GamePanel gp) {
         this.name = name;
         this.damage = damage;
         this.range = range;
         this.attackRate = attackRate; // in milliseconds
         this.lastAttackTime = 0;
-        this.entityManager = entityManager;
+        this.gp = gp;
     }
 
     public String getName() { return name;}
@@ -31,7 +31,6 @@ public abstract class Weapon {
     }
     
     public Point getPosition() { return position; }
-    public EntityManager getEntityManager() { return entityManager; }
     
     public boolean canAttack() {
         long currentTime = System.currentTimeMillis();

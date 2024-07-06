@@ -19,6 +19,7 @@ public class Player extends Entity {
     private final List<Weapon> storedWeapons;
     private int equippedWeaponIndex;
     private static final int MAX_WEAPON_COUNT = 2;
+    private final int weaponOffset;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
         super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
@@ -27,9 +28,10 @@ public class Player extends Entity {
         this.mouseHandler = mouseHandler;
         
         this.storedWeapons = new ArrayList<>();
-        this.storedWeapons.add(new Sword("Dull Blade", 2, 1 * 16 * gp.getScale(), 500, entityManager));
-        this.storedWeapons.add(new Gun("Pew Pew", 1, 5 * 16 * gp.getScale(), 200, entityManager));
+        this.storedWeapons.add(null);
+        this.storedWeapons.add(null);
         this.equippedWeaponIndex = 0;
+        this.weaponOffset = getWidth() / 2;
         
         this.screenX = gp.getSize().width / 2 - getWidth() / 2;
         this.screenY = gp.getSize().height / 2 - getHeight() / 2;
@@ -102,20 +104,22 @@ public class Player extends Entity {
         return new Point(mX, mY);
     }
     
-    public void calculateWeaponPoint() {
+    public Point calculateWeaponPoint() {
         // https://www.desmos.com/calculator/oyir1xuqnd
         Point mousePoint = getMousePoint();
 
         int pX = getX() + getWidth() / 2;
         int pY = getY() + getHeight() / 2;
 
-        int distanceFromPlayer = getWidth();
-
         int deltaX = mousePoint.x - screenX - getWidth() / 2;
         int deltaY = mousePoint.y - screenY - getHeight() / 2;
-        double dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        double dist = Math.hypot(deltaX, deltaY);
         
-        getEquippedWeapon().setPosition(new Point((int) ((distanceFromPlayer * deltaX / dist) + pX), (int) ((distanceFromPlayer * deltaY / dist) + pY)));
+        return new Point((int) ((weaponOffset * deltaX / dist) + pX), (int) ((weaponOffset * deltaY / dist) + pY));
+    }
+    
+    public int getWeaponOffset() {
+        return weaponOffset;
     }
     
     @Override
@@ -132,7 +136,7 @@ public class Player extends Entity {
             switchEquippedWeapon(1);
         }
         if (mouseHandler.isLmb()) {
-            calculateWeaponPoint();
+            getEquippedWeapon().setPosition(calculateWeaponPoint());
             useEquippedWeapon();
         } else {
             getEquippedWeapon().setPosition(null);

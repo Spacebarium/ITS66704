@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import weapon.Gun;
+import weapon.Sword;
 import weapon.Weapon;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -41,7 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     public final EntityManager entityManager;
-    final TileManager tileManager;
+    public final TileManager tileManager;
 
     public GamePanel() {
         ui = new UI(this);
@@ -70,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void initialiseEntities() {
         Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
+        player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * 16 * scale, 500, this), 0);
+        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * 16 * scale, 200, this), 1);
 
         WhiteNinja whiteNinja = new WhiteNinja(this);
         entityManager.addEntity(whiteNinja);
@@ -226,12 +229,11 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(new Color(0, 0, 255, 128));
             g2.fillRect(hitbox.x - player.getX() + player.getScreenX(), hitbox.y - player.getY() + player.getScreenY(), hitbox.width, hitbox.height);
 
+            // movement bounds
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
 
-            int entityCentreX = entity.getX() + (int) Math.round(entity.getWidth() / 2.0);
-            int entityCentreY = entity.getY() + (int) Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - (int) Math.round(boundX / 2.0), entityCentreY - (int) Math.round(boundY / 2.0), boundX, boundY);
+            Rectangle movementBound = new Rectangle(entity.getCentreX() - boundX / 2, entity.getCentreY() - boundY / 2, boundX, boundY);
 
             g2.setColor(new Color(128, 0, 255, 128));
             g2.drawRect(movementBound.x - player.getX() + player.getScreenX(), movementBound.y - player.getY() + player.getScreenY(), movementBound.width, movementBound.height);
@@ -244,10 +246,9 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(new Color(128, 0, 255, 128));
             g2.fillOval(player.getEquippedWeapon().getPosition().x - r - player.getX() + player.getScreenX(), player.getEquippedWeapon().getPosition().y - r - player.getY() + player.getScreenY(), 2 * r, 2 * r);
             
-            if (player.getEquippedWeapon() instanceof Gun) {
-                Point mouse = player.getMousePoint();
-                g2.setColor(Color.PINK);
-                g2.drawLine(player.getScreenX() + player.getWidth() / 2, player.getScreenY() + player.getHeight() / 2, mouse.x, mouse.y);
+            if (equippedWeapon instanceof Gun) {
+                Gun gun = (Gun) equippedWeapon;
+                gun.drawTiles(g2);
             }
         }
     }
