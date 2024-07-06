@@ -4,6 +4,7 @@ import main.GamePanel;
 import utility.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -83,11 +84,14 @@ public abstract class Entity {
         this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
     
+    public Rectangle getBoundingBox() { return new Rectangle(x, y, width, height); }
+    
     public int getScreenX() { return screenX; } 
     public int getScreenY() { return screenY; }
     
     public int getCentreX() { return x + (width / 2); }
     public int getCentreY() { return y + (height / 2); }
+    public Point getCentre() { return new Point(getCentreX(), getCentreY()); }
 
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
@@ -109,6 +113,22 @@ public abstract class Entity {
     public boolean getCombatStatus(){ return inCombat; }
     public void setCombatStatus(boolean inCombat) {
         this.inCombat = inCombat;
+    }
+    
+    public boolean isInRange(int x, int y, int range) {
+        int closestX = clamp(x, this.x, this.x + this.width);
+        int closestY = clamp(y, this.y, this.y + this.height);
+        
+        int distX = x - closestX;
+        int distY = y - closestY;
+        
+        return distX * distX + distY * distY <= range * range;
+    }
+    
+    private int clamp(int value, int min, int max) {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
     }
 
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
@@ -146,7 +166,7 @@ public abstract class Entity {
     }
 
     public void update() {
-        getMovementHandler().update();
+        movementHandler.update();
     };
 
     public void draw(Graphics2D g2) {

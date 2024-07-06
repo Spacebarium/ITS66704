@@ -1,8 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
-import entity.type.Entity;
-import entity.type.Player;
+import entity.type.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +18,7 @@ public class EntityManager {
 
     public void addEntity(Entity entity) {
         entities.add(entity);
-        if (entity instanceof Player) {
+        if (entity.getEntityType() == EntityType.PLAYER) {
             player = (Player) entity;
         }
     }
@@ -32,40 +31,30 @@ public class EntityManager {
         return entities;
     }
     
-    public Player getPlayer() {
-        return player;
+    public List<Entity> getEntitiesInRange(int x, int y, int range, EntityType entityType) {
+        return entities.stream()
+                .filter(e -> entityType == null || e.getEntityType() == entityType)
+                .filter(e -> e.isInRange(x, y, range))
+                .toList();
     }
+    
+    public List<Entity> getEntitiesInRange(int x, int y, int range) {
+        return getEntitiesInRange(x, y, range, null);
+    }
+    
+    public Player getPlayer() { return player; }
 
     public void update() {
-//        for (Object entityObject : entities) {
-//            switch (entityObject) {
-//                case Player player:
-//                    player.update();
-//                    break;
-//                default: System.out.println("No entity found!");
-//            }
-//        }
         synchronized (entities) {
-            for (Entity entity : entities) {
-                entity.update();
-            }
+            entities.forEach(e -> e.update());
         }
     }
 
     public void draw(Graphics2D g2) {
-        List<Entity> sortedEntities;
         synchronized (entities) {
-            sortedEntities = new ArrayList<>(entities);
-        }
-        sortedEntities.sort(Comparator.comparingInt(Entity::getY));
-
-
-//        for (Object entityObject : entities) {
-//            Entity entity = (Entity) entityObject;
-//            entity.draw(g2);
-//        }
-        for (Entity entity : entities) {
-            entity.draw(g2);
+            entities.stream()
+                    .sorted(Comparator.comparingInt(Entity::getY))
+                    .forEach(e -> e.draw(g2));
         }
     }
 

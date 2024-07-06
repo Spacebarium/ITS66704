@@ -8,6 +8,10 @@ import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.geom.Line2D;
+import weapon.Gun;
+import weapon.Sword;
+import weapon.Weapon;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -16,12 +20,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final int scale = 3;
     private final int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-    // WORLD SETTINGS
-    private final int maxWorldCol = 50;
-    private final int maxWorldRow = 50;
-    private final int worldWidth = tileSize * maxWorldCol;
-    private final int worldHeight = tileSize * maxWorldRow;
 
     int updatesPerSecond = 60;
     int FPS = 0;
@@ -42,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     public final EntityManager entityManager;
-    final TileManager tileManager;
+    public final TileManager tileManager;
 
     public GamePanel() {
         ui = new UI(this);
@@ -66,11 +64,13 @@ public class GamePanel extends JPanel implements Runnable {
     public int getTileSize() { return tileSize; }
     public int getScreenWidth() { return screenSize.width; }
     public int getScreenHeight() { return screenSize.height; }
-    public int getScale() {return scale;}
+    public int getScale() { return scale; }
 
     public void initialiseEntities() {
         Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler), entityManager);
         entityManager.addEntity(player);
+        player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * 16 * scale, 500, this), 0);
+        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * 16 * scale, 200, this), 1);
 
         WhiteNinja whiteNinja = new WhiteNinja(this);
         entityManager.addEntity(whiteNinja);
@@ -167,6 +167,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void renderDebugInfo(Graphics2D g2) {
         Player player = entityManager.getPlayer();
+        
         g2.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -197,23 +198,27 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(new Color(0, 0, 255, 128));
             g2.fillRect(hitbox.x - player.getX() + player.getScreenX(), hitbox.y - player.getY() + player.getScreenY(), hitbox.width, hitbox.height);
 
+            // movement bounds
             int boundX = entity.getWidth() + 200;
             int boundY = entity.getHeight() + 200;
 
-            int entityCentreX = entity.getX() + (int)Math.round(entity.getWidth() / 2.0);
-            int entityCentreY = entity.getY() + (int)Math.round(entity.getHeight() / 2.0);
-            Rectangle movementBound = new Rectangle(entityCentreX - (int)Math.round(boundX / 2.0), entityCentreY - (int)Math.round(boundY / 2.0), boundX, boundY);
+            Rectangle movementBound = new Rectangle(entity.getCentreX() - boundX / 2, entity.getCentreY() - boundY / 2, boundX, boundY);
 
             g2.setColor(new Color(128, 0, 255, 128));
-
             g2.drawRect(movementBound.x - player.getX() + player.getScreenX(), movementBound.y - player.getY() + player.getScreenY(), movementBound.width, movementBound.height);
         }
 
         // draw weapon range
         if (player.getEquippedWeapon().getPosition() != null) {
+            Weapon equippedWeapon = player.getEquippedWeapon();
             int r = player.getEquippedWeapon().getRange();
             g2.setColor(new Color(128, 0, 255, 128));
             g2.fillOval(player.getEquippedWeapon().getPosition().x - r - player.getX() + player.getScreenX(), player.getEquippedWeapon().getPosition().y - r - player.getY() + player.getScreenY(), 2 * r, 2 * r);
+            
+            if (equippedWeapon instanceof Gun) {
+                Gun gun = (Gun) equippedWeapon;
+                gun.drawTiles(g2);
+            }
         }
     }
 }

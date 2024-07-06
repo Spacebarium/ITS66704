@@ -7,7 +7,6 @@ public class WhiteNinja extends Enemy {
 
     public WhiteNinja(GamePanel gp) {
         super(gp, "whiteNinja", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
-        setSpeed(4);
 
         getImage();
     }

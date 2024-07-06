@@ -1,22 +1,22 @@
 package weapon;
 
-import entity.EntityManager;
 import entity.type.Enemy;
 import entity.type.Entity;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
+import main.GamePanel;
 
 public class Sword extends Weapon {
 
-    public Sword(String name, int damage, int range, int attackRate, EntityManager entityManager) {
-        super(name, damage, range, attackRate, entityManager);
+    public Sword(String name, int damage, int range, int attackRate, GamePanel gp) {
+        super(name, damage, range, attackRate, gp);
     }
 
     @Override
     public void use() {
         if (!canAttack()) { return; }
         
-        for (Entity entity : entityManager.getEntities()) {
+        for (Entity entity : gp.entityManager.getEntities()) {
             if (entity instanceof Enemy) {
                 Enemy enemy = (Enemy) entity;
 
