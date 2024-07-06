@@ -137,30 +137,4 @@ public class Player extends Entity {
             getEquippedWeapon().setPosition(null);
         }
     }
-    
-    @Override
-    public void draw(Graphics2D g2) {
-        if (entityImage == 1) {
-            image = switch (direction) {
-                case "up" -> up1;
-                case "down" -> down1;
-                case "left" -> left1;
-                case "right" -> right1;
-                default -> idle;
-            };
-        } else if (entityImage == 2) {
-            image = switch (direction) {
-                case "up" -> up2;
-                case "down" -> down2;
-                case "left" -> left2;
-                case "right" -> right2;
-                default -> idle;
-	    };
-        } else {
-            image = idle;
-        }
-        setEntityImage();
-
-        g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
-    }
 }

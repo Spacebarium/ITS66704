@@ -18,17 +18,14 @@ public class Main {
 //        window.setResizable(false);
 
         GamePanel gp = new GamePanel();
-      //  InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
+        InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
 
-        //mainPanel.add(ui, "InitialUI");
+        mainPanel.add(ui, "InitialUI");
         mainPanel.add(gp, "GamePanel");
-        gp.startGameThread();
-
         window.add(mainPanel);
+
         window.pack();
-
         window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
