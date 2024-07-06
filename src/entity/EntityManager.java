@@ -22,6 +22,8 @@ public class EntityManager {
             player = (Player) entity;
         }
     }
+    
+    public Player getPlayer() { return player; }
 
     public void removeEntity(Entity entity) {
         entities.remove(entity);
@@ -41,8 +43,6 @@ public class EntityManager {
     public List<Entity> getEntitiesInRange(int x, int y, int range) {
         return getEntitiesInRange(x, y, range, null);
     }
-    
-    public Player getPlayer() { return player; }
 
     public void update() {
         synchronized (entities) {

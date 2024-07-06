@@ -1,4 +1,4 @@
-package gameFile;
+package game_file;
 
 public class GameFile {
     int playerX;

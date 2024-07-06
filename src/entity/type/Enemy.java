@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import main.GamePanel;
 import movement.type.EnemyMovement;
-import movement.type.NoMovement;
 
 public class Enemy extends Entity {
 
@@ -19,7 +18,7 @@ public class Enemy extends Entity {
     private boolean      canAttack = true;
 
     public Enemy(GamePanel gp, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
-        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new NoMovement());
+        super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
         this.player = gp.entityManager.getPlayer();
 
         setSpeed(2);
@@ -97,17 +96,13 @@ public class Enemy extends Entity {
     public void draw(Graphics2D g2) {
         super.draw(g2);
         
+        // draw hp
         g2.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setFont(new Font("Arial", Font.BOLD, 16));
         g2.setColor(Color.WHITE);
 
-        Player player = gp.entityManager.getPlayer();
-        this.screenX = getX() - player.getX() + player.getScreenX();
-        this.screenY = getY() - player.getY() + player.getScreenY();
-
-        // draw hp
         g2.drawString(String.valueOf(getHealth()), getScreenX(), getScreenY() - 10);
     }
 }

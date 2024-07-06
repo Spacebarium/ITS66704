@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class InitialUI extends JPanel {
+
     private final GamePanel gp;
     private Font arial_40, arial_80B;
     private int commandNum;
@@ -25,7 +26,7 @@ public class InitialUI extends JPanel {
     private JPanel optionPanel;
     private JLayeredPane optionLayer;
     private JPanel stringPanel, buttonPanel;
-    private JLabel [] buttonOptions;
+    private JLabel[] buttonOptions;
     private JButton startButton, tutorialButton, quitButton;
 
     public InitialUI(CardLayout cardLayout, JPanel mainPanel, GamePanel gp) {
@@ -70,8 +71,6 @@ public class InitialUI extends JPanel {
         titleLabel.setFont(getFont().deriveFont(Font.BOLD, 66F));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-
-
         //Option panel
         optionPanel = new JPanel();
         optionPanel.setLayout(null);
@@ -80,8 +79,8 @@ public class InitialUI extends JPanel {
         optionLayer = new JLayeredPane();
 
         //String panel
-        stringPanel = new JPanel(new GridLayout(3,1,10, 0));
-        String [] optionTexts = {"  START GAME  ", "  TUTORIAL  ", "  QUIT  "};
+        stringPanel = new JPanel(new GridLayout(3, 1, 10, 0));
+        String[] optionTexts = {"  START GAME  ", "  TUTORIAL  ", "  QUIT  "};
         buttonOptions = new JLabel[optionTexts.length];
 
         for (int i = 0; i < optionTexts.length; i++) {
@@ -93,7 +92,6 @@ public class InitialUI extends JPanel {
 
         //Button panel
         buttonPanel = new JPanel();
-
 
         //Start button
         startButton = new JButton();
@@ -121,8 +119,6 @@ public class InitialUI extends JPanel {
         add(hPaddingRight, BorderLayout.EAST);
         add(hPaddingLeft, BorderLayout.WEST);
         add(vPaddingBottom, BorderLayout.SOUTH);
-
-
 
         //Element configuration
         //Start button
@@ -152,25 +148,25 @@ public class InitialUI extends JPanel {
                 System.out.println(optionPanel.getHeight());
                 int panelWidth = 100;
                 int panelHeight = 100;
-                optionLayer.setBounds(0,0, optionPanelWidth, optionPanelHeight);
+                optionLayer.setBounds(0, 0, optionPanelWidth, optionPanelHeight);
                 stringPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, 100, 100);
                 buttonPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, 100, 100);
             }
         });
-        
+
         //Accept keyboard inputs
         updateSelection(commandNum);
         addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e){
-                switch(e.getKeyCode()){
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                        if (commandNum > 0){
+                        if (commandNum > 0) {
                             updateSelection(commandNum, -1);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                        if (commandNum < maxCommandNum){
+                        if (commandNum < maxCommandNum) {
                             updateSelection(commandNum, +1);
                         }
                     }
@@ -180,7 +176,8 @@ public class InitialUI extends JPanel {
                                 switchGamePanel();
                             }
                             //    case 1 -> settingPanel();
-                            case 2 -> System.exit(0);
+                            case 2 ->
+                                System.exit(0);
                         }
                         timer.stop();
                     }
@@ -212,10 +209,9 @@ public class InitialUI extends JPanel {
         this.commandNum += i;
     }
 
-    private void switchGamePanel(){
+    private void switchGamePanel() {
         cardLayout.show(mainPanel, "GamePanel");
         gp.requestFocusInWindow();
         gp.startGameThread();
     }
 }
-
