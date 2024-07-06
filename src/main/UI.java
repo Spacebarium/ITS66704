@@ -49,7 +49,7 @@ public class UI {
     public void drawTitleScreen(Graphics2D g2) {
 
         //SET BACKGROUND COLOR
-        g2.setColor(new Color(0, 0, 0));
+        g2.setColor(new Color(0, 0, 128));
         g2.fillRect(0, 0, gp.getScreenWidth(), gp.getScreenHeight());
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 66F));

@@ -97,7 +97,11 @@ public class Enemy extends Entity {
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.setFont(new Font("Arial", Font.BOLD, 16));
         g2.setColor(Color.WHITE);
-        
+
+        Player player = gp.entityManager.getPlayer();
+        this.screenX = getX() - player.getX() + player.getScreenX();
+        this.screenY = getY() - player.getY() + player.getScreenY();
+
         // draw hp
         g2.drawString(String.valueOf(getHealth()), getScreenX(), getScreenY() - 10);
     }
