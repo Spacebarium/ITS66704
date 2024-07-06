@@ -148,16 +148,15 @@ public class InitialUI extends JPanel {
             public void componentResized(ComponentEvent e) {
                 int optionPanelWidth = optionPanel.getWidth();
                 int optionPanelHeight = optionPanel.getHeight();
-                System.out.println(optionPanel.getHeight());
-                System.out.println(optionPanel.getHeight());
                 int panelWidth = 100;
                 int panelHeight = 100;
+
                 optionLayer.setBounds(0,0, optionPanelWidth, optionPanelHeight);
-                stringPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, 100, 100);
-                buttonPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, 100, 100);
+                stringPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, panelWidth, panelHeight);
+                buttonPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, panelWidth, panelHeight);
             }
         });
-        
+
         //Accept keyboard inputs
         updateSelection(commandNum);
         addKeyListener(new KeyAdapter() {
