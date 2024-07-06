@@ -191,12 +191,6 @@ public abstract class Entity {
         }
         setEntityImage();
         
-        if (type != EntityType.PLAYER) {
-            Player player = gp.entityManager.getPlayer();
-            this.screenX = x - player.getX() + player.getScreenX();
-            this.screenY = y - player.getY() + player.getScreenY();
-        }
-        
         g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
     }
 }
