@@ -40,19 +40,22 @@ public class GamePanel extends JPanel implements Runnable {
     private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
+    private final HUDRenderer hudRenderer;
     public final DebugRenderer debugRenderer;
     public final EntityManager entityManager;
     public final TileManager tileManager;
 
     public GamePanel() {
-        ui = new UI(this);
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        debugRenderer = new DebugRenderer(this);
+        ui = new UI(this);
 
         initialiseEntities();
+        
+        debugRenderer = new DebugRenderer(this);
+        hudRenderer = new HUDRenderer(this);
 
         this.setPreferredSize(screenSize);
         this.setBackground(Color.BLACK);
@@ -72,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final void initialiseEntities() {
         Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * tileSize, 500, this), 0);
+        player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * tileSize, 750, this), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this), 1);
 
         WhiteNinja whiteNinja = new WhiteNinja(this);
@@ -150,6 +153,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.isDebugMode()) {
             debugRenderer.renderDebugInfo(g2);
         }
+        
+        hudRenderer.draw(g2);
         
         g2.dispose();
     }

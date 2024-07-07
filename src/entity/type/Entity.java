@@ -97,7 +97,7 @@ public abstract class Entity {
     public void setSpeed(int speed) { this.speed = speed; }
 
     public int getHealth() { return health; }
-    public void setHealth(int health) { this.health = health; }
+    public void setHealth(int health) { this.health = Math.max(0, health); }
 
     public int getMaxHealth() { return maxHealth; }
     public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }

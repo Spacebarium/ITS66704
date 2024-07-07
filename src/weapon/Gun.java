@@ -1,18 +1,14 @@
 package weapon;
 
-import entity.EntityManager;
-import entity.type.*;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.util.List;
+import java.awt.*;
+import java.awt.geom.Line2D;
+
 import main.GamePanel;
+import entity.type.*;
 
 public class Gun extends Weapon {
     
-    private final EntityManager entityManager;
     private final int tileSize;
     private final Player player;
     private final int weaponOffset;
@@ -20,9 +16,8 @@ public class Gun extends Weapon {
     public Gun(String name, int damage, int range, int attackRate, GamePanel gp) {
         super(name, damage, range, attackRate, gp);
         
-        this.entityManager = gp.entityManager;
         this.tileSize = gp.getTileSize();
-        this.player = entityManager.getPlayer();
+        this.player = gp.entityManager.getPlayer();
         this.weaponOffset = player.getWeaponOffset();
     }
     
@@ -75,7 +70,7 @@ public class Gun extends Weapon {
     public void use() {
         if (!canAttack()) { return; }
         
-        List<Entity> enemiesInRange = entityManager.getEntitiesInRange(position.x, position.y, range, EntityType.ENEMY);
+        List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
         Line2D raycast = getRaycast(player.getCentre(), getWorldMouse());
         
         // check for enemies in line

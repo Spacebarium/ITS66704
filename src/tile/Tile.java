@@ -42,7 +42,7 @@ public class Tile {
 
     private BufferedImage loadImage(String name) {
         try {
-            return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
+            return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/" + name + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
