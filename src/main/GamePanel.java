@@ -135,10 +135,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void setGameState(int gameState){
-        this.gameState = gameState;
-    }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
