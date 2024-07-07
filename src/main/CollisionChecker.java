@@ -27,9 +27,7 @@ public class CollisionChecker {
         // tile check
         for (int tileX = startTileX; tileX <= endTileX; tileX++) {
             for (int tileY = startTileY; tileY <= endTileY; tileY++) {
-                if (!gp.tileManager.getTile(tileX, tileY).isWalkable()) {
-                    return false; // collision detected
-                }
+
             }
         }
         

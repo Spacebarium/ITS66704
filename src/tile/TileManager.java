@@ -21,7 +21,7 @@ public class TileManager {
         this.gp = gp;
     }
 
-    public void setTile(int x, int y, TileType type) {
+    public void setTile(int x, int y, int type) {
         tiles[y][x] = new Tile(type);
     }
 
@@ -59,20 +59,19 @@ public class TileManager {
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
-            
+
             bufferedReader.close();
 
             int mapTileHeight = lines.size();
             int mapTileWidth = lines.get(0).split(" ").length;
             tiles = new Tile[mapTileHeight][mapTileWidth];
-
             for (int y = 0; y < mapTileHeight; y++) {
                 String[] tileIds = lines.get(y).split(" ");
                 for (int x = 0; x < tileIds.length; x++) {
                     int tileId = Integer.parseInt(tileIds[x]);
-                    setTile(x, y, tileIdToEnum(tileId));
+                    setTile(x, y, tileId);
                 }
-            }   
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

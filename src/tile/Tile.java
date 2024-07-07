@@ -6,23 +6,23 @@ import javax.imageio.ImageIO;
 
 public class Tile {
 
-    private final TileType type;
-    private final boolean walkable;
+   // private final TileType type;
+   // private final boolean walkable;
     private final BufferedImage image;
 
-    public Tile(TileType type) {
-        this.type = type;
-        this.walkable = determineWalkability(type);
-        this.image = loadImage(type.name().toLowerCase());
+    public Tile(int type) {
+        //this.type = type;
+     //   this.walkable = determineWalkability(type);
+        this.image = loadImage(type);
     }
 
-    public TileType getType() {
-        return type;
-    }
+//    public TileType getType() {
+//        return type;
+//    }
 
-    public boolean isWalkable() {
-        return walkable;
-    }
+//    public boolean isWalkable() {
+//        return walkable;
+//    }
     
     public BufferedImage getImage() {
         return image;
@@ -40,9 +40,10 @@ public class Tile {
         }
     }
 
-    private BufferedImage loadImage(String name) {
+    private BufferedImage loadImage(int name) {
         try {
-            return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
+            String test = String.format("%03d", name);
+            return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + test + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
