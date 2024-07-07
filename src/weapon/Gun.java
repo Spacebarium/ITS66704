@@ -12,13 +12,23 @@ import main.GamePanel;
 
 public class Gun extends Weapon {
     
+    private final EntityManager entityManager;
     private final int tileSize;
+    private final Player player;
     private final int weaponOffset;
 
     public Gun(String name, int damage, int range, int attackRate, GamePanel gp) {
         super(name, damage, range, attackRate, gp);
+        
+        this.entityManager = gp.entityManager;
         this.tileSize = gp.getTileSize();
-        this.weaponOffset = gp.entityManager.getPlayer().getWeaponOffset();
+        this.player = entityManager.getPlayer();
+        this.weaponOffset = player.getWeaponOffset();
+    }
+    
+    public Point getWorldMouse() {
+        Point mouse = player.getMousePoint();
+        return new Point(mouse.x + player.getX() - player.getScreenX(), mouse.y + player.getY() - player.getScreenY());
     }
     
     public Line2D getRaycast(Point playerPoint, Point mousePoint) {
@@ -65,19 +75,10 @@ public class Gun extends Weapon {
     public void use() {
         if (!canAttack()) { return; }
         
-        EntityManager entityManager = gp.entityManager;
-        Player player = entityManager.getPlayer();
-        Point mouse = player.getMousePoint();
-        Point worldMouse = new Point(mouse.x + player.getX() - player.getScreenX(), mouse.y + player.getY() - player.getScreenY());
         List<Entity> enemiesInRange = entityManager.getEntitiesInRange(position.x, position.y, range, EntityType.ENEMY);
-        Line2D raycast = getRaycast(player.getCentre(), worldMouse);
+        Line2D raycast = getRaycast(player.getCentre(), getWorldMouse());
         
-        // problems:
-        // 1: check for walls in line
-//        Point lastWalkablePoint = getLastWalkablePoint(position, mouse);
-        
-        
-        // 2: check for other entities in line
+        // check for enemies in line
         enemiesInRange.stream()
                 .filter(e -> e.getBoundingBox().intersectsLine(raycast))
                 .forEach(e -> e.setHealth(e.getHealth() - damage));
@@ -85,18 +86,13 @@ public class Gun extends Weapon {
         lastAttackTime = System.currentTimeMillis();
     }
     
-    public void drawTiles(Graphics2D g2) {
+    public void renderDebugInfo(Graphics2D g2) {
         g2.setColor(new Color(255, 192, 203, 128));
-        
-        EntityManager entityManager = gp.entityManager;
-        Player player = entityManager.getPlayer();
-        Point mouse = player.getMousePoint();
-        Point worldMouse = new Point(mouse.x + player.getX() - player.getScreenX(), mouse.y + player.getY() - player.getScreenY());
         
 //        g2.drawOval(mouse.x - 4, mouse.y - 4, 8, 8);
 //        g2.drawOval(position.x - 4 - player.getX() + player.getScreenX(), position.y - 4 - player.getY() + player.getScreenY(), 8, 8);
         
-        Line2D raycast = getRaycast(player.getCentre(), worldMouse);
+        Line2D raycast = getRaycast(player.getCentre(), getWorldMouse());
         g2.setStroke(new BasicStroke(5));
         g2.drawLine(
                 (int) (raycast.getX1() - player.getX() + player.getScreenX()),

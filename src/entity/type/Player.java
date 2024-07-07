@@ -1,7 +1,5 @@
 package entity.type;
 
-import entity.EntityManager;
-import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -18,10 +16,10 @@ public class Player extends Entity {
     private final MouseHandler mouseHandler;
     private final List<Weapon> storedWeapons;
     private int equippedWeaponIndex;
-    private static final int MAX_WEAPON_COUNT = 2;
+    private final int MAX_WEAPON_COUNT = 2;
     private final int weaponOffset;
 
-    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement, EntityManager entityManager) {
+    public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
         super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
 
         this.keyHandler = keyHandler;

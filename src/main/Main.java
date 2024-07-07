@@ -1,12 +1,10 @@
 package main;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
-
 
 public class Main {
 
@@ -21,7 +19,7 @@ public class Main {
         window.setMinimumSize(new Dimension(1280, 720));
 
         GamePanel gp = new GamePanel();
-        InitialUI ui = new InitialUI(cardLayout,mainPanel, gp);
+        InitialUI ui = new InitialUI(cardLayout, mainPanel, gp);
 
         mainPanel.add(ui, "InitialUI");
         mainPanel.add(gp, "GamePanel");
@@ -41,7 +39,5 @@ public class Main {
                 gp.repaint();
             }
         });
-        
-        gp.startGameThread();
     }
 }

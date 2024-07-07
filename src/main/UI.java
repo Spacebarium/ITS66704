@@ -9,7 +9,7 @@ public class UI {
     GamePanel gp;
     Font arial_40, arial_80B;
 
-    //BufferedImage keyimage;
+    // BufferedImage keyimage;
     private boolean messageOn = false;
     private String message = "";
 
@@ -17,7 +17,6 @@ public class UI {
     private final int maxCommandNum = 2;
 
     public UI(GamePanel gp) {
-
         this.gp = gp;
 
         arial_40 = new Font("Arial", Font.PLAIN, 40);
@@ -45,7 +44,7 @@ public class UI {
         return maxCommandNum;
     }
 
-    //TITLE SCREEN
+    // TITLE SCREEN
     public void drawTitleScreen(Graphics2D g2) {
 
         //SET BACKGROUND COLOR
@@ -98,7 +97,7 @@ public class UI {
         }
     }
 
-    //SETTINGS SCREEN
+    // SETTINGS SCREEN
     public void drawSettingScreen(Graphics2D g2) {
         String text = "SETTINGS";
 
@@ -111,7 +110,7 @@ public class UI {
         g2.drawString(text, x, y);
     }
 
-    //PAUSE SCREEN
+    // PAUSE SCREEN
     public void drawPauseScreen(Graphics2D g2) {
         String text = "PAUSED";
 
