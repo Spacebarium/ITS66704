@@ -1,8 +1,12 @@
 package tile;
 
+import utility.UtilityTool;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import static main.GamePanel.getTileSize;
 
 public class Tile {
 
@@ -43,11 +47,16 @@ public class Tile {
     }
 
     private BufferedImage loadImage(String name) {
+        UtilityTool utilityTool = new UtilityTool();
+        BufferedImage image;
+
         try {
-            return ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
+             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
+             image = utilityTool.scaleImage(image, getTileSize(), getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+        return image;
     }
 }

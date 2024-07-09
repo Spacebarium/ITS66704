@@ -37,19 +37,6 @@ public class TileManager {
         return tiles.length;
     }
 
-    private TileType tileIdToEnum(int type) {
-        switch (type) {
-            case 0:
-                return TileType.EMPTY;
-            case 1:
-                return TileType.GRASS;
-            case 2:
-                return TileType.WALL;
-            default:
-                throw new IllegalArgumentException("Unknown tile type: " + type);
-        }
-    }
-
     public void loadMap(String mapName){
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt")) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
