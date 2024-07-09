@@ -171,9 +171,7 @@ public class InitialUI extends JPanel {
                     }
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
                         switch (commandNum) {
-                            case 0 -> {
-                                switchGamePanel();
-                            }
+                            case 0 -> switchGamePanel();
                             //    case 1 -> settingPanel();
                             case 2 ->
                                 System.exit(0);

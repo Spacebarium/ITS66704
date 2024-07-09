@@ -21,7 +21,7 @@ public class TileManager {
         this.gp = gp;
     }
 
-    public void setTile(int x, int y, TileType type) {
+    public void setTile(int x, int y, String type) {
         tiles[y][x] = new Tile(type);
     }
 
@@ -55,11 +55,11 @@ public class TileManager {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<String> lines = new ArrayList<>();
             String line;
-            
+
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
-            
+
             bufferedReader.close();
 
             int mapTileHeight = lines.size();
@@ -69,10 +69,10 @@ public class TileManager {
             for (int y = 0; y < mapTileHeight; y++) {
                 String[] tileIds = lines.get(y).split(" ");
                 for (int x = 0; x < tileIds.length; x++) {
-                    int tileId = Integer.parseInt(tileIds[x]);
-                    setTile(x, y, tileIdToEnum(tileId));
+                    String tileId = String.format("%03d", Integer.parseInt(tileIds[x]));
+                    setTile(x, y, tileId);
                 }
-            }   
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,10 +90,10 @@ public class TileManager {
                 if (tile == null) { return; }
                 BufferedImage image = tile.getImage();
                 if (image == null) { return; }
-                
+
                 int screenX = x * tileSize - player.getX() + player.getScreenX();
                 int screenY = y * tileSize - player.getY() + player.getScreenY();
-                
+
                 if ((x + 1) * tileSize > player.getX() - player.getScreenX()
                         && (x - 1) * tileSize < player.getX() + player.getScreenX()
                         && (y + 1) * tileSize > player.getY() - player.getScreenY()
