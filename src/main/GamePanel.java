@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
 
-        tileManager.loadMap("map");
+        tileManager.loadMap("Level1");
     }
 
     public int getTileSize() { return tileSize; }

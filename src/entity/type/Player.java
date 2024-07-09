@@ -20,7 +20,7 @@ public class Player extends Entity {
     private final int weaponOffset;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
+        super(gp, EntityType.PLAYER, "Player", 800, 900, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
 
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;

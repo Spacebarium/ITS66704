@@ -12,10 +12,10 @@ public class CollisionChecker {
         this.gp = gp;
         this.tileSize = gp.getTileSize();
     }
-    
+
     public boolean canMove(Entity entity, int dx, int dy) {
         Rectangle hitbox = entity.getHitbox();
-        
+
         int newX = hitbox.x + dx;
         int newY = hitbox.y + dy;
 
@@ -23,17 +23,18 @@ public class CollisionChecker {
         int startTileY = newY / tileSize;
         int endTileX = (newX + hitbox.width - 1) / tileSize;
         int endTileY = (newY + hitbox.height - 1) / tileSize;
-        
+
         // tile check
         for (int tileX = startTileX; tileX <= endTileX; tileX++) {
             for (int tileY = startTileY; tileY <= endTileY; tileY++) {
-
+                if (!gp.tileManager.getTile(tileX, tileY).isWalkable()) {
+                    System.out.println("DEBUG1");
+                    return false; // collision detected
+                }
             }
         }
-        
-        // enemy check: maybe won't need, we'll see
-        
 
+        // enemy check: maybe won't need, we'll see
         return true; // no collision detected
     }
 }
