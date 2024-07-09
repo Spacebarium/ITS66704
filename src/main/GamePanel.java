@@ -13,9 +13,9 @@ import weapon.*;
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
-    private final int originalTileSize = 16;
-    private final int scale = 3;
-    private final int tileSize = originalTileSize * scale; // 48
+    private final static int originalTileSize = 16;
+    private final static int scale = 3;
+    private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private final int updatesPerSecond = 60;
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager.loadMap("Level1");
     }
 
-    public int getTileSize() { return tileSize; }
+    public static int getTileSize() { return tileSize; }
     public int getScreenWidth() { return screenSize.width; }
     public int getScreenHeight() { return screenSize.height; }
     public int getScale() { return scale; }

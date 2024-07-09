@@ -1,7 +1,7 @@
-package tile;
-
-public enum TileType {
-    EMPTY,
-    GRASS,
-    WALL;
-}
+//package tile;
+//
+//public enum TileType {
+//    EMPTY,
+//    GRASS,
+//    WALL;
+//}
