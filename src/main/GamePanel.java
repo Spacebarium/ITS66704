@@ -43,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final DebugRenderer debugRenderer;
     public final EntityManager entityManager;
     public final TileManager tileManager;
+    private final Sound sound;
+
 
     public GamePanel() {
         ui = new UI(this);
@@ -51,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
         debugRenderer = new DebugRenderer(this);
+        sound = new Sound();
 
         initialiseEntities();
 
@@ -83,6 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
     protected void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+        playMusic(0);
     }
 
     @Override
@@ -153,4 +157,20 @@ public class GamePanel extends JPanel implements Runnable {
         
         g2.dispose();
     }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+
 }

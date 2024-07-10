@@ -83,6 +83,7 @@ public class Gun extends Weapon {
                 .forEach(e -> e.setHealth(e.getHealth() - damage));
         
         lastAttackTime = System.currentTimeMillis();
+        gp.playSE(1);
     }
     
     public void renderDebugInfo(Graphics2D g2) {

@@ -26,6 +26,7 @@ public class Sword extends Weapon {
                 if (weaponRange.intersects(enemyBox)) {
                     enemy.setHealth(enemy.getHealth() - damage);
                 }
+                gp.playSE(2);
             }
         }
         

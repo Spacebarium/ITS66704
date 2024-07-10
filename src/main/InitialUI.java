@@ -162,11 +162,13 @@ public class InitialUI extends JPanel {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                         if (commandNum > 0) {
                             updateSelection(commandNum, -1);
+                            gp.playSE(3);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                         if (commandNum < maxCommandNum) {
                             updateSelection(commandNum, +1);
+                            gp.playSE(3);
                         }
                     }
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
@@ -176,13 +178,14 @@ public class InitialUI extends JPanel {
                             case 2 ->
                                 System.exit(0);
                         }
+                        gp.playSE(4);
                         timer.stop();
                     }
                 }
             }
         });
         //Timer for blinking text !!! MUST MAKE SURE THIS IS STOPPED TO PREVENT LAG !!!
-        timer = new Timer(300, _ -> {
+        timer = new Timer(300, e -> {
             blinking = !blinking;
             buttonOptions[commandNum].setVisible(blinking);
         });
