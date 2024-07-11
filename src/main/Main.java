@@ -16,7 +16,8 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Echoes of the Forest");
 //        window.setResizable(false);
-        window.setMinimumSize(new Dimension(1280, 720));
+//        window.setMinimumSize(new Dimension(1280, 720));
+        window.setMinimumSize(new Dimension(854, 480));
 
         GamePanel gp = new GamePanel();
         InitialUI ui = new InitialUI(cardLayout, mainPanel, gp);
@@ -27,7 +28,7 @@ public class Main {
         window.add(mainPanel);
 
         window.pack();
-        window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+//        window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 

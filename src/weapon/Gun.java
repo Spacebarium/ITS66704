@@ -13,17 +13,12 @@ public class Gun extends Weapon {
     private final Player player;
     private final int weaponOffset;
 
-    public Gun(String name, int damage, int range, int attackRate, GamePanel gp) {
-        super(name, damage, range, attackRate, gp);
+    public Gun(String name, int damage, int range, int attackRate, GamePanel gp, String textureName) {
+        super(name, damage, range, attackRate, gp, textureName);
         
         this.tileSize = gp.getTileSize();
         this.player = gp.entityManager.getPlayer();
         this.weaponOffset = player.getWeaponOffset();
-    }
-    
-    public Point getWorldMouse() {
-        Point mouse = player.getMousePoint();
-        return new Point(mouse.x + player.getX() - player.getScreenX(), mouse.y + player.getY() - player.getScreenY());
     }
     
     public Line2D getRaycast(Point playerPoint, Point mousePoint) {
@@ -40,6 +35,8 @@ public class Gun extends Weapon {
 
         int dx = Math.abs(endX - px);
         int dy = Math.abs(endY - py);
+        int dx2 = 2 * dx;
+        int dy2 = 2 * dy;
         int err = dx - dy;
 
         int sx = (int) Math.signum(endX - px);
@@ -53,13 +50,11 @@ public class Gun extends Weapon {
 
             lastWalkablePoint = new Point(x, y);
 
-            int e2 = 2 * err;
-            if (e2 > -dy) {
-                err -= dy;
+            if (err > 0) {
+                err -= dy2;
                 x += sx;
-            }
-            if (e2 < dx) {
-                err += dx;
+            } else {
+                err += dx2;
                 y += sy;
             }
         }
@@ -68,10 +63,8 @@ public class Gun extends Weapon {
 
     @Override
     public void use() {
-        if (!canAttack()) { return; }
-        
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
-        Line2D raycast = getRaycast(player.getCentre(), getWorldMouse());
+        Line2D raycast = getRaycast(player.getCentre(), player.getWorldMouse());
         
         // check for enemies in line
         enemiesInRange.stream()
@@ -87,7 +80,7 @@ public class Gun extends Weapon {
 //        g2.drawOval(mouse.x - 4, mouse.y - 4, 8, 8);
 //        g2.drawOval(position.x - 4 - player.getX() + player.getScreenX(), position.y - 4 - player.getY() + player.getScreenY(), 8, 8);
         
-        Line2D raycast = getRaycast(player.getCentre(), getWorldMouse());
+        Line2D raycast = getRaycast(player.getCentre(), player.getWorldMouse());
         g2.setStroke(new BasicStroke(5));
         g2.drawLine(
                 (int) (raycast.getX1() - player.getX() + player.getScreenX()),

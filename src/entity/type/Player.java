@@ -20,7 +20,7 @@ public class Player extends Entity {
     private final int weaponOffset;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
+        super(gp, EntityType.PLAYER, "Player", 400, 200, 16 * gp.getScale(), 16 * gp.getScale(), 3 * gp.getScale(), 4 * gp.getScale(), 10 * gp.getScale(), 12 * gp.getScale(), playerMovement);
 
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
@@ -42,15 +42,16 @@ public class Player extends Entity {
     }
 
     public void getImage() {
-        setUp1(imageSetup("whiteNinja", "whiteUp1"));
-        setUp2(imageSetup("whiteNinja", "whiteUp2"));
-        setDown1(imageSetup("whiteNinja", "whiteDown1"));
-        setDown2(imageSetup("whiteNinja", "whiteDown2"));
-        setLeft1(imageSetup("whiteNinja", "whiteLeft1"));
-        setLeft2(imageSetup("whiteNinja", "whiteLeft2"));
-        setRight1(imageSetup("whiteNinja", "whiteRight1"));
-        setRight2(imageSetup("whiteNinja", "whiteRight2"));
-        setIdle(imageSetup("blackNinja", "blackDown1"));
+        String folderName = "entity/player";
+        setUp1(imageSetup(folderName, "up1"));
+        setUp2(imageSetup(folderName, "up2"));
+        setDown1(imageSetup(folderName, "down1"));
+        setDown2(imageSetup(folderName, "down2"));
+        setLeft1(imageSetup(folderName, "left1"));
+        setLeft2(imageSetup(folderName, "left2"));
+        setRight1(imageSetup(folderName, "right1"));
+        setRight2(imageSetup(folderName, "right2"));
+        setIdle(imageSetup(folderName, "idle"));
     }
     
     public int getEquippedWeaponIndex() { return equippedWeaponIndex; }
@@ -88,11 +89,13 @@ public class Player extends Entity {
     public void useEquippedWeapon() {
         Weapon weapon = getEquippedWeapon();
         if (weapon != null) {
-            weapon.use();
+            if (weapon.canAttack()) {
+                weapon.use();
+            }
         }
     }
     
-    public Point getMousePoint() {
+    public Point getScreenMouse() {
         Point componentP = gp.getLocationOnScreen();
         Point mouseScreenP = MouseInfo.getPointerInfo().getLocation();
         
@@ -102,9 +105,14 @@ public class Player extends Entity {
         return new Point(mX, mY);
     }
     
+    public Point getWorldMouse() {
+        Point mouse = getScreenMouse();
+        return new Point(mouse.x + getX() - getScreenX(), mouse.y + getY() - getScreenY());
+    }
+    
     public Point calculateWeaponPoint() {
         // https://www.desmos.com/calculator/oyir1xuqnd
-        Point mousePoint = getMousePoint();
+        Point mousePoint = getScreenMouse();
 
         int pX = getX() + getWidth() / 2;
         int pY = getY() + getHeight() / 2;

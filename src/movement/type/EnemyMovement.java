@@ -1,10 +1,10 @@
 package movement.type;
 
-import entity.type.Enemy;
-import entity.type.Entity;
-
 import java.awt.*;
 import java.util.Random;
+
+import entity.type.Enemy;
+import entity.type.Entity;
 
 public class EnemyMovement implements Movement {
 

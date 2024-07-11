@@ -53,15 +53,18 @@ public class HUDRenderer {
         int hph = 40;
         int currentHealthX = (int) ((double) currentHealth / maxHealth * hpw);
 
-        int hpx = ww - hpw - 4 * scale;
+        int hpx = ww - hpw - 5 * scale;
         int hpy = wh_2 - (slot.getHeight() + 8) * scale - hph;
         g2.setColor(new Color(32, 32, 32));
-        g2.fillRoundRect(hpx, hpy, hpw, hph, 10, 10);
+        g2.fillRect(hpx, hpy, hpw, hph);
         g2.setColor(Color.RED);
-        g2.fillRoundRect(hpx, hpy,currentHealthX, hph, 10, 10);
+        g2.fillRect(hpx, hpy, currentHealthX, hph);
+        g2.setColor(new Color(163, 19, 25));
+        g2.fillRect(hpx, hpy + 24, currentHealthX, hph - 24);
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.setStroke(new BasicStroke(6));
+        g2.drawRect(hpx, hpy, hpw, hph);
         g2.setColor(Color.WHITE);
-        g2.setStroke(new BasicStroke(2));
-        g2.drawRoundRect(hpx, hpy, hpw, hph, 10, 10);
         g2.drawString(String.format("%d / %d", currentHealth, maxHealth), hpx + 24, hpy + 26);
         
         // draw slots

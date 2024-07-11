@@ -1,7 +1,7 @@
 package movement;
 
-import entity.type.Entity;
 import main.CollisionChecker;
+import entity.type.Entity;
 import movement.type.Movement;
 
 public class MovementHandler {

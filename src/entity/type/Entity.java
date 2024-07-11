@@ -144,12 +144,11 @@ public abstract class Entity {
     // Methods
     // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
-        UtilityTool util = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = UtilityTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,7 +190,7 @@ public abstract class Entity {
         }
         setEntityImage();
         
-        if (type != EntityType.PLAYER) {
+        if (type != EntityType.PLAYER) { // draw all other entities relative to player
             Player player = gp.entityManager.getPlayer();
             this.screenX = getX() - player.getX() + player.getScreenX();
             this.screenY = getY() - player.getY() + player.getScreenY();
