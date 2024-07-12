@@ -29,14 +29,12 @@ public class Sword extends Weapon {
         
         // determine angle to start swing arc animation depending on mouse coords (120deg sweep, +-60deg from mouse angle)
         double angleToMouse = Math.atan2(screenMouse.y - gp.getSize().height / 2, screenMouse.x - gp.getSize().width / 2);
-//        System.out.println(screenMouse);
-//        System.out.println(gp.getSize());
         int totalAngleDeg = 120;
         double totalAngleRad = Math.toRadians(totalAngleDeg);
         
-        swingStartAngle = angleToMouse - totalAngleRad / 2;
+        swingStartAngle = angleToMouse + Math.toRadians(45) - totalAngleRad / 2;
         swingCurrentAngle = swingStartAngle;
-        swingSteps = 60;
+        swingSteps = 20;
         swingAngleStep = totalAngleRad / swingSteps;
         swingCurrentStep = 0;
         isSwinging = true;
@@ -71,13 +69,13 @@ public class Sword extends Weapon {
         }
     }
     
+    @Override
     public void draw(Graphics2D g2) {
         if (!isSwinging) return;
 
         AffineTransform transform = new AffineTransform();
-
-        transform.translate(gp.getSize().width / 2, gp.getSize().height / 2);
-        transform.rotate(swingCurrentAngle);
+        transform.rotate(swingCurrentAngle, gp.getSize().width / 2, gp.getSize().height / 2);
+        transform.translate(gp.getSize().width / 2 - 6, gp.getSize().height / 2 - gp.entityManager.getPlayer().getHeight() + 6);
 
         g2.drawImage(image, transform, null);
     }

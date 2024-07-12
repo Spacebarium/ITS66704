@@ -1,5 +1,6 @@
 package entity.type;
 
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -131,6 +132,10 @@ public class Player extends Entity {
     @Override
     public void update() {
         super.update();
+        switch (getEquippedWeapon()) {
+            case Sword sword -> sword.update();
+            default          -> {}
+        };
         
         this.screenX = gp.getSize().width / 2 - getWidth() / 2;
         this.screenY = gp.getSize().height / 2 - getHeight() / 2;
@@ -147,5 +152,11 @@ public class Player extends Entity {
         } else {
             getEquippedWeapon().setPosition(null);
         }
+    }
+    
+    @Override
+    public void draw(Graphics2D g2) {
+        super.draw(g2);
+        getEquippedWeapon().draw(g2);
     }
 }

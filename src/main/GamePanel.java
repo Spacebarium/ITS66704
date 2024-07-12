@@ -76,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
         Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
         player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
-        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "netherite_sword"), 1);
+        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
 
         WhiteNinja whiteNinja = new WhiteNinja(this);
         entityManager.addEntity(whiteNinja);
@@ -135,7 +135,6 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         if (gameState == GameState.PLAYING) {
             entityManager.update();
-            ((Sword) entityManager.getPlayer().getEquippedWeapon()).update();
         }
     }
 
@@ -146,7 +145,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.draw(g2);
         entityManager.draw(g2);
-        ((Sword) entityManager.getPlayer().getEquippedWeapon()).draw(g2);
         
         if (gameState == GameState.PAUSED) {
             ui.drawPauseScreen(g2);

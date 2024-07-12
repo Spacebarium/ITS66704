@@ -68,8 +68,16 @@ public class HUDRenderer {
         g2.drawString(String.format("%d / %d", currentHealth, maxHealth), hpx + 24, hpy + 26);
         
         // draw slots
-        g2.drawImage(slot, ww - (slot.getWidth() + 4) * scale, wh_2 - (slot.getHeight() + 2) * scale, slot.getWidth() * scale, slot.getHeight() * scale, null);
-        g2.drawImage(slot, ww - (slot.getWidth() + 4) * scale, wh_2 + 2 * scale, slot.getWidth() * scale, slot.getHeight() * scale, null);
+        int slotsX = ww - (slot.getWidth() + 4) * scale;
+        int slot0Y = wh_2 - (slot.getHeight() + 2) * scale;
+        g2.drawImage(slot, slotsX, wh_2 - (slot.getHeight() + 2) * scale, slot.getWidth() * scale, slot.getHeight() * scale, null);
+        g2.drawImage(slot, slotsX, wh_2 + 2 * scale, slot.getWidth() * scale, slot.getHeight() * scale, null);
+        
+        // draw weapons in hotbar
+        BufferedImage slot0Img = player.getWeaponFromSlot(0).getImage();
+        BufferedImage slot1Img = player.getWeaponFromSlot(1).getImage();
+        g2.drawImage(slot0Img, slotsX + 15, slot0Y + 15, 32, 32, null);
+        g2.drawImage(slot1Img, slotsX + 12, slot0Y + slot.getHeight() * scale + 30, null);
         
         // draw equipped index
         int sx = ww - (slotSelected.getWidth() + 3) * scale;

@@ -1,7 +1,7 @@
 package weapon;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -28,7 +28,7 @@ public abstract class Weapon {
         
         try {
             this.image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("weapon/" + textureName + ".png"));
-            this.image = UtilityTool.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            this.image = UtilityTool.scaleImage(image, 3 * image.getWidth(), 3 * image.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +44,7 @@ public abstract class Weapon {
     }
     
     public Point getPosition() { return position; }
+    public BufferedImage getImage() { return image; }
     
     public boolean canAttack() {
         long currentTime = System.currentTimeMillis();
@@ -62,7 +63,6 @@ public abstract class Weapon {
     // b.1: if GUN, draw hitmark sprite at (1) centre of hit enemy OR (2) last walkable point
     // b.2: maybe draw some intermediary lines to signify flying bullets
     
-    public void use() {
-        
-    };
+    abstract public void use();
+    abstract public void draw(Graphics2D g2);
 }

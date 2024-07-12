@@ -48,6 +48,13 @@ public class EntityManager {
     public void update() {
         synchronized (entities) {
             entities.forEach(e -> e.update());
+            
+            List<Entity> entitiesToRemove = new ArrayList<>();
+            entities.stream()
+                    .filter(e -> e.getHealth() == 0)
+                    .forEach(entitiesToRemove::add);
+
+            entitiesToRemove.forEach(this::removeEntity);
         }
     }
 

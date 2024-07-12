@@ -6,6 +6,7 @@ import java.awt.geom.Line2D;
 
 import main.GamePanel;
 import entity.type.*;
+import java.awt.geom.AffineTransform;
 
 public class Gun extends Weapon {
     
@@ -22,6 +23,7 @@ public class Gun extends Weapon {
     }
     
     public Line2D getRaycast(Point playerPoint, Point mousePoint) {
+        // Modified Bresenham's line drawing algorithm
         int px = playerPoint.x;
         int py = playerPoint.y;
         int mx = mousePoint.x;
@@ -87,5 +89,25 @@ public class Gun extends Weapon {
                 (int) (raycast.getY1() - player.getY() + player.getScreenY()),
                 (int) (raycast.getX2() - player.getX() + player.getScreenX()),
                 (int) (raycast.getY2() - player.getY() + player.getScreenY()));
+    }
+    
+    @Override
+    public void draw(Graphics2D g2) {
+        // this sucks sobbing emoji
+        Point screenMouse = gp.entityManager.getPlayer().getScreenMouse();
+        double angleToMouse = Math.atan2(screenMouse.y - gp.getSize().height / 2, screenMouse.x - gp.getSize().width / 2);
+        
+        AffineTransform transform = new AffineTransform();
+        
+        if (screenMouse.x > gp.getSize().width / 2) {
+            transform.rotate(angleToMouse, gp.getSize().getWidth() / 2 + 18, gp.getSize().getHeight() / 2 + 3);
+            transform.translate(gp.getSize().getWidth() / 2 + 12, gp.getSize().getHeight() / 2 - 15);
+        } else {
+            transform.rotate(angleToMouse + Math.toRadians(180), gp.getSize().getWidth() / 2 - 18, gp.getSize().getHeight() / 2 + 3);
+            transform.translate(gp.getSize().getWidth() / 2 - 12, gp.getSize().getHeight() / 2 - 15);
+            transform.scale(-1, 1);
+        }
+        
+        g2.drawImage(image, transform, null);
     }
 }
