@@ -6,6 +6,7 @@ import utility.UtilityTool;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -269,22 +270,20 @@ public class StartGameUI extends JPanel{
     }
 
     public void updateGameButtons(JButton gameButton, JButton closeButton, int gameSlot) {
-        if (gameFileManager.checkFile(gameSlot)) {
-            gameButton.setText(" Load Game ");
-            gameButton.addActionListener(e -> {
-                try {
-                    switchPanel("GamePanel", 3);
-                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-            });
-            closeButton.setVisible(true); // Show close button if game file exists
-        } else {
+        if (!gameFileManager.checkFile(gameSlot)) {
             gameButton.setText(" + ");
+            ActionListener[] listeners = gameButton.getActionListeners();
+            for (ActionListener listener : listeners) {
+                gameButton.removeActionListener(listener);
+            }
             gameButton.addActionListener(e -> {
                 switchPanel("GamePanel", 3);
                 gameFileManager.newGame(gameSlot);
+                try {
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
             closeButton.setVisible(false); // Hide close button if no game file
         }
@@ -306,6 +305,11 @@ public class StartGameUI extends JPanel{
             gameButton.addActionListener(e -> {
                 switchPanel("GamePanel", 3);
                 gameFileManager.newGame(gameSlot);
+                try {
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             });
         }
         gameButton.setContentAreaFilled(false);

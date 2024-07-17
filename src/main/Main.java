@@ -32,6 +32,7 @@ public class Main {
         mainPanel.add(setting, "SettingUI");
         mainPanel.add(gp, "GamePanel");
 
+        window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         window.add(mainPanel);
         window.pack();
         window.setLocationRelativeTo(null);
