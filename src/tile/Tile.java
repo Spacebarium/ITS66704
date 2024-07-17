@@ -42,15 +42,6 @@ public class Tile {
 
     private BufferedImage loadImage(String name) {
         UtilityTool utilityTool = new UtilityTool();
-        BufferedImage image;
-
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
-            image = utilityTool.scaleImage(image, getTileSize(), getTileSize());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return image;
+        return utilityTool.imageSetup("tiles" , name);
     }
 }

@@ -1,8 +1,6 @@
 package main;
 
-import game_file.GameFileManager;
 import ui.InitialUI;
-//import ui.SettingUI;
 import ui.SettingUI;
 import ui.StartGameUI;
 
@@ -10,8 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.IOException;
-import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Main {
 
@@ -22,16 +20,12 @@ public class Main {
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Echoes of the Forest");
-//        window.setResizable(false);
-//        window.setMinimumSize(new Dimension(1280, 720));
         window.setMinimumSize(new Dimension(854, 480));
 
-
-        GamePanel gp = new GamePanel();
+        GamePanel gp = new GamePanel(); // Initialize your GamePanel
         InitialUI ui = new InitialUI(cardLayout, mainPanel);
         StartGameUI startGame = new StartGameUI(cardLayout, mainPanel, gp);
         SettingUI setting = new SettingUI(cardLayout, mainPanel);
-
 
         mainPanel.add(ui, "InitialUI");
         mainPanel.add(startGame, "StartGameUI");
@@ -39,11 +33,19 @@ public class Main {
         mainPanel.add(gp, "GamePanel");
 
         window.add(mainPanel);
-
         window.pack();
-//        window.setExtendedState(window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (gp.isRunning()) {
+                    gp.saveGameFile(); // Save game state when window is closing
+                }
+                System.exit(1);
+            }
+        });
 
         window.addComponentListener(new ComponentAdapter() {
             @Override
