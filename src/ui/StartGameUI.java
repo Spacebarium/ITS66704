@@ -30,8 +30,7 @@ public class StartGameUI extends JPanel{
     private JLabel titleLabel;
 
     private JPanel optionPanel;
-    private JPanel stringPanel, buttonPanel;
-    private JLabel[] buttonOptions;
+    private JPanel buttonPanel;
     private JButton gameButton1, gameButton2, gameButton3;
     private JPanel closePanel;
     private JButton closeButton1, closeButton2, closeButton3;
@@ -112,18 +111,6 @@ public class StartGameUI extends JPanel{
         //optionPanel.setOpaque(false);
 
 
-        //String panel
-        stringPanel = new JPanel(new GridLayout(1, 3, 10, 0));
-        String[] optionTexts = {"  +  ", "  +  ", "  +  "};
-        buttonOptions = new JLabel[optionTexts.length];
-
-        for (int i = 0; i < optionTexts.length; i++) {
-            buttonOptions[i] = new JLabel(optionTexts[i]);
-            buttonOptions[i].setHorizontalAlignment(JLabel.CENTER);
-            buttonOptions[i].setVerticalAlignment(JLabel.CENTER);
-            stringPanel.add(buttonOptions[i]);
-        }
-
         //Button panel
         buttonPanel = new JPanel(new GridLayout(1, 3, 100, 0));
         buttonPanel.setOpaque(false);
@@ -185,9 +172,7 @@ public class StartGameUI extends JPanel{
 
         //Element configuration
         //Exit button
-        //exit.setContentAreaFilled(false);
         exit.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 182, 82)));
-
         exit.setHorizontalTextPosition(SwingConstants.CENTER);
         exit.setVerticalTextPosition(SwingConstants.CENTER);
         exit.addActionListener(e -> switchPanel("InitialUI", 0));
@@ -252,19 +237,19 @@ public class StartGameUI extends JPanel{
 
 
         //Accept keyboard inputs
-        updateSelection(commandNum);
+        //updateSelection(commandNum);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                         if (commandNum > 0) {
-                            updateSelection(commandNum, -1);
+                            //updateSelection(commandNum, -1);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                         if (commandNum < maxCommandNum) {
-                            updateSelection(commandNum, +1);
+                            //updateSelection(commandNum, +1);
                         }
                     }
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
@@ -320,19 +305,19 @@ public class StartGameUI extends JPanel{
         gameButton.setContentAreaFilled(false);
     }
 
-    public void updateSelection(int commandNum) {
-        buttonOptions[commandNum].setText("> " + buttonOptions[commandNum].getText().trim() + " <");
-    }
-
-    public void updateSelection(int commandNum, int i) {
-        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace(">", " ").trim());
-        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace("<", " ").trim());
-        buttonOptions[commandNum].setVisible(true);
-
-        buttonOptions[commandNum + i].setText("> " + buttonOptions[commandNum + i].getText().trim() + " <");
-
-        this.commandNum += i;
-    }
+//    public void updateSelection(int commandNum) {
+//        buttonOptions[commandNum].setText("> " + buttonOptions[commandNum].getText().trim() + " <");
+//    }
+//
+//    public void updateSelection(int commandNum, int i) {
+//        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace(">", " ").trim());
+//        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace("<", " ").trim());
+//        buttonOptions[commandNum].setVisible(true);
+//
+//        buttonOptions[commandNum + i].setText("> " + buttonOptions[commandNum + i].getText().trim() + " <");
+//
+//        this.commandNum += i;
+//    }
 
     public void switchPanel(String ui, int index){
         cardLayout.show(mainPanel, ui);

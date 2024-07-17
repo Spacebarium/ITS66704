@@ -22,6 +22,9 @@ public class SettingUI extends JPanel{
     private final JPanel mainPanel;
     private JPanel centrePanel;
     private JPanel vPaddingTop, vPaddingBottom, hPaddingLeft, hPaddingRight;
+    private JPanel exitLeftPad, exitMiddlePad;
+    private JPanel leftPad, topPad;
+    private JButton exit;
     private JLabel titleLabel;
 
     private JPanel optionPanel;
@@ -50,9 +53,30 @@ public class SettingUI extends JPanel{
         centrePanel.setOpaque(false);
 
         // Vertical padding at the top
-        vPaddingTop = new JPanel();
+        vPaddingTop = new JPanel(new BorderLayout());
         vPaddingTop.setPreferredSize(new Dimension(getPreferredSize().width, 100));
         vPaddingTop.setOpaque(false);
+
+        //Exit button left padding
+        exitLeftPad = new JPanel(new BorderLayout());
+        exitLeftPad.setPreferredSize(new Dimension(200, 100));
+        exitLeftPad.setOpaque(false);
+        //Exit button
+        exit = new JButton("BACK");
+
+        //Exit button padding's left padding
+        leftPad = new JPanel();
+        leftPad.setPreferredSize(new Dimension(25, getPreferredSize().height));
+        leftPad.setOpaque(false);
+        //Exit button padding's top padding
+        topPad = new JPanel();
+        topPad.setPreferredSize(new Dimension(getPreferredSize().width, 25));
+        topPad.setOpaque(false);
+
+        //Exit button middle padding
+        exitMiddlePad = new JPanel();
+        exitMiddlePad.setPreferredSize(new Dimension(vPaddingTop.getPreferredSize().width, 100));
+        exitMiddlePad.setOpaque(false);
 
         // Vertical padding at the bottom
         vPaddingBottom = new JPanel();
@@ -69,8 +93,8 @@ public class SettingUI extends JPanel{
         hPaddingRight.setPreferredSize(new Dimension(100, getPreferredSize().height));
         hPaddingRight.setOpaque(false);
         //Title label
-        titleLabel = new JLabel("Echoes of the Forest");
-        titleLabel.setIcon(new ImageIcon(uTool.imageSetup("UI", "titleBackground", 1010, 240)));
+        titleLabel = new JLabel("SETTINGS");
+        titleLabel.setIcon(new ImageIcon(uTool.imageSetup("UI", "titleBackground", 800, 240)));
         titleLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         titleLabel.setVerticalTextPosition(SwingConstants.CENTER);
         titleLabel.setPreferredSize(new Dimension(getPreferredSize().width, 250));
@@ -104,6 +128,13 @@ public class SettingUI extends JPanel{
         centrePanel.add(titleLabel, BorderLayout.NORTH);
         centrePanel.add(optionPanel, BorderLayout.CENTER);
 
+        exitLeftPad.add(leftPad, BorderLayout.WEST);
+        exitLeftPad.add(topPad, BorderLayout.NORTH);
+        exitLeftPad.add(exit, BorderLayout.CENTER);
+
+        vPaddingTop.add(exitLeftPad, BorderLayout.WEST);
+        vPaddingTop.add(exitMiddlePad, BorderLayout.CENTER);
+
         add(centrePanel, BorderLayout.CENTER);
         add(vPaddingTop, BorderLayout.NORTH);
         add(hPaddingRight, BorderLayout.EAST);
@@ -111,6 +142,14 @@ public class SettingUI extends JPanel{
         add(vPaddingBottom, BorderLayout.SOUTH);
 
         //Element configuration
+        //Exit button
+        exit.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 182, 82)));
+        exit.setHorizontalTextPosition(SwingConstants.CENTER);
+        exit.setVerticalTextPosition(SwingConstants.CENTER);
+        exit.addActionListener(e -> switchPanel("InitialUI", 0));
+        exit.setPreferredSize(new Dimension(exitLeftPad.getWidth(), 75));
+        exit.setContentAreaFilled(false);
+
         //Start button
         startButton.setText(" START GAME ");
         startButton.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 225, 70)));
@@ -197,21 +236,22 @@ public class SettingUI extends JPanel{
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                         if (commandNum > 0) {
-                            updateSelection(commandNum, -1);
+                            //updateSelection(commandNum, -1);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                         if (commandNum < maxCommandNum) {
-                            updateSelection(commandNum, +1);
+                            //updateSelection(commandNum, +1);
                         }
                     }
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
                         switch (commandNum) {
-                            case 0 -> switchPanel("StartGameUI", 1);
-                            case 1 -> switchPanel("SettingUI", 2);
+                            case 0 -> switchPanel("GamePanel", 3);
+                            //    case 1 -> settingPanel();
                             case 2 -> System.exit(0);
                         }
                     }
+                    case KeyEvent.VK_ESCAPE -> switchPanel("InitialUI", 0);
                 }
             }
         });
@@ -252,7 +292,9 @@ public class SettingUI extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
+            g.setColor(new Color(0, 0, 0, 150));
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            g.fillRect(0, 0, getWidth(), getHeight());
         }
     }
 }
