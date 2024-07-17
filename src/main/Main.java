@@ -15,7 +15,6 @@ public class Main {
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Echoes of the Forest");
-//        window.setResizable(false);
         window.setMinimumSize(new Dimension(1280, 720));
 
         GamePanel gp = new GamePanel();
