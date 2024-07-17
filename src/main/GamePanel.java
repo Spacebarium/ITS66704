@@ -96,13 +96,10 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager.addEntity(player);
         player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
-        
-//        WhiteNinja whiteNinja = new WhiteNinja(this);
-//        entityManager.addEntity(whiteNinja);
-
     }
 
     public void startGameThread(GameFile gameFile) {
+        System.out.println("DEBUG Thread");
         if (gameThread == null || !gameThread.isAlive()) {
             loadGameFile(gameFile);
             gameThread = new Thread(this);
@@ -121,7 +118,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void saveGameFile() {
-        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), player.getX(), player.getY());
+        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), this.map, player.getX(), player.getY());
+    }
+
+    public void restartGameThread(){
+        stopGameThread();
+        startGameThread(this.gameFile);
     }
 
     public void stopGameThread() {
@@ -184,6 +186,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == GameState.PLAYING) {
+            if (player.getX() >= 1877 && player.getY() == 1248){
+                System.out.println("DWADAW");
+                this.map = "Level5";
+                mapLoaded = false;
+                restartGameThread();
+            }
             entityManager.update();
         }
     }
