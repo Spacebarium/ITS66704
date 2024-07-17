@@ -1,11 +1,12 @@
 package game_file;
 
-public class GameFile {
-    int playerX;
-    int playerY;
+import java.io.Serializable;
 
-    public GameFile (int playerX, int playerY){
-        this.playerX = playerX;
-        this.playerY = playerY;
-    }
+public class GameFile implements Serializable {
+    int gameSlot;
+    int map;
+    int playerX= 400;
+    int playerY = 400;
+    //Weapon weapon;
+
 }

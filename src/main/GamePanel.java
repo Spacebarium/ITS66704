@@ -9,16 +9,20 @@ import entity.type.*;
 import item.ItemManager;
 import movement.type.*;
 import tile.TileManager;
+import game_file.GameFile;
 import weapon.*;
+import ui.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
-    private final int originalTileSize = 16;
-    private final int scale = 3;
-    private final int tileSize = originalTileSize * scale; // 48
+    private final static int originalTileSize = 16;
+    private final static int scale = 3;
+    private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    private GameFile gameFile;
+    private boolean running = false;
     private final int updatesPerSecond = 60;
     public static int FPS = 0;
     private long frameUpdateTime;
@@ -38,7 +42,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private Thread gameThread;
-    private final UI ui;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final HUDRenderer hudRenderer;
@@ -53,7 +56,6 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
         itemManager = new ItemManager();
-        ui = new UI(this);
 
         initialiseEntities();
         
@@ -66,11 +68,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
-
-        tileManager.loadMap("Test");
+        //tileManager.loadMap("Level1");
     }
 
-    public int getTileSize() { return tileSize; }
+    public static int getTileSize() { return tileSize; }
     public int getScreenWidth() { return screenSize.width; }
     public int getScreenHeight() { return screenSize.height; }
     public int getScale() { return scale; }
@@ -87,10 +88,26 @@ public class GamePanel extends JPanel implements Runnable {
         
     }
 
+    public void startGameThread(GameFile gameFile) {
+        if (gameThread == null || !gameThread.isAlive()) {
+            gameThread = new Thread(this);
+            running = true;
+            this.gameFile = gameFile;
+            gameThread.start();
+        } else {
+            System.out.println("Existing game thread found!!!");
+        }
+    }
 
-    protected void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
+    public void stopGameThread() {
+        if (gameThread != null && gameThread.isAlive()) {
+            running = false;
+            try {
+                gameThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -104,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
         double cycleStart;
 
         // game loop
-        while (gameThread != null) {
+        while (running) {
             current = System.nanoTime();
             delta += (current - previous) / drawInterval;
             timer += current - previous;
@@ -152,7 +169,7 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager.draw(g2);
         
         if (gameState == GameState.PAUSED) {
-            ui.drawPauseScreen(g2);
+            drawPauseScreen(g2);
         }
         
         if (keyHandler.isDebugMode()) {
@@ -162,5 +179,32 @@ public class GamePanel extends JPanel implements Runnable {
         hudRenderer.draw(g2);
         
         g2.dispose();
+    }
+
+    //CHAT GPTED WILL FIX
+    private void drawPauseScreen(Graphics2D g2) {
+        // Draw a semi-transparent overlay
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+
+        // Draw pause text
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        String pauseText = "Paused";
+        FontMetrics fm = g2.getFontMetrics();
+        int x = (getWidth() - fm.stringWidth(pauseText)) / 2;
+        int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        g2.drawString(pauseText, x, y);
+
+        // Optional: Draw additional pause menu options (e.g., resume, quit)
+        g2.setFont(new Font("Arial", Font.PLAIN, 30));
+        String resumeText = "Press 'P' to Resume";
+        int resumeX = (getWidth() - fm.stringWidth(resumeText)) / 2;
+        int resumeY = y + fm.getHeight() + 20;
+        g2.drawString(resumeText, resumeX, resumeY);
+    }
+
+    private void drawDeathScreen(Graphics2D g2){
+
     }
 }

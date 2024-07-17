@@ -47,7 +47,6 @@ public class Gun extends Weapon {
         Point lastWalkablePoint = new Point(x, y);
 
         while (true) {
-            if (!gp.tileManager.getTile(x / tileSize, y / tileSize).isWalkable()) { break; }
             if (Math.hypot(x - px, y - py) > range + weaponOffset) { break; }
 
             lastWalkablePoint = new Point(x, y);

@@ -1,7 +1,9 @@
 package utility;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class UtilityTool {
 
@@ -20,5 +22,28 @@ public class UtilityTool {
         if (value < min) return min;
         if (value > max) return max;
         return value;
+    }
+
+    public BufferedImage imageSetup(String folderName, String imageName) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
+    }
+
+    public BufferedImage imageSetup(String folderName, String imageName, int width, int height) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
+            image = scaleImage(image, width, height);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
     }
 }

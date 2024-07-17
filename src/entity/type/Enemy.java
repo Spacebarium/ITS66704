@@ -21,7 +21,7 @@ public class Enemy extends Entity {
         super(gp, EntityType.ENEMY, name, x, y, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
         this.player = gp.entityManager.getPlayer();
 
-        setSpeed(2);
+        setSpeed(3);
         setHealth(20);
         getImage();
     }
