@@ -4,8 +4,9 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 import entity.*;
-import entity.enemy.WhiteNinja;
+import entity.enemy.*;
 import entity.type.*;
+import item.ItemManager;
 import movement.type.*;
 import tile.TileManager;
 import weapon.*;
@@ -44,12 +45,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final DebugRenderer debugRenderer;
     public final EntityManager entityManager;
     public final TileManager tileManager;
+    public final ItemManager itemManager;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
+        itemManager = new ItemManager();
         ui = new UI(this);
 
         initialiseEntities();
@@ -80,6 +83,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         WhiteNinja whiteNinja = new WhiteNinja(this);
         entityManager.addEntity(whiteNinja);
+        
+        
     }
 
 
