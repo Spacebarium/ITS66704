@@ -1,11 +1,11 @@
 package entity;
 
-import java.awt.Graphics2D;
-import entity.type.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.awt.Graphics2D;
+
+import entity.type.*;
 
 public class EntityManager {
 
@@ -33,20 +33,28 @@ public class EntityManager {
         return entities;
     }
     
-    public List<Entity> getEntitiesInRange(int x, int y, int range, EntityType entityType) {
+    public <T extends Entity> List<T> getEntitiesInRange(int x, int y, int range, Class<T> entityType) {
         return entities.stream()
-                .filter(e -> entityType == null || e.getEntityType() == entityType)
+                .filter(e -> entityType == null || entityType.isInstance(e))
                 .filter(e -> e.isInRange(x, y, range))
+                .map(entityType::cast)
                 .toList();
     }
     
     public List<Entity> getEntitiesInRange(int x, int y, int range) {
-        return getEntitiesInRange(x, y, range, null);
+        return getEntitiesInRange(x, y, range, Entity.class);
     }
 
     public void update() {
         synchronized (entities) {
             entities.forEach(e -> e.update());
+            
+            List<Entity> entitiesToRemove = new ArrayList<>();
+            entities.stream()
+                    .filter(e -> e.getHealth() == 0)
+                    .forEach(entitiesToRemove::add);
+
+            entitiesToRemove.forEach(this::removeEntity);
         }
     }
 

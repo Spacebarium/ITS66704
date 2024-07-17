@@ -4,12 +4,14 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 import entity.*;
-import entity.enemy.WhiteNinja;
+import entity.enemy.*;
 import entity.type.*;
+import item.ItemManager;
 import movement.type.*;
 import tile.TileManager;
 import game_file.GameFile;
 import weapon.*;
+import ui.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -48,20 +50,25 @@ public class GamePanel extends JPanel implements Runnable {
     private Thread gameThread;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
+    private final HUDRenderer hudRenderer;
     public final DebugRenderer debugRenderer;
     public final EntityManager entityManager;
     public final TileManager tileManager;
+    public final ItemManager itemManager;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
-        debugRenderer = new DebugRenderer(this);
+        itemManager = new ItemManager();
 
         initialiseEntities();
+        
+        debugRenderer = new DebugRenderer(this);
+        hudRenderer = new HUDRenderer(this);
 
-        this.setPreferredSize(new Dimension(800,500));
+        this.setPreferredSize(new Dimension(854, 480));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
@@ -77,13 +84,13 @@ public class GamePanel extends JPanel implements Runnable {
     public final void initialiseEntities() {
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * tileSize, 500, this), 0);
-        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this), 1);
-
+        player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
+        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
+        
 //        WhiteNinja whiteNinja = new WhiteNinja(this);
 //        entityManager.addEntity(whiteNinja);
-    }
 
+    }
 
     public void startGameThread(GameFile gameFile) {
         if (gameThread == null || !gameThread.isAlive()) {
@@ -91,8 +98,7 @@ public class GamePanel extends JPanel implements Runnable {
             running = true;
             loadGameFile(gameFile);
             gameThread.start();
-        }
-        else{
+        } else {
             System.out.println("Existing game thread found!!!");
         }
     }
@@ -181,6 +187,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.isDebugMode()) {
             debugRenderer.renderDebugInfo(g2);
         }
+        
+        hudRenderer.draw(g2);
         
         g2.dispose();
     }

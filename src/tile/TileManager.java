@@ -1,16 +1,16 @@
 package tile;
 
-import entity.type.Player;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Graphics2D;
-import main.GamePanel;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+
+import main.GamePanel;
+import entity.type.Player;
 
 public class TileManager {
 

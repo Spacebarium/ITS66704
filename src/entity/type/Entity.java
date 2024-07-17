@@ -97,7 +97,7 @@ public abstract class Entity {
     public void setSpeed(int speed) { this.speed = speed; }
 
     public int getHealth() { return health; }
-    public void setHealth(int health) { this.health = health; }
+    public void setHealth(int health) { this.health = Math.max(0, health); }
 
     public int getMaxHealth() { return maxHealth; }
     public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
@@ -116,8 +116,8 @@ public abstract class Entity {
     }
     
     public boolean isInRange(int x, int y, int range) {
-        int closestX = clamp(x, this.x, this.x + this.width);
-        int closestY = clamp(y, this.y, this.y + this.height);
+        int closestX = UtilityTool.clamp(x, this.x, this.x + this.width);
+        int closestY = UtilityTool.clamp(y, this.y, this.y + this.height);
         
         int distX = x - closestX;
         int distY = y - closestY;
@@ -125,11 +125,7 @@ public abstract class Entity {
         return distX * distX + distY * distY <= range * range;
     }
     
-    private int clamp(int value, int min, int max) {
-        if (value < min) return min;
-        if (value > max) return max;
-        return value;
-    }
+  
 
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
     public void setLeft2(BufferedImage left2) { this.left2 = left2; }
@@ -182,12 +178,12 @@ public abstract class Entity {
         }
         setEntityImage();
         
-        if (type != EntityType.PLAYER) {
+        if (type != EntityType.PLAYER) { // draw all other entities relative to player
             Player player = gp.entityManager.getPlayer();
             this.screenX = getX() - player.getX() + player.getScreenX();
             this.screenY = getY() - player.getY() + player.getScreenY();
         }
         
-        g2.drawImage(image, screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
+        g2.drawImage(image, screenX, screenY, image.getWidth() * gp.getScale(), image.getHeight() * gp.getScale(), null);
     }
 }

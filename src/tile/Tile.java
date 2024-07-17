@@ -28,16 +28,10 @@ public class Tile {
 
     private boolean determineWalkability(String tileID) {
         switch (tileID) {
-            case "000", "001", "002", "003", "004", "005", "006", "007", "008", "009",
-                 "010", "011", "012", "013", "014", "015", "017", "034", "035", "036",
-                 "037", "038", "040", "041", "042", "043", "044", "045", "046", "047",
-                 "048", "049", "050", "051", "052", "053", "054", "056", "057", "060",
-                 "063", "065", "066" -> {
+            case "000", "001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "017", "034", "035", "036", "037", "038", "040", "041", "042", "043", "044", "045", "046", "047", "048", "049", "050", "051", "052", "053", "054", "056", "057", "060", "063", "065", "066" -> {
                 return true;
             }
-            case "016", "018", "019", "020", "021", "022", "023", "024", "025", "026",
-                 "027", "028", "029", "030", "031", "032", "033", "039", "055", "058",
-                 "059", "061", "062", "064" -> {
+            case "016", "018", "019", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "031", "032", "033", "039", "055", "058", "059", "061", "062", "064" -> {
                 return false;
             }
             default -> {
@@ -51,8 +45,8 @@ public class Tile {
         BufferedImage image;
 
         try {
-             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
-             image = utilityTool.scaleImage(image, getTileSize(), getTileSize());
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tile/" + name + ".png"));
+            image = utilityTool.scaleImage(image, getTileSize(), getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
