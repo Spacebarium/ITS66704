@@ -145,16 +145,7 @@ public abstract class Entity {
     // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
         UtilityTool util = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return image;
+        return util.imageSetup(folderName, imageName);
     }
 
     public void setEntityImage() {

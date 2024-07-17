@@ -8,7 +8,7 @@ import entity.enemy.WhiteNinja;
 import entity.type.*;
 import movement.type.*;
 import tile.TileManager;
-import ui.InitialUI;
+import game_file.GameFile;
 import weapon.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    private GameFile gameFile;
     private boolean running = false;
     private final int updatesPerSecond = 60;
     public static int FPS = 0;
@@ -54,14 +55,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         initialiseEntities();
 
-        this.setPreferredSize(screenSize);
+        this.setPreferredSize(new Dimension(800,500));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
-
-        tileManager.loadMap("Level1");
+        //tileManager.loadMap("Level1");
     }
 
     public static int getTileSize() { return tileSize; }
@@ -80,10 +80,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
 
-    public void startGameThread() {
+    public void startGameThread(GameFile gameFile) {
         if (gameThread == null || !gameThread.isAlive()) {
             gameThread = new Thread(this);
             running = true;
+            this.gameFile = gameFile;
             gameThread.start();
         }
         else{

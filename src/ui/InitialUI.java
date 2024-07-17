@@ -1,5 +1,7 @@
 package ui;
 
+import utility.UtilityTool;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +11,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class InitialUI extends JPanel {
-
+    private final UtilityTool uTool;
     private Font arial_40, arial_80B;
     private int commandNum;
     private final int maxCommandNum = 2;
-    private Timer timer;
+    private final Timer timer;
     private boolean blinking;
 
     private final CardLayout cardLayout;
@@ -23,22 +25,20 @@ public class InitialUI extends JPanel {
     private JLabel titleLabel;
 
     private JPanel optionPanel;
-    private JLayeredPane optionLayer;
-    private JPanel stringPanel, buttonPanel;
-    private JLabel[] buttonOptions;
-    private JButton startButton, tutorialButton, quitButton;
+    private JPanel buttonPanel;
+    private JButton[] buttonArray;
+    private String[] buttonText;
+    private String oriText;
+    private JButton startButton, settingButton, quitButton;
 
     private BufferedImage backgroundImage;
 
     public InitialUI(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
+        this.uTool = new UtilityTool();
 
-        try {
-            backgroundImage = ImageIO.read(getClass().getClassLoader().getResource("UI/ForestBackground.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        backgroundImage = uTool.imageSetup("UI", "ForestBackground");
 
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         arial_80B = new Font("Arial", Font.BOLD, 80);
@@ -70,51 +70,36 @@ public class InitialUI extends JPanel {
         hPaddingRight.setOpaque(false);
         //Title label
         titleLabel = new JLabel("Echoes of the Forest");
-        titleLabel.setPreferredSize(new Dimension(getPreferredSize().width, 100));
-        titleLabel.setForeground(Color.white);
-        titleLabel.setFont(getFont().deriveFont(Font.BOLD, 66F));
+        titleLabel.setIcon(new ImageIcon(uTool.imageSetup("UI", "titleBackground", 1010, 240)));
+        titleLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        titleLabel.setVerticalTextPosition(SwingConstants.CENTER);
+        titleLabel.setPreferredSize(new Dimension(getPreferredSize().width, 250));
+        titleLabel.setForeground(Color.gray);
+        titleLabel.setFont(getFont().deriveFont(Font.BOLD, 55F));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
         //Option panel
         optionPanel = new JPanel();
         optionPanel.setOpaque(false);
-        optionPanel.setLayout(null);
-
-        //Option layer
-        optionLayer = new JLayeredPane();
-
-        //String panel
-        stringPanel = new JPanel(new GridLayout(3, 1, 10, 0));
-        String[] optionTexts = {"  START GAME  ", "  TUTORIAL  ", "  QUIT  "};
-        buttonOptions = new JLabel[optionTexts.length];
-
-        for (int i = 0; i < optionTexts.length; i++) {
-            buttonOptions[i] = new JLabel(optionTexts[i]);
-            buttonOptions[i].setHorizontalAlignment(JLabel.CENTER);
-            buttonOptions[i].setVerticalAlignment(JLabel.CENTER);
-            stringPanel.add(buttonOptions[i]);
-        }
 
         //Button panel
-        buttonPanel = new JPanel(new GridLayout(3, 1, 10, 0));
+        buttonPanel = new JPanel(new GridLayout(4, 1, 0, 30));
+        buttonPanel.setOpaque(false);
 
         //Start button
         startButton = new JButton();
 
         //Tutorial button
-        tutorialButton = new JButton();
+        settingButton = new JButton();
 
         //Quit button
         quitButton = new JButton();
 
         buttonPanel.add(startButton);
-        buttonPanel.add(tutorialButton);
+        buttonPanel.add(settingButton);
         buttonPanel.add(quitButton);
 
-        optionLayer.add(stringPanel, JLayeredPane.DRAG_LAYER);
-        optionLayer.add(buttonPanel, JLayeredPane.DEFAULT_LAYER);
-
-        optionPanel.add(optionLayer);
+        optionPanel.add(buttonPanel);
 
         centrePanel.add(titleLabel, BorderLayout.NORTH);
         centrePanel.add(optionPanel, BorderLayout.CENTER);
@@ -127,22 +112,58 @@ public class InitialUI extends JPanel {
 
         //Element configuration
         //Start button
-        startButton.setText("Start game");
+        startButton.setText(" START GAME ");
+        startButton.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 225, 70)));
+        startButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        startButton.setVerticalTextPosition(SwingConstants.CENTER);
+        startButton.setContentAreaFilled(false);
+        startButton.setPreferredSize(new Dimension(226, 72));
+        startButton.setBorderPainted(false);
         startButton.addActionListener(e -> switchPanel("StartGameUI", 1));
-        //startButton.setContentAreaFilled(false);
-        // startButton.setBorderPainted(false);
 
-        //Tutorial button
-        tutorialButton.setText("        ");
-        //tutorialButton.addActionListener(e -> switchStartPanel());
-        //tutorialButton.setContentAreaFilled(false);
-        // startButton.setBorderPainted(false);
+        startButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (commandNum != 0)
+                    updateSelection(0);
+            }
+        });
+
+        //Setting button
+        settingButton.setText("  SETTINGS  ");
+        settingButton.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 225, 70)));
+        settingButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        settingButton.setVerticalTextPosition(SwingConstants.CENTER);
+        settingButton.setContentAreaFilled(false);
+        settingButton.setPreferredSize(new Dimension(226, 72));
+        settingButton.setBorderPainted(false);
+        settingButton.addActionListener(e -> switchPanel("SettingUI", 2));
+        settingButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (commandNum != 1)
+                    updateSelection(1);
+            }
+        });
 
         //Quit button
-        quitButton.setText("    ");
+        quitButton.setText("  QUIT  ");
+        quitButton.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 225, 70)));
+        quitButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        quitButton.setVerticalTextPosition(SwingConstants.CENTER);
+        quitButton.setContentAreaFilled(false);
+        quitButton.setPreferredSize(new Dimension(226, 72));
+        quitButton.setBorderPainted(false);
         quitButton.addActionListener(e -> System.exit(0));
-        //quitButton.setContentAreaFilled(false);
-        // startButton.setBorderPainted(false);
+        quitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (commandNum != 2)
+                    updateSelection(2);
+            }
+        });
+        buttonText = new String[]{startButton.getText(), settingButton.getText(), quitButton.getText()};
+        buttonArray = new JButton[] {startButton, settingButton, quitButton};
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -154,29 +175,22 @@ public class InitialUI extends JPanel {
             public void componentHidden(ComponentEvent e){
                 timer.stop();
             }
-
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int optionPanelWidth = optionPanel.getWidth();
-                int optionPanelHeight = optionPanel.getHeight();
-                int panelWidth = 100;
-                int panelHeight = 100;
-
-                optionLayer.setBounds(0,0, optionPanelWidth, optionPanelHeight);
-                stringPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, panelWidth, panelHeight);
-                buttonPanel.setBounds((optionPanelWidth - panelWidth) / 2, (optionPanelHeight - panelHeight) / 2, panelWidth, panelHeight);
-            }
         });
 
         //Timer for blinking text !!! MUST MAKE SURE THIS IS STOPPED TO PREVENT LAG !!!
         timer = new Timer(300, e -> {
+            if(blinking){
+                buttonArray[commandNum].setText("");
+            }
+            else {
+                buttonArray[commandNum].setText(oriText);
+            }
             blinking = !blinking;
-            buttonOptions[commandNum].setVisible(blinking);
         });
         timer.start();
 
         //Accept keyboard inputs
-        updateSelection(commandNum);
+        updateSelection(commandNum, 0);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -194,9 +208,8 @@ public class InitialUI extends JPanel {
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
                         switch (commandNum) {
                             case 0 -> switchPanel("StartGameUI", 1);
-                            //    case 1 -> settingPanel();
-                            case 2 ->
-                                System.exit(0);
+                            case 1 -> switchPanel("SettingUI", 2);
+                            case 2 -> System.exit(0);
                         }
                     }
                 }
@@ -207,19 +220,28 @@ public class InitialUI extends JPanel {
         requestFocusInWindow();
     }
 
-    public void updateSelection(int commandNum) {
-        buttonOptions[commandNum].setText("> " + buttonOptions[commandNum].getText().trim() + " <");
-    }
-
     public void updateSelection(int commandNum, int i) {
-        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace(">", " ").trim());
-        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace("<", " ").trim());
-        buttonOptions[commandNum].setVisible(true);
+        buttonArray[commandNum].setText(buttonText[commandNum]);
 
-        buttonOptions[commandNum + i].setText("> " + buttonOptions[commandNum + i].getText().trim() + " <");
-
+        buttonArray[commandNum + i].setText("> " + buttonText[commandNum + i].trim() + " <");
+        this.oriText = buttonArray[commandNum + i].getText();
         this.commandNum += i;
     }
+
+    public void updateSelection(int commandNum){
+        for (int i = 0; i < buttonArray.length; i++){
+            if (i == commandNum){
+                buttonArray[i].setText("> " + buttonText[i].trim() + " <");
+                this.oriText = buttonArray[i].getText();
+            }
+            else {
+                buttonArray[i].setText(buttonText[i]);
+            }
+        }
+
+        this.commandNum = commandNum;
+    }
+
 
     public void switchPanel(String ui, int index){
         cardLayout.show(mainPanel, ui);
