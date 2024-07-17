@@ -1,17 +1,18 @@
 package main;
 
 import java.awt.*;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import entity.*;
 import entity.enemy.*;
 import entity.type.*;
+import game_file.GameFileManager;
 import item.ItemManager;
 import movement.type.*;
 import tile.TileManager;
 import game_file.GameFile;
 import weapon.*;
-import ui.*;
+
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -21,7 +22,15 @@ public class GamePanel extends JPanel implements Runnable {
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    //GAME SETTINGS
     private GameFile gameFile;
+    private String map;
+    private boolean mapLoaded = false;
+
+    //ENTITIES
+    private Player player;
+
+    //GAME INFO
     private boolean running = false;
     private final int updatesPerSecond = 60;
     public static int FPS = 0;
@@ -33,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static double renderDurationPerSecond;
 
     public static GameState gameState = GameState.PLAYING;
+
     public enum GameState {
         TITLE,
         PLAYING,
@@ -42,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private Thread gameThread;
+    private final GameFileManager gameFileManager;
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final HUDRenderer hudRenderer;
@@ -56,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable {
         entityManager = new EntityManager();
         tileManager = new TileManager(this);
         itemManager = new ItemManager();
+        gameFileManager = new GameFileManager();
 
         initialiseEntities();
         
@@ -68,7 +80,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
-        //tileManager.loadMap("Level1");
+    }
+
+    public boolean isRunning(){
+        return this.running;
     }
 
     public static int getTileSize() { return tileSize; }
@@ -77,26 +92,36 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScale() { return scale; }
 
     public final void initialiseEntities() {
-        Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
         player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
+        
+//        WhiteNinja whiteNinja = new WhiteNinja(this);
+//        entityManager.addEntity(whiteNinja);
 
-        WhiteNinja whiteNinja = new WhiteNinja(this);
-        entityManager.addEntity(whiteNinja);
-        
-        
     }
 
     public void startGameThread(GameFile gameFile) {
         if (gameThread == null || !gameThread.isAlive()) {
+            loadGameFile(gameFile);
             gameThread = new Thread(this);
             running = true;
-            this.gameFile = gameFile;
             gameThread.start();
         } else {
             System.out.println("Existing game thread found!!!");
         }
+    }
+
+    public void loadGameFile(GameFile gameFile){
+        this.gameFile = gameFile;
+        this.map = gameFile.getMap();
+        this.player.setX(gameFile.getPlayerX());
+        this.player.setY(gameFile.getPlayerY());
+    }
+
+    public void saveGameFile() {
+        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), player.getX(), player.getY());
     }
 
     public void stopGameThread() {
@@ -119,6 +144,9 @@ public class GamePanel extends JPanel implements Runnable {
         long   timer = 0;
         int    drawCount = 0; // FPS
         double cycleStart;
+
+        tileManager.loadMap(this.map);
+        mapLoaded = true;
 
         // game loop
         while (running) {
@@ -164,21 +192,22 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        if (mapLoaded) {
+            tileManager.draw(g2);
+            entityManager.draw(g2);
 
-        tileManager.draw(g2);
-        entityManager.draw(g2);
-        
-        if (gameState == GameState.PAUSED) {
-            drawPauseScreen(g2);
+            if (gameState == GameState.PAUSED) {
+                drawPauseScreen(g2);
+            }
+
+            if (keyHandler.isDebugMode()) {
+                debugRenderer.renderDebugInfo(g2);
+            }
+
+            hudRenderer.draw(g2);
+
+            g2.dispose();
         }
-        
-        if (keyHandler.isDebugMode()) {
-            debugRenderer.renderDebugInfo(g2);
-        }
-        
-        hudRenderer.draw(g2);
-        
-        g2.dispose();
     }
 
     //CHAT GPTED WILL FIX

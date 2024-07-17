@@ -31,7 +31,6 @@ public class UtilityTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return image;
     }
 

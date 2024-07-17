@@ -41,7 +41,7 @@ public class StartGameUI extends JPanel{
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
         this.gp = gp;
-        this.gameFileManager = new GameFileManager(gp);
+        this.gameFileManager = new GameFileManager();
         uTool = new UtilityTool();
 
         backgroundImage = uTool.imageSetup("UI", "ForestBackground");
@@ -273,8 +273,8 @@ public class StartGameUI extends JPanel{
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
                 try {
-                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                     switchPanel("GamePanel", 3);
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
@@ -282,7 +282,10 @@ public class StartGameUI extends JPanel{
             closeButton.setVisible(true); // Show close button if game file exists
         } else {
             gameButton.setText(" + ");
-            gameButton.addActionListener(e -> gameFileManager.newGame(gameSlot));
+            gameButton.addActionListener(e -> {
+                switchPanel("GamePanel", 3);
+                gameFileManager.newGame(gameSlot);
+            });
             closeButton.setVisible(false); // Hide close button if no game file
         }
     }
@@ -292,15 +295,18 @@ public class StartGameUI extends JPanel{
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
                 try {
-                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                     switchPanel("GamePanel", 3);
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
             });
         } else {
             gameButton.setText(" + ");
-            gameButton.addActionListener(e -> gameFileManager.newGame(gameSlot));
+            gameButton.addActionListener(e -> {
+                switchPanel("GamePanel", 3);
+                gameFileManager.newGame(gameSlot);
+            });
         }
         gameButton.setContentAreaFilled(false);
     }

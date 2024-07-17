@@ -6,7 +6,7 @@ import main.GamePanel;
 public class WhiteNinja extends Enemy {
 
     public WhiteNinja(GamePanel gp) {
-        super(gp, "whiteNinja", 600, 900, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
+        super(gp, "whiteNinja", 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
 
         getImage();
     }

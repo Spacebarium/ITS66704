@@ -7,20 +7,18 @@ public class GameFileManager {
     private final String SAVE_FOLDER = "res/GameFile/";
     private final String SAVE_FILE_PREFIX = "save_slot_";
     private final int maxGameFiles = 3;
-    private GamePanel gp;
 
-    public GameFileManager(GamePanel gp){
-        this.gp = gp;
+    public GameFileManager(){
         File saveDir = new File(SAVE_FOLDER);
         if (!saveDir.exists()){
             saveDir.mkdir();
         }
     }
 
-    public void newGame(int slot){
-        if (slot >= 0 && slot < maxGameFiles) {
-            GameFile newGameFile = new GameFile();
-            saveGame(newGameFile, slot, 400, 200);
+    public void newGame(int gameSlot){
+        if (gameSlot >= 0 && gameSlot < maxGameFiles) {
+            GameFile newGameFile = new GameFile(gameSlot, "Level1", 800, 900);
+            saveGame(newGameFile, gameSlot, newGameFile.getPlayerX(), newGameFile.getPlayerY());
         } else {
             System.out.println("Invalid slot number.");
         }
@@ -29,10 +27,10 @@ public class GameFileManager {
     public void saveGame(GameFile gameFile, int gameSlot, int playerX, int playerY) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_FOLDER + SAVE_FILE_PREFIX + gameSlot + ".ser"))) {
-                gameFile.playerX = playerX;
-                gameFile.playerY = playerY;
+                gameFile.setPlayerX(playerX);
+                gameFile.setPlayerY(playerY);
                 oos.writeObject(gameFile);
-                System.out.println("Game saved successfully in slot " + gameSlot);
+                System.out.println("Game saved successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
