@@ -43,7 +43,7 @@ public abstract class Entity {
     protected BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
-    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
+    public Entity(GamePanel gp, EntityType type, String name, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
         this.gp = gp;
         this.movementHandler = new MovementHandler(this, new CollisionChecker(gp), movement);
         this.type = type;

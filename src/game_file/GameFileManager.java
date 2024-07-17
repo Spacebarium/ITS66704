@@ -19,8 +19,8 @@ public class GameFileManager {
 
     public void newGame(int slot){
         if (slot >= 0 && slot < maxGameFiles) {
-            GameFile newGameFile = new GameFile();
-            saveGame(newGameFile, slot, 400, 200);
+            GameFile newGameFile = new GameFile("Level1", 800, 900);
+            saveGame(newGameFile, slot, newGameFile.getPlayerX(), newGameFile.getPlayerY());
         } else {
             System.out.println("Invalid slot number.");
         }
@@ -29,8 +29,8 @@ public class GameFileManager {
     public void saveGame(GameFile gameFile, int gameSlot, int playerX, int playerY) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_FOLDER + SAVE_FILE_PREFIX + gameSlot + ".ser"))) {
-                gameFile.playerX = playerX;
-                gameFile.playerY = playerY;
+                gameFile.setPlayerX(playerX);
+                gameFile.setPlayerY(playerY);
                 oos.writeObject(gameFile);
                 System.out.println("Game saved successfully in slot " + gameSlot);
             } catch (IOException e) {

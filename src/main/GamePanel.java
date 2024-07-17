@@ -15,11 +15,17 @@ public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
     private final static int originalTileSize = 16;
-    private final static int scale = 3;
+    private final static int scale = 6;
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    private GameFile gameFile;
+    //GAME SETTINGS
+    private String map;
+
+    //ENTITIES
+    private Player player;
+
+    //GAME INFO
     private boolean running = false;
     private final int updatesPerSecond = 60;
     public static int FPS = 0;
@@ -61,7 +67,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseHandler);
-        //tileManager.loadMap("Level1");
     }
 
     public static int getTileSize() { return tileSize; }
@@ -70,13 +75,13 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScale() { return scale; }
 
     public final void initialiseEntities() {
-        Player player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
         player.setWeaponToSlot(new Sword("Dull Blade", 2, 1 * tileSize, 500, this), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this), 1);
 
-        WhiteNinja whiteNinja = new WhiteNinja(this);
-        entityManager.addEntity(whiteNinja);
+//        WhiteNinja whiteNinja = new WhiteNinja(this);
+//        entityManager.addEntity(whiteNinja);
     }
 
 
@@ -84,12 +89,18 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameThread == null || !gameThread.isAlive()) {
             gameThread = new Thread(this);
             running = true;
-            this.gameFile = gameFile;
+            loadGameFile(gameFile);
             gameThread.start();
         }
         else{
             System.out.println("Existing game thread found!!!");
         }
+    }
+
+    public void loadGameFile(GameFile gameFile){
+        this.map = gameFile.getMap();
+        this.player.setX(gameFile.getPlayerX());
+        this.player.setY(gameFile.getPlayerY());
     }
 
     public void stopGameThread() {
@@ -113,6 +124,8 @@ public class GamePanel extends JPanel implements Runnable {
         int    drawCount = 0; // FPS
         double cycleStart;
 
+        tileManager.loadMap(this.map);
+        System.out.println("DEBUG1");
         // game loop
         while (running) {
             current = System.nanoTime();

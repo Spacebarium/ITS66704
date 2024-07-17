@@ -1,5 +1,6 @@
 package main;
 
+import game_file.GameFileManager;
 import ui.InitialUI;
 //import ui.SettingUI;
 import ui.SettingUI;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
 import javax.swing.JFrame;
 
 public class Main {
@@ -28,11 +30,12 @@ public class Main {
         StartGameUI startGame = new StartGameUI(cardLayout, mainPanel, gp);
         SettingUI setting = new SettingUI(cardLayout, mainPanel);
 
+
         mainPanel.add(ui, "InitialUI");
         mainPanel.add(startGame, "StartGameUI");
         mainPanel.add(setting, "SettingUI");
         mainPanel.add(gp, "GamePanel");
-        //gp.startGameThread();
+
         window.add(mainPanel);
 
         window.pack();

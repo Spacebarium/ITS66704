@@ -273,8 +273,8 @@ public class StartGameUI extends JPanel{
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
                 try {
-                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                     switchPanel("GamePanel", 3);
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
@@ -292,8 +292,8 @@ public class StartGameUI extends JPanel{
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
                 try {
-                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                     switchPanel("GamePanel", 3);
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
