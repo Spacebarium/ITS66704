@@ -50,9 +50,11 @@ public class Sword extends Weapon {
             Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
             Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
 
-            if (weaponRange.intersects(enemyBox)) {
-                enemy.setHealth(enemy.getHealth() - damage);
-            }
+
+                if (weaponRange.intersects(enemyBox)) {
+                    enemy.setHealth(enemy.getHealth() - damage);
+                }
+                gp.playSE(2);
         });
         
         lastAttackTime = System.currentTimeMillis();

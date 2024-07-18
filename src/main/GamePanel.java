@@ -60,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final EntityManager entityManager;
     public final TileManager tileManager;
     public final ItemManager itemManager;
+    private final Sound sound;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -68,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager = new TileManager(this);
         itemManager = new ItemManager();
         gameFileManager = new GameFileManager();
+        sound = new Sound();
 
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
@@ -132,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable {
             gameThread = new Thread(this);
             running = true;
             gameThread.start();
+            //playMusic(0);
         } else {
             System.out.println("Existing game thread found!!!");
         }
@@ -274,4 +277,20 @@ public class GamePanel extends JPanel implements Runnable {
     private void drawDeathScreen(Graphics2D g2){
 
     }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+
 }

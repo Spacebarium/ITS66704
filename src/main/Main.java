@@ -20,7 +20,8 @@ public class Main {
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Echoes of the Forest");
-        window.setMinimumSize(new Dimension(854, 480));
+
+        window.setMinimumSize(new Dimension(1280, 720));
 
         GamePanel gp = new GamePanel(); // Initialize your GamePanel
         InitialUI ui = new InitialUI(cardLayout, mainPanel);
