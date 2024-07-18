@@ -3,6 +3,9 @@ package game_file;
 import main.GamePanel;
 
 import java.io.*;
+
+import static main.GamePanel.getTileSize;
+
 public class GameFileManager {
     private final String SAVE_FOLDER = "res/GameFile/";
     private final String SAVE_FILE_PREFIX = "save_slot_";
@@ -17,7 +20,7 @@ public class GameFileManager {
 
     public void newGame(int gameSlot){
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
-            GameFile newGameFile = new GameFile(gameSlot, "Level1", 800, 900);
+            GameFile newGameFile = new GameFile(gameSlot, "Level1", 10 * getTileSize(), 20 * getTileSize());
             saveGame(newGameFile, gameSlot, newGameFile.getMap(), newGameFile.getPlayerX(), newGameFile.getPlayerY());
         } else {
             System.out.println("Invalid slot number.");

@@ -11,17 +11,19 @@ import movement.type.EnemyMovement;
 public class Enemy extends Entity {
 
     private final Player player;
-    private final int    aggroDistance = 140;
+    private final int    aggroDistance = 46 * gp.getScale();
     private int          cooldown = 2 * 60;
     private int          attackRange = 16;
     private int          attackCooldown = cooldown;
     private boolean      canAttack = true;
 
-    public Enemy(GamePanel gp, String name, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
+    public Enemy(GamePanel gp, String name, int defaultX, int defaultY, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
         super(gp, EntityType.ENEMY, name, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
         this.player = gp.entityManager.getPlayer();
+        setX(defaultX);
+        setY(defaultY);
 
-        setSpeed(3);
+        setSpeed(gp.getScale() + 1);
         setHealth(20);
     }
     

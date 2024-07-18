@@ -13,12 +13,11 @@ import tile.TileManager;
 import game_file.GameFile;
 import weapon.*;
 
-
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
     private final static int originalTileSize = 16;
-    private final static int scale = 3;
+    private final static int scale = 5;
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -29,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //ENTITIES
     private Player player;
+
 
     //GAME INFO
     private boolean running = false;
@@ -69,7 +69,10 @@ public class GamePanel extends JPanel implements Runnable {
         itemManager = new ItemManager();
         gameFileManager = new GameFileManager();
 
-        initialiseEntities();
+        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
+        entityManager.addEntity(player);
+        player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
+        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
         
         debugRenderer = new DebugRenderer(this);
         hudRenderer = new HUDRenderer(this);
@@ -92,14 +95,38 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScale() { return scale; }
 
     public final void initialiseEntities() {
-        player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
-        entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
-        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
+        entityManager.clearEntities();
+        switch (map){
+            case "Level1" -> {
+//                private BlackNinja blackNinja;
+//                private GreenNinja greenNinja;
+//                private Boss boss;
+//                private FinalBoss finalBoss;
+//                private Gun gun;
+//                private Sword sword;
+//                //private Key key;
+//                //private Girl girl;
+                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                entityManager.addEntity(whiteNinja);
+            }
+            case "Level2" -> {
+
+            }
+            case "Level3" -> {
+
+            }
+            case "Level4" -> {
+
+            }
+            case "Level5" -> {
+
+            }
+            default -> {}
+        }
+        System.out.println("TEST1");
     }
 
     public void startGameThread(GameFile gameFile) {
-        System.out.println("DEBUG Thread");
         if (gameThread == null || !gameThread.isAlive()) {
             loadGameFile(gameFile);
             gameThread = new Thread(this);
@@ -122,15 +149,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void restartGameThread(){
-        stopGameThread();
-        startGameThread(this.gameFile);
+        run();
     }
 
     public void stopGameThread() {
         if (gameThread != null && gameThread.isAlive()) {
             running = false;
             try {
-                gameThread.join();
+                gameThread.join(3000);
+                gameThread = null;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -148,6 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
         double cycleStart;
 
         tileManager.loadMap(this.map);
+        initialiseEntities();
         mapLoaded = true;
 
         // game loop
@@ -187,8 +215,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         if (gameState == GameState.PLAYING) {
             if (player.getX() >= 1877 && player.getY() == 1248){
-                System.out.println("DWADAW");
                 this.map = "Level5";
+                player.setX(400);
+                player.setY(1000);
+                gameFileManager.saveGame(gameFile, gameFile.getGameFile(), this.map, player.getX(), player.getY());
                 mapLoaded = false;
                 restartGameThread();
             }

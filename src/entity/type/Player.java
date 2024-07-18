@@ -24,7 +24,7 @@ public class Player extends Entity {
     private final int weaponOffset;
 
     public Player(GamePanel gp, KeyHandler keyHandler, MouseHandler mouseHandler, PlayerMovement playerMovement) {
-        super(gp, EntityType.PLAYER, "Player", 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36, playerMovement);
+        super(gp, EntityType.PLAYER, "Player", 16 * gp.getScale(), 16 * gp.getScale(), 3 * gp.getScale(), 4 * gp.getScale(), 10 * gp.getScale(), 12 * gp.getScale(), playerMovement);
 
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
@@ -38,7 +38,7 @@ public class Player extends Entity {
         this.screenX = gp.getSize().width / 2 - getWidth() / 2;
         this.screenY = gp.getSize().height / 2 - getHeight() / 2;
         
-        setSpeed(4);
+        setSpeed(gp.getScale() + 2);
         getImage();
 
         setMaxHealth(10);

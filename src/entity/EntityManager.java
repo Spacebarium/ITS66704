@@ -29,6 +29,13 @@ public class EntityManager {
         entities.remove(entity);
     }
 
+    public void clearEntities(){
+        for (Entity entity: getEntities()){
+            if (entity != player)
+                removeEntity(entity);
+        }
+    }
+
     public List<Entity> getEntities() {
         return entities;
     }

@@ -7,6 +7,7 @@ public class GameFile implements Serializable {
     private String map;
     private int playerX;
     private int playerY;
+    private int playerHP;
 
     public GameFile(int gameFile, String map, int playerX, int playerY) {
         this.gameFile = gameFile;
