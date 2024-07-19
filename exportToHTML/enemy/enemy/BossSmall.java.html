@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>BossSmall.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+BossSmall.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">enemy</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Random</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">type</span><span class="s2">.</span><span class="s1">Entity</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">type</span><span class="s2">.</span><span class="s1">EntityType</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">main</span><span class="s2">.</span><span class="s1">GamePanel</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">BossSmall </span><span class="s0">extends </span><span class="s1">Entity</span><span class="s2">{</span>
+    <span class="s1">GamePanel gp</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">BossSmall</span><span class="s2">(</span><span class="s1">GamePanel gp</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">(</span><span class="s1">gp</span><span class="s2">, </span><span class="s1">EntityType</span><span class="s2">.</span><span class="s1">ENEMY</span><span class="s2">, </span><span class="s3">&quot;Boss&quot;</span><span class="s2">, </span><span class="s4">48</span><span class="s2">, </span><span class="s4">48</span><span class="s2">, </span><span class="s4">48</span><span class="s2">, </span><span class="s4">48</span><span class="s2">, </span><span class="s4">9</span><span class="s2">, </span><span class="s4">12</span><span class="s2">, </span><span class="s4">30</span><span class="s2">, </span><span class="s4">36</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">gp </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">;</span>
+
+<span class="s5">//        type=type_monster; //characteristics of LJ that should be shown in GamePanel?</span>
+<span class="s5">//        boss=true; //not shown in GamePanel?</span>
+<span class="s5">//        name=bossName;</span>
+<span class="s5">//        defaultSpeed=1;</span>
+<span class="s5">//        speed=defaultSpeed;</span>
+<span class="s5">//        getMaxHealth()=50;</span>
+<span class="s5">//        health=maxLife;</span>
+<span class="s5">//        attack=10;</span>
+<span class="s5">//        defense=2;</span>
+<span class="s5">//        exp=50;</span>
+<span class="s5">//        knockBackPower=5;</span>
+<span class="s5">//        attackArea.width=48; //for attacking area tile size purposes</span>
+<span class="s5">//        attackArea.height=48;</span>
+
+        <span class="s1">getImage</span><span class="s2">();</span>
+        <span class="s1">getAttackImage</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">getImage</span><span class="s2">(){</span>
+        <span class="s1">setUp1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossUp1&quot;</span><span class="s2">));</span>
+        <span class="s1">setUp2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossUp2&quot;</span><span class="s2">));</span>
+        <span class="s1">setDown1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossDown1&quot;</span><span class="s2">));</span>
+        <span class="s1">setDown2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossDown2&quot;</span><span class="s2">));</span>
+        <span class="s1">setLeft1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossLeft1&quot;</span><span class="s2">));</span>
+        <span class="s1">setLeft2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossLeft2&quot;</span><span class="s2">));</span>
+        <span class="s1">setRight1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossRight1&quot;</span><span class="s2">));</span>
+        <span class="s1">setRight2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossRight2&quot;</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">getAttackImage</span><span class="s2">(){</span>
+        <span class="s1">setUp1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackUp1&quot;</span><span class="s2">));</span>
+        <span class="s1">setUp2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackUp2&quot;</span><span class="s2">));</span>
+        <span class="s1">setDown1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackDown1&quot;</span><span class="s2">));</span>
+        <span class="s1">setDown2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackDown2&quot;</span><span class="s2">));</span>
+        <span class="s1">setLeft1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackLeft1&quot;</span><span class="s2">));</span>
+        <span class="s1">setLeft2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackLeft2&quot;</span><span class="s2">));</span>
+        <span class="s1">setRight1</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackRight1&quot;</span><span class="s2">));</span>
+        <span class="s1">setRight2</span><span class="s2">(</span><span class="s1">imageSetup</span><span class="s2">(</span><span class="s3">&quot;BossMini&quot;</span><span class="s2">, </span><span class="s3">&quot;BossAttackRight2&quot;</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setAction</span><span class="s2">(){</span>
+        <span class="s1">GamePanel gp</span><span class="s2">=</span><span class="s0">new </span><span class="s1">GamePanel</span><span class="s2">();</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">onPath</span><span class="s2">==</span><span class="s0">true</span><span class="s2">){</span>
+            <span class="s1">checkStopChasingOrNot</span><span class="s2">(</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getPlayer</span><span class="s2">(), </span><span class="s4">15</span><span class="s2">, </span><span class="s4">100</span><span class="s2">);</span>
+            <span class="s1">searchPath</span><span class="s2">(</span><span class="s1">getGoalCol</span><span class="s2">(</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getPlayer</span><span class="s2">()), </span><span class="s1">getGoalRow</span><span class="s2">(</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getPlayer</span><span class="s2">()));</span>
+        <span class="s2">}</span>
+        <span class="s0">else</span><span class="s2">{</span>
+            <span class="s1">checkStartChasingOrNot</span><span class="s2">(</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getPlayer</span><span class="s2">(), </span><span class="s4">5</span><span class="s2">, </span><span class="s4">100</span><span class="s2">);</span>
+            <span class="s1">getRandomDirection</span><span class="s2">(</span><span class="s4">120</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">attacking</span><span class="s2">==</span><span class="s0">false</span><span class="s2">){ </span><span class="s5">//Check if it attacks</span>
+            <span class="s1">checkAttackOrNot</span><span class="s2">(</span><span class="s4">60</span><span class="s2">, </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">() *</span><span class="s4">7</span><span class="s2">, </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">() *</span><span class="s4">5</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

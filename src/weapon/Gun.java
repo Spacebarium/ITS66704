@@ -8,7 +8,8 @@ public class Gun extends Weapon {
 
     @Override
     public void use() {
-        System.out.printf("%s used\n", getName());
+        super.use();
+
     }
 
 }

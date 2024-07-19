@@ -1,0 +1,286 @@
+<html>
+<head>
+<title>GamePanel.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #7a7e85;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+GamePanel.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">main</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">enemy</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">enemy</span><span class="s2">.</span><span class="s1">type</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">enemy</span><span class="s2">.</span><span class="s1">enemy</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">movement</span><span class="s2">.</span><span class="s1">type</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">tile</span><span class="s2">.</span><span class="s1">TileManager</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.</span><span class="s1">JPanel</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Random</span><span class="s2">;</span>
+<span class="s2">=======</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+<span class="s0">public class </span><span class="s1">GamePanel </span><span class="s0">extends </span><span class="s1">JPanel </span><span class="s0">implements </span><span class="s1">Runnable </span><span class="s2">{</span>
+
+    <span class="s4">// SCREEN SETTINGS</span>
+    <span class="s0">private final int </span><span class="s1">originalTileSize </span><span class="s2">= </span><span class="s3">16</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">scale </span><span class="s2">= </span><span class="s3">3</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">maxScreenCol </span><span class="s2">= </span><span class="s3">16</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">maxScreenRow </span><span class="s2">= </span><span class="s3">12</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">tileSize </span><span class="s2">= </span><span class="s1">originalTileSize </span><span class="s2">* </span><span class="s1">scale</span><span class="s2">; </span><span class="s4">// 48</span>
+    <span class="s0">private final int </span><span class="s1">screenWidth </span><span class="s2">= </span><span class="s1">tileSize </span><span class="s2">* </span><span class="s1">maxScreenCol</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">screenHeight </span><span class="s2">= </span><span class="s1">tileSize </span><span class="s2">* </span><span class="s1">maxScreenRow</span><span class="s2">;</span>
+
+    <span class="s0">int </span><span class="s1">updatesPerSecond </span><span class="s2">= </span><span class="s3">60</span><span class="s2">;</span>
+    <span class="s0">int </span><span class="s1">FPS </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+    <span class="s0">long </span><span class="s1">updateTime</span><span class="s2">;</span>
+    <span class="s0">long </span><span class="s1">renderTime</span><span class="s2">;</span>
+    <span class="s0">long </span><span class="s1">updateDuration</span><span class="s2">;</span>
+    <span class="s0">long </span><span class="s1">renderDuration</span><span class="s2">;</span>
+    <span class="s0">double </span><span class="s1">updateDurationPerSecond</span><span class="s2">;</span>
+    <span class="s0">double </span><span class="s1">renderDurationPerSecond</span><span class="s2">;</span>
+
+    <span class="s0">final int </span><span class="s1">pressNHoldCd </span><span class="s2">= </span><span class="s3">10</span><span class="s2">;</span>
+    <span class="s0">boolean </span><span class="s1">canPressNHold</span><span class="s2">;</span>
+    <span class="s0">int </span><span class="s1">pressNHold </span><span class="s2">= </span><span class="s1">pressNHoldCd</span><span class="s2">;</span>
+
+    <span class="s0">private int </span><span class="s1">gameState</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">titleState </span><span class="s2">= </span><span class="s3">0</span><span class="s2">, </span><span class="s1">playState </span><span class="s2">= </span><span class="s3">1</span><span class="s2">, </span><span class="s1">pauseState </span><span class="s2">= </span><span class="s3">2</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Thread gameThread</span><span class="s2">;</span>
+    <span class="s0">private final </span><span class="s1">UI ui</span><span class="s2">;</span>
+    <span class="s0">private final </span><span class="s1">KeyHandler keyHandler</span><span class="s2">;</span>
+    <span class="s0">private final </span><span class="s1">MouseHandler mouseHandler</span><span class="s2">;</span>
+    <span class="s0">private final </span><span class="s1">EntityManager entityManager</span><span class="s2">;</span>
+    <span class="s0">final </span><span class="s1">TileManager tileManager</span><span class="s2">;</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+    
+    <span class="s0">private final </span><span class="s1">Player player</span><span class="s2">;</span>
+<span class="s2">=======</span>
+    <span class="s0">final </span><span class="s1">Player player</span><span class="s2">;</span>
+    <span class="s0">final </span><span class="s1">Enemy whiteNinja</span><span class="s2">;</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+    <span class="s0">public </span><span class="s1">GamePanel</span><span class="s2">() {</span>
+        <span class="s1">ui </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UI</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s1">keyHandler </span><span class="s2">= </span><span class="s0">new </span><span class="s1">KeyHandler</span><span class="s2">();</span>
+        <span class="s1">mouseHandler </span><span class="s2">= </span><span class="s0">new </span><span class="s1">MouseHandler</span><span class="s2">();</span>
+        <span class="s1">entityManager </span><span class="s2">= </span><span class="s0">new </span><span class="s1">EntityManager</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s1">tileManager </span><span class="s2">= </span><span class="s0">new </span><span class="s1">TileManager</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        
+        <span class="s4">// setup player</span>
+        <span class="s1">player </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Player</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">keyHandler</span><span class="s2">, </span><span class="s1">mouseHandler</span><span class="s2">, </span><span class="s0">new </span><span class="s1">PlayerMovement</span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">));</span>
+        <span class="s1">entityManager</span><span class="s2">.</span><span class="s1">addEntity</span><span class="s2">(</span><span class="s1">player</span><span class="s2">);</span>
+
+        <span class="s4">// setup enemy</span>
+        <span class="s4">// White ninja</span>
+        <span class="s1">whiteNinja </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Enemy</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s0">new </span><span class="s1">EnemyMovement</span><span class="s2">(), </span><span class="s1">player</span><span class="s2">);</span>
+        <span class="s1">entityManager</span><span class="s2">.</span><span class="s1">addEntity</span><span class="s2">(</span><span class="s1">whiteNinja</span><span class="s2">);</span>
+
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">setPreferredSize</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Dimension</span><span class="s2">(</span><span class="s1">screenWidth</span><span class="s2">, </span><span class="s1">screenHeight</span><span class="s2">));</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">setBackground</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLACK</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">setDoubleBuffered</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">setFocusable</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">addKeyListener</span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">);</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">addMouseListener</span><span class="s2">(</span><span class="s1">mouseHandler</span><span class="s2">);</span>
+        
+        <span class="s1">tileManager</span><span class="s2">.</span><span class="s1">loadMap</span><span class="s2">(</span><span class="s5">&quot;Test&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getTileSize</span><span class="s2">() { </span><span class="s0">return </span><span class="s1">tileSize</span><span class="s2">; }</span>
+    <span class="s0">public int </span><span class="s1">getMaxScreenCol</span><span class="s2">() { </span><span class="s0">return </span><span class="s1">maxScreenCol</span><span class="s2">; }</span>
+    <span class="s0">public int </span><span class="s1">getMaxScreenRow</span><span class="s2">() { </span><span class="s0">return </span><span class="s1">maxScreenRow</span><span class="s2">; }</span>
+    <span class="s0">public int </span><span class="s1">getScreenWidth</span><span class="s2">(){ </span><span class="s0">return </span><span class="s1">screenWidth</span><span class="s2">;}</span>
+    <span class="s0">public int </span><span class="s1">getScreenHeight</span><span class="s2">(){ </span><span class="s0">return </span><span class="s1">screenHeight</span><span class="s2">;}</span>
+
+    <span class="s0">public void </span><span class="s1">pressNHold</span><span class="s2">(){</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">pressNHold </span><span class="s2">== </span><span class="s1">pressNHoldCd</span><span class="s2">) {</span>
+            <span class="s1">canPressNHold </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s0">else</span><span class="s2">{</span>
+            <span class="s1">pressNHold </span><span class="s2">++;</span>
+            <span class="s1">canPressNHold </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+    <span class="s0">public void </span><span class="s1">setGameState</span><span class="s2">(){</span>
+        <span class="s1">pressNHold</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">canPressNHold</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">.</span><span class="s1">isUp</span><span class="s2">() &amp;&amp; </span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getCommandNum</span><span class="s2">() &gt; </span><span class="s3">0</span><span class="s2">) {</span>
+                <span class="s1">ui</span><span class="s2">.</span><span class="s1">setCommandNum</span><span class="s2">(</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getCommandNum</span><span class="s2">() - </span><span class="s3">1</span><span class="s2">);</span>
+                <span class="s1">pressNHold </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">.</span><span class="s1">isDown</span><span class="s2">() &amp;&amp; </span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getCommandNum</span><span class="s2">() &lt; </span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getMaxCommandNum</span><span class="s2">()) {</span>
+                <span class="s1">ui</span><span class="s2">.</span><span class="s1">setCommandNum</span><span class="s2">((</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getCommandNum</span><span class="s2">() + </span><span class="s3">1</span><span class="s2">));</span>
+                <span class="s1">pressNHold </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s4">//GAME STATE</span>
+    <span class="s0">public int </span><span class="s1">gameState</span><span class="s2">;</span>
+    <span class="s0">public final int </span><span class="s1">titleState </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+    <span class="s0">public final int </span><span class="s1">playState </span><span class="s2">= </span><span class="s3">1</span><span class="s2">;</span>
+    <span class="s0">public final int </span><span class="s1">pauseState </span><span class="s2">= </span><span class="s3">2</span><span class="s2">;</span>
+
+    <span class="s4">//SYSTEM FOR UI</span>
+    <span class="s0">public </span><span class="s1">UI ui </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UI</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+
+
+    <span class="s0">public void </span><span class="s1">setupGame</span><span class="s2">(){</span>
+        <span class="s1">gameState </span><span class="s2">= </span><span class="s1">titleState</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">startGameThread</span><span class="s2">() {</span>
+        <span class="s1">gameThread </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Thread</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s1">gameThread</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">run</span><span class="s2">() {</span>
+        <span class="s0">double </span><span class="s1">drawInterval </span><span class="s2">= </span><span class="s3">1_000_000_000 </span><span class="s2">/ </span><span class="s1">updatesPerSecond</span><span class="s2">;</span>
+        <span class="s0">double </span><span class="s1">delta </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+        <span class="s0">long   </span><span class="s1">previous </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+        <span class="s0">long   </span><span class="s1">current</span><span class="s2">;</span>
+        <span class="s0">long   </span><span class="s1">timer </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+        <span class="s0">int    </span><span class="s1">drawCount </span><span class="s2">= </span><span class="s3">0</span><span class="s2">; </span><span class="s4">// FPS</span>
+        <span class="s0">double </span><span class="s1">cycleStart</span><span class="s2">;</span>
+
+        <span class="s4">// game loop</span>
+        <span class="s0">while </span><span class="s2">(</span><span class="s1">gameThread </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">current </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+            <span class="s1">delta </span><span class="s2">+= (</span><span class="s1">current </span><span class="s2">- </span><span class="s1">previous</span><span class="s2">) / </span><span class="s1">drawInterval</span><span class="s2">;</span>
+            <span class="s1">timer </span><span class="s2">+= </span><span class="s1">current </span><span class="s2">- </span><span class="s1">previous</span><span class="s2">;</span>
+            <span class="s1">previous </span><span class="s2">= </span><span class="s1">current</span><span class="s2">;</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">delta </span><span class="s2">&gt;= </span><span class="s3">1</span><span class="s2">) {</span>
+                <span class="s1">cycleStart </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                <span class="s1">update</span><span class="s2">();</span>
+                <span class="s1">updateTime </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+                <span class="s1">repaint</span><span class="s2">();</span>
+                <span class="s1">renderTime </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">nanoTime</span><span class="s2">();</span>
+
+                <span class="s1">updateDuration </span><span class="s2">+= </span><span class="s1">updateTime </span><span class="s2">- </span><span class="s1">cycleStart</span><span class="s2">;</span>
+                <span class="s1">renderDuration </span><span class="s2">+= </span><span class="s1">renderTime </span><span class="s2">- </span><span class="s1">updateTime</span><span class="s2">;</span>
+
+                <span class="s1">delta</span><span class="s2">--;</span>
+                <span class="s1">drawCount</span><span class="s2">++;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">timer </span><span class="s2">&gt;= </span><span class="s3">1_000_000_000</span><span class="s2">) {</span>
+                <span class="s1">FPS </span><span class="s2">= </span><span class="s1">drawCount</span><span class="s2">;</span>
+                <span class="s1">updateDurationPerSecond </span><span class="s2">= (</span><span class="s0">double</span><span class="s2">) </span><span class="s1">updateDuration </span><span class="s2">/ </span><span class="s3">1_000_000</span><span class="s2">;</span>
+                <span class="s1">renderDurationPerSecond </span><span class="s2">= (</span><span class="s0">double</span><span class="s2">) </span><span class="s1">renderDuration </span><span class="s2">/ </span><span class="s3">1_000_000</span><span class="s2">;</span>
+                
+                <span class="s1">drawCount </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+                <span class="s1">updateDuration </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+                <span class="s1">renderDuration </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+                <span class="s1">timer </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">update</span><span class="s2">() {</span>
+        <span class="s1">setGameState</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gameState </span><span class="s2">== </span><span class="s1">playState</span><span class="s2">)</span>
+            <span class="s1">entityManager</span><span class="s2">.</span><span class="s1">update</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">paintComponent</span><span class="s2">(</span><span class="s1">Graphics g</span><span class="s2">) {</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">paintComponent</span><span class="s2">(</span><span class="s1">g</span><span class="s2">);</span>
+        <span class="s1">Graphics2D g2 </span><span class="s2">= (</span><span class="s1">Graphics2D</span><span class="s2">) </span><span class="s1">g</span><span class="s2">;</span>
+
+        <span class="s4">//Title Screen</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gameState </span><span class="s2">== </span><span class="s1">titleState</span><span class="s2">){</span>
+            <span class="s1">ui</span><span class="s2">.</span><span class="s1">drawTitleScreen</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">.</span><span class="s1">isEnter</span><span class="s2">()){</span>
+                <span class="s0">switch</span><span class="s2">(</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">getCommandNum</span><span class="s2">()){</span>
+                    <span class="s0">case </span><span class="s3">0 </span><span class="s1">-&gt; gameState </span><span class="s2">= </span><span class="s1">playState</span><span class="s2">;</span>
+                    <span class="s0">case </span><span class="s3">1 </span><span class="s1">-&gt; gameState </span><span class="s2">= </span><span class="s1">pauseState</span><span class="s2">;</span>
+                    <span class="s4">//case 2 -&gt; gameState = settingState;</span>
+                    <span class="s0">case </span><span class="s3">3 </span><span class="s1">-&gt; System</span><span class="s2">.</span><span class="s1">exit</span><span class="s2">(</span><span class="s3">0</span><span class="s2">);</span>
+                    <span class="s0">default </span><span class="s1">-&gt; gameState </span><span class="s2">= </span><span class="s1">titleState</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s0">else if </span><span class="s2">(</span><span class="s1">gameState </span><span class="s2">== </span><span class="s1">playState</span><span class="s2">){</span>
+            <span class="s4">//drawing elements and entities</span>
+            <span class="s1">tileManager</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">);</span>
+            <span class="s1">entityManager</span><span class="s2">.</span><span class="s1">draw</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">);</span>
+
+            <span class="s4">//DEBUG</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">keyHandler</span><span class="s2">.</span><span class="s1">isDebugMode</span><span class="s2">()){</span>
+                <span class="s1">renderDebugInfo</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">dispose</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">renderDebugInfo</span><span class="s2">(</span><span class="s1">Graphics2D g2</span><span class="s2">) {</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setRenderingHint</span><span class="s2">(</span>
+                <span class="s1">RenderingHints</span><span class="s2">.</span><span class="s1">KEY_TEXT_ANTIALIASING</span><span class="s2">,</span>
+                <span class="s1">RenderingHints</span><span class="s2">.</span><span class="s1">VALUE_TEXT_ANTIALIAS_ON</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Font</span><span class="s2">(</span><span class="s5">&quot;Arial&quot;</span><span class="s2">, </span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">14</span><span class="s2">));</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">WHITE</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;FPS: &quot; </span><span class="s2">+ </span><span class="s1">FPS</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">20</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;Update duration: &quot; </span><span class="s2">+ </span><span class="s1">String</span><span class="s2">.</span><span class="s1">format</span><span class="s2">(</span><span class="s5">&quot;%.2f&quot;</span><span class="s2">, </span><span class="s1">updateDurationPerSecond</span><span class="s2">) + </span><span class="s5">&quot;ms&quot;</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">40</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;Render duration: &quot; </span><span class="s2">+ </span><span class="s1">String</span><span class="s2">.</span><span class="s1">format</span><span class="s2">(</span><span class="s5">&quot;%.2f&quot;</span><span class="s2">, </span><span class="s1">renderDurationPerSecond</span><span class="s2">) + </span><span class="s5">&quot;ms&quot;</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">60</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;X: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">80</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;Y: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">100</span><span class="s2">);</span>
+        
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">player </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;DX: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getMovementHandler</span><span class="s2">().</span><span class="s1">getDx</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">120</span><span class="s2">);</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;DY: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getMovementHandler</span><span class="s2">().</span><span class="s1">getDy</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">140</span><span class="s2">);</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;Speed: &quot; </span><span class="s2">+ </span><span class="s1">String</span><span class="s2">.</span><span class="s1">format</span><span class="s2">(</span><span class="s5">&quot;%.2f&quot;</span><span class="s2">, </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getMovementHandler</span><span class="s2">().</span><span class="s1">getSpeed</span><span class="s2">()), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">160</span><span class="s2">);</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;Health: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getHealth</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">180</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;slot0: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getWeaponFromSlot</span><span class="s2">(</span><span class="s3">0</span><span class="s2">).</span><span class="s1">getName</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">200</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;slot1: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getWeaponFromSlot</span><span class="s2">(</span><span class="s3">1</span><span class="s2">).</span><span class="s1">getName</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">220</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;equip slot: &quot; </span><span class="s2">+ </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getEquippedWeaponIndex</span><span class="s2">(), </span><span class="s3">10</span><span class="s2">, </span><span class="s3">240</span><span class="s2">);</span>
+        
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Entity entity </span><span class="s2">: </span><span class="s1">entityManager</span><span class="s2">.</span><span class="s1">getEntities</span><span class="s2">()) {</span>
+            <span class="s4">// image box</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">RED</span><span class="s2">);</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawRect</span><span class="s2">(</span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">(), </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">(), </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">());</span>
+            
+            <span class="s4">// collision box</span>
+            <span class="s1">Rectangle hitbox </span><span class="s2">= </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getHitbox</span><span class="s2">();</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Color</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">255</span><span class="s2">, </span><span class="s3">128</span><span class="s2">));</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s1">hitbox</span><span class="s2">.</span><span class="s1">x</span><span class="s2">, </span><span class="s1">hitbox</span><span class="s2">.</span><span class="s1">y</span><span class="s2">, </span><span class="s1">hitbox</span><span class="s2">.</span><span class="s1">width</span><span class="s2">, </span><span class="s1">hitbox</span><span class="s2">.</span><span class="s1">height</span><span class="s2">);</span>
+
+            <span class="s0">int </span><span class="s1">boundX </span><span class="s2">= </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">() + </span><span class="s3">200</span><span class="s2">;</span>
+            <span class="s0">int </span><span class="s1">boundY </span><span class="s2">= </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">() + </span><span class="s3">200</span><span class="s2">;</span>
+            <span class="s0">int </span><span class="s1">entityCentreX </span><span class="s2">= </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getX</span><span class="s2">() + (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">() / </span><span class="s3">2.0</span><span class="s2">);</span>
+            <span class="s0">int </span><span class="s1">entityCentreY </span><span class="s2">= </span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getY</span><span class="s2">() + (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">entity</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">() / </span><span class="s3">2.0</span><span class="s2">);</span>
+            <span class="s1">Rectangle movementBound </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Rectangle</span><span class="s2">(</span><span class="s1">entityCentreX </span><span class="s2">- (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">boundX </span><span class="s2">/ </span><span class="s3">2.0</span><span class="s2">), </span><span class="s1">entityCentreY </span><span class="s2">- (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">boundY </span><span class="s2">/ </span><span class="s3">2.0</span><span class="s2">), </span><span class="s1">boundX</span><span class="s2">, </span><span class="s1">boundY</span><span class="s2">);</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Color</span><span class="s2">(</span><span class="s3">128</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">255</span><span class="s2">, </span><span class="s3">128</span><span class="s2">));</span>
+
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawRect</span><span class="s2">(</span><span class="s1">movementBound</span><span class="s2">.</span><span class="s1">x</span><span class="s2">, </span><span class="s1">movementBound</span><span class="s2">.</span><span class="s1">y</span><span class="s2">, </span><span class="s1">movementBound</span><span class="s2">.</span><span class="s1">width</span><span class="s2">, </span><span class="s1">movementBound</span><span class="s2">.</span><span class="s1">height</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        
+        <span class="s0">int </span><span class="s1">r </span><span class="s2">= </span><span class="s1">player</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">() / </span><span class="s3">2</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">fillOval</span><span class="s2">(</span><span class="s1">player</span><span class="s2">.</span><span class="s1">weaponP</span><span class="s2">.</span><span class="s1">x </span><span class="s2">- </span><span class="s1">r</span><span class="s2">, </span><span class="s1">player</span><span class="s2">.</span><span class="s1">weaponP</span><span class="s2">.</span><span class="s1">y </span><span class="s2">- </span><span class="s1">r</span><span class="s2">, </span><span class="s3">2 </span><span class="s2">* </span><span class="s1">r</span><span class="s2">, </span><span class="s3">2 </span><span class="s2">* </span><span class="s1">r</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Player getPlayer</span><span class="s2">(){</span>
+        <span class="s0">return </span><span class="s1">player</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

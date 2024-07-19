@@ -1,0 +1,274 @@
+<html>
+<head>
+<title>UI.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #7a7e85;}
+.s5 { color: #6aab73;}
+.s6 { color: #5f826b; font-style: italic;}
+.s7 { color: #68a67e; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+UI.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">main</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">Color</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">Font</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">Graphics2D</span><span class="s2">;</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.</span><span class="s1">image</span><span class="s2">.</span><span class="s1">BufferedImage</span><span class="s2">;</span>
+<span class="s2">=======</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+<span class="s0">public class </span><span class="s1">UI </span><span class="s2">{</span>
+
+    <span class="s1">GamePanel gp</span><span class="s2">;</span>
+    <span class="s1">Font arial_40</span><span class="s2">, </span><span class="s1">arial_80B</span><span class="s2">;</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+    <span class="s4">//BufferedImage keyimage;</span>
+    <span class="s0">public boolean </span><span class="s1">messageOn </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+    <span class="s0">public </span><span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;&quot;</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Graphics2D g2</span><span class="s2">;</span>
+    <span class="s0">public int </span><span class="s1">commandNum </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">UI</span><span class="s2">(</span><span class="s1">GamePanel gp</span><span class="s2">){</span>
+<span class="s2">=======</span>
+
+    <span class="s4">//BufferedImage keyimage;</span>
+    <span class="s0">private boolean </span><span class="s1">messageOn </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">String message </span><span class="s2">= </span><span class="s5">&quot;&quot;</span><span class="s2">;</span>
+
+    <span class="s0">private int </span><span class="s1">commandNum</span><span class="s2">;</span>
+    <span class="s0">private final int </span><span class="s1">maxCommandNum </span><span class="s2">= </span><span class="s3">3</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">UI</span><span class="s2">(</span><span class="s1">GamePanel gp</span><span class="s2">) {</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">gp </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">;</span>
+
+        <span class="s1">arial_40 </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Font</span><span class="s2">(</span><span class="s5">&quot;Arial&quot;</span><span class="s2">, </span><span class="s1">Font</span><span class="s2">.</span><span class="s1">PLAIN</span><span class="s2">, </span><span class="s3">40</span><span class="s2">);</span>
+        <span class="s1">arial_80B </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Font</span><span class="s2">(</span><span class="s5">&quot;Arial&quot;</span><span class="s2">, </span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">80</span><span class="s2">);</span>
+
+    <span class="s2">}</span>
+
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+    <span class="s6">/**public void showMessage(String text){ //MIGHT DELETE THIS</span>
+
+     <span class="s6">message = text;</span>
+     <span class="s6">messageOn = true;</span>
+     <span class="s6">}**/</span>
+
+    <span class="s0">public void </span><span class="s1">draw</span><span class="s2">(</span><span class="s1">Graphics2D g2</span><span class="s2">){</span>
+
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">g2 </span><span class="s2">= </span><span class="s1">g2</span><span class="s2">;</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">arial_40</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">white</span><span class="s2">);</span>
+        <span class="s4">//g2.drawString(&quot;MAK KAU HIJAU&quot;, 50, 50);</span>
+
+        <span class="s4">//TITLE STATE</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">gameState </span><span class="s2">== </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">titleState</span><span class="s2">){</span>
+            <span class="s1">drawTitleScreen</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s4">//PAUSE STATE</span>
+        <span class="s6">/**if (gp.gameState == gp.pauseState) {</span>
+         <span class="s6">drawPauseScreen();</span>
+         <span class="s6">}**/</span>
+
+    <span class="s2">}</span>
+
+    <span class="s4">//TITLE SCREEN</span>
+    <span class="s0">public void </span><span class="s1">drawTitleScreen</span><span class="s2">(){</span>
+
+        <span class="s4">//SET BACKGROUND COLOR</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Color</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">));</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">screenWidth</span><span class="s2">, </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">screenHeight</span><span class="s2">);</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFont</span><span class="s2">().</span><span class="s1">deriveFont</span><span class="s2">(</span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">66F</span><span class="s2">));</span>
+        <span class="s1">String text </span><span class="s2">= </span><span class="s5">&quot;Echoes Of The Forest&quot;</span><span class="s2">;</span>
+        <span class="s0">int </span><span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">); </span><span class="s4">//CENTERING THE TEXT</span>
+        <span class="s0">int </span><span class="s1">y </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">*</span><span class="s3">3</span><span class="s2">; </span><span class="s4">//LOWERING THE TEXT</span>
+
+        <span class="s4">//SHADOW</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">GRAY</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">+</span><span class="s3">5</span><span class="s2">, </span><span class="s1">y</span><span class="s2">+</span><span class="s3">5</span><span class="s2">);</span>
+<span class="s2">=======</span>
+    <span class="s6">/**</span>
+     <span class="s6">* public void showMessage(String text){ //MIGHT DELETE THIS</span>
+     <span class="s6">* </span><span class="s7">&lt;p&gt;</span>
+     <span class="s6">* message = text;</span>
+     <span class="s6">* messageOn = true;</span>
+     <span class="s6">* }</span>
+     <span class="s6">**/</span>
+
+    <span class="s0">public int </span><span class="s1">getCommandNum</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">commandNum</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setCommandNum</span><span class="s2">(</span><span class="s0">int </span><span class="s1">commandNum</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">commandNum </span><span class="s2">= </span><span class="s1">commandNum</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getMaxCommandNum</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">maxCommandNum</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s4">//TITLE SCREEN</span>
+    <span class="s0">public void </span><span class="s1">drawTitleScreen</span><span class="s2">(</span><span class="s1">Graphics2D g2</span><span class="s2">) {</span>
+
+        <span class="s4">//SET BACKGROUND COLOR</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Color</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">));</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getScreenWidth</span><span class="s2">(), </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getScreenHeight</span><span class="s2">());</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFont</span><span class="s2">().</span><span class="s1">deriveFont</span><span class="s2">(</span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">66F</span><span class="s2">));</span>
+        <span class="s1">String text </span><span class="s2">= </span><span class="s5">&quot;Echoes Of The Forest&quot;</span><span class="s2">;</span>
+        <span class="s0">int </span><span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">); </span><span class="s4">//CENTERING THE TEXT</span>
+        <span class="s0">int </span><span class="s1">y </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">() * </span><span class="s3">3</span><span class="s2">; </span><span class="s4">//LOWERING THE TEXT</span>
+
+        <span class="s4">//SHADOW</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">GRAY</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x </span><span class="s2">+ </span><span class="s3">5</span><span class="s2">, </span><span class="s1">y </span><span class="s2">+ </span><span class="s3">5</span><span class="s2">);</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+        <span class="s4">//TEXTCOLOR</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">WHITE</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+
+        <span class="s4">//MAIN CHARACTER IMAGE</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+        <span class="s6">/**x = gp.screenWidth/2 - (gp.tileSize*2)/2;</span>
+         <span class="s6">y += gp.tileSize*3;</span>
+         <span class="s6">g2.drawImage(addimagehere, x, y, gp.tileSize*2, gp.tileSize*2, null);**/ </span><span class="s4">//NEED HELP DISPLAYING THE IMAGE</span>
+<span class="s2">=======</span>
+        <span class="s6">/**x = gp.screenWidth/2 - (gp.getTileSize()*2)/2;</span>
+         <span class="s6">y += gp.getTileSize()*3;</span>
+         <span class="s6">g2.drawImage(addimagehere, x, y, gp.getTileSize()*2, gp.getTileSize()*2, null);**/ </span><span class="s4">//NEED HELP DISPLAYING THE IMAGE</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+
+        <span class="s4">//MENU</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFont</span><span class="s2">().</span><span class="s1">deriveFont</span><span class="s2">(</span><span class="s1">Font</span><span class="s2">.</span><span class="s1">BOLD</span><span class="s2">, </span><span class="s3">48F</span><span class="s2">));</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;NEW GAME&quot;</span><span class="s2">;</span>
+<span class="s2">&lt;&lt;&lt;&lt;&lt;&lt;&lt; </span><span class="s1">HEAD</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+=  </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">*</span><span class="s3">5</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">0</span><span class="s2">){</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x</span><span class="s2">-</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;LOAD GAME&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+=  </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">1</span><span class="s2">){</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x</span><span class="s2">-</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;SETTINGS&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+=  </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">2</span><span class="s2">){</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x</span><span class="s2">-</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;QUIT&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+=  </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">3</span><span class="s2">){</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x</span><span class="s2">-</span><span class="s1">gp</span><span class="s2">.</span><span class="s1">tileSize</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+
+    <span class="s2">}</span>
+
+    <span class="s4">//PAUSE SCREEN</span>
+    <span class="s6">/**public void drawPauseScreen() {</span>
+     <span class="s6">String text = &quot;PAUSED&quot;;</span>
+
+     <span class="s6">g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));</span>
+     <span class="s6">g2.setFont(arial_80B);</span>
+     <span class="s6">int x = getXforCenteredText(text);</span>
+     <span class="s6">int y = gp.screenHeight / 2;</span>
+
+     <span class="s6">g2.setColor(Color.WHITE);</span>
+     <span class="s6">g2.drawString(text, x, y);</span>
+     <span class="s6">}**/</span>
+
+    <span class="s0">public int </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">String text</span><span class="s2">){</span>
+
+        <span class="s0">int </span><span class="s1">length </span><span class="s2">= (</span><span class="s0">int</span><span class="s2">)</span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFontMetrics</span><span class="s2">().</span><span class="s1">getStringBounds</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">).</span><span class="s1">getWidth</span><span class="s2">();</span>
+        <span class="s0">int </span><span class="s1">x </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">screenWidth</span><span class="s2">/</span><span class="s3">2 </span><span class="s2">- </span><span class="s1">length</span><span class="s2">/</span><span class="s3">2</span><span class="s2">;</span>
+        <span class="s0">return </span><span class="s1">x</span><span class="s2">;</span>
+
+    <span class="s2">}</span>
+<span class="s2">}</span>
+<span class="s2">=======</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">() * </span><span class="s3">5</span><span class="s2">;</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">0</span><span class="s2">) {</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x </span><span class="s2">- </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">(), </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;LOAD GAME&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">();</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">1</span><span class="s2">) {</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x </span><span class="s2">- </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">(), </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;SETTINGS&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">();</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">2</span><span class="s2">) {</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x </span><span class="s2">- </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">(), </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">text </span><span class="s2">= </span><span class="s5">&quot;QUIT&quot;</span><span class="s2">;</span>
+        <span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">);</span>
+        <span class="s1">y </span><span class="s2">+= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">();</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">commandNum </span><span class="s2">== </span><span class="s3">3</span><span class="s2">) {</span>
+            <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s5">&quot;&gt;&quot;</span><span class="s2">, </span><span class="s1">x </span><span class="s2">- </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getTileSize</span><span class="s2">(), </span><span class="s1">y</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s4">//PAUSE SCREEN</span>
+    <span class="s0">public void </span><span class="s1">drawPauseScreen</span><span class="s2">(</span><span class="s1">Graphics2D g2</span><span class="s2">) {</span>
+        <span class="s1">String text </span><span class="s2">= </span><span class="s5">&quot;PAUSED&quot;</span><span class="s2">;</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFont</span><span class="s2">().</span><span class="s1">deriveFont</span><span class="s2">(</span><span class="s1">Font</span><span class="s2">.</span><span class="s1">PLAIN</span><span class="s2">, </span><span class="s3">35F</span><span class="s2">));</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">arial_80B</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">x </span><span class="s2">= </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">y </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getScreenHeight</span><span class="s2">() / </span><span class="s3">2</span><span class="s2">;</span>
+
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">setColor</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">WHITE</span><span class="s2">);</span>
+        <span class="s1">g2</span><span class="s2">.</span><span class="s1">drawString</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getXforCenteredText</span><span class="s2">(</span><span class="s1">String text</span><span class="s2">, </span><span class="s1">Graphics2D g2</span><span class="s2">) {</span>
+        <span class="s0">int </span><span class="s1">length </span><span class="s2">= (</span><span class="s0">int</span><span class="s2">) </span><span class="s1">g2</span><span class="s2">.</span><span class="s1">getFontMetrics</span><span class="s2">().</span><span class="s1">getStringBounds</span><span class="s2">(</span><span class="s1">text</span><span class="s2">, </span><span class="s1">g2</span><span class="s2">).</span><span class="s1">getWidth</span><span class="s2">();</span>
+        <span class="s0">int </span><span class="s1">x </span><span class="s2">= </span><span class="s1">gp</span><span class="s2">.</span><span class="s1">getScreenWidth</span><span class="s2">() / </span><span class="s3">2 </span><span class="s2">- </span><span class="s1">length </span><span class="s2">/ </span><span class="s3">2</span><span class="s2">;</span>
+        <span class="s0">return </span><span class="s1">x</span><span class="s2">;</span>
+
+    <span class="s2">}</span>
+<span class="s2">}</span>
+<span class="s2">&gt;&gt;&gt;&gt;&gt;&gt;&gt; </span><span class="s3">946209d3d1</span><span class="s1">b6503543d1d8efe9ed7fe5c3aae672</span>
+</pre>
+</body>
+</html>

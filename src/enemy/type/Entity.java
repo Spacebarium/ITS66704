@@ -1,18 +1,25 @@
-package entity.type;
+package enemy.type;
 
 import entity.enemy.BossLJ;
 import main.GamePanel;
-import utility.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+<<<<<<< HEAD:src/entity/type/Entity.java
 import java.util.Random;
+=======
+import main.CollisionHandler;
+import movement.MovementHandler;
+import movement.type.Movement;
+import static utility.UtilityTool.scaleImage;
+>>>>>>> 946209d3d1b6503543d1d8efe9ed7fe5c3aae672:src/enemy/type/Entity.java
 
 public abstract class Entity {
     
     public GamePanel gp;
+    private final MovementHandler movementHandler;
 
     private final EntityType type;
     private final String name;
@@ -22,8 +29,6 @@ public abstract class Entity {
     private int height;
     private int hitboxOffsetX;
     private int hitboxOffsetY;
-    private int hitboxWidth;
-    private int hitboxHeight;
     private Rectangle hitbox;
 
     private int health;
@@ -45,8 +50,9 @@ public abstract class Entity {
     private BufferedImage left1, left2, right1, right2, up1, up2, down1, down2, image, idle;
 
 
-    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
+    public Entity(GamePanel gp, EntityType type, String name, int x, int y, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight, Movement movement) {
         this.gp = gp;
+        this.movementHandler = new MovementHandler(this, new CollisionHandler(gp), movement);
         this.type = type;
         this.name = name;
         this.x = x;
@@ -56,9 +62,7 @@ public abstract class Entity {
         
         this.hitboxOffsetX = hitboxOffsetX;
         this.hitboxOffsetY = hitboxOffsetY;
-        this.hitboxWidth = hitboxWidth;
-        this.hitboxHeight = hitboxHeight;
-        setHitbox();
+        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
         
         this.speed = 2;
     }
@@ -84,7 +88,7 @@ public abstract class Entity {
 
     public Rectangle getHitbox() { return hitbox; }
     private void setHitbox() {
-        this.hitbox = new Rectangle(x + hitboxOffsetX, y + hitboxOffsetY, hitboxWidth, hitboxHeight);
+        this.hitbox.setLocation(x + hitboxOffsetX, y + hitboxOffsetY);
     }
 
     public int getSpeed() { return speed; }
@@ -101,8 +105,14 @@ public abstract class Entity {
 
     public String getDirection() { return direction; }
     public void setDirection(String direction) { this.direction = direction; }
-
     
+    public MovementHandler getMovementHandler() { return movementHandler; }
+
+    public boolean getCombatStatus(){ return inCombat; }
+    public void setCombatStatus(boolean inCombat) {
+        this.inCombat = inCombat;
+    }
+
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
     public void setLeft2(BufferedImage left2) { this.left2 = left2; }
     public void setRight1(BufferedImage right1) { this.right1 = right1; }
@@ -116,21 +126,16 @@ public abstract class Entity {
     // Methods
     // Import images
     public BufferedImage imageSetup(String folderName, String imageName) {
-        UtilityTool util = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(folderName + "/" + imageName + ".png"));
-            image = util.scaleImage(image, gp.getTileSize(), gp.getTileSize());
+            image = scaleImage(image, gp.getTileSize(), gp.getTileSize());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return image;
-    }
-
-    public void setAction() {
-
     }
 
     public void setEntityImage() {
@@ -142,8 +147,8 @@ public abstract class Entity {
     }
 
     public void update() {
-
-    }
+        getMovementHandler().update();
+    };
 
     public void draw(Graphics2D g2) {
 
