@@ -32,6 +32,13 @@ public class ItemManager {
                 .toList();
     }
     
+    public void highlightNearestItem(int x, int y, int range) {
+        List<Item> itemsInRange = getItemsInRange(x, y, range);
+        itemsInRange.forEach(i -> i.unhighlight());
+        
+        itemsInRange.getFirst().highlight();
+    }
+    
     public void draw(Graphics2D g2) {
         synchronized (items) {
             items.stream()

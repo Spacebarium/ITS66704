@@ -1,6 +1,7 @@
 package entity.type;
 
 import item.Item;
+import item.KeyItem;
 import item.WeaponItem;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -16,6 +17,7 @@ import weapon.*;
 public class Player extends Entity {
 
     private final int MAX_WEAPON_COUNT = 2;
+    private final int PICKUP_RADIUS = 1;
     
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
@@ -142,6 +144,10 @@ public class Player extends Entity {
         }
     }
     
+    public void pickUpKeyItem(KeyItem keyItem) {
+        
+    }
+    
     @Override
     public void update() {
         super.update();
@@ -166,6 +172,8 @@ public class Player extends Entity {
         } else {
             getEquippedWeapon().setPosition(null);
         }
+        
+        
     }
     
     @Override

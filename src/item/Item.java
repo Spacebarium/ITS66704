@@ -83,6 +83,14 @@ public class Item {
         return texture;
     }
     
+    public void highlight() {
+        this.highlighted = true;
+    }
+    
+    public void unhighlight() {
+        this.highlighted = false;
+    }
+    
     public double getDistanceFrom(int x, int y, int range) {
         int closestX = UtilityTool.clamp(x, this.x, this.x + this.width);
         int closestY = UtilityTool.clamp(y, this.y, this.y + this.height);
