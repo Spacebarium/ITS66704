@@ -1,14 +1,16 @@
 package ui;
 
-import game_file.GameFileManager;
+import main.Sound;
 import utility.UtilityTool;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+
+import static main.Sound.*;
+import static ui.InitialUI.startBGMusic;
+import static ui.InitialUI.stopBGMusic;
 
 public class SettingUI extends JPanel{
     private final UtilityTool uTool;
@@ -32,6 +34,7 @@ public class SettingUI extends JPanel{
     private JButton[] buttonArray;
     private String[] buttonText;
     private String oriText;
+    private JCheckBox musicOn, soundEffectOn;
     private JButton startButton, settingButton, quitButton;
 
     private BufferedImage backgroundImage;
@@ -39,7 +42,7 @@ public class SettingUI extends JPanel{
     public SettingUI(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
-        this.uTool = new UtilityTool();
+        uTool = new UtilityTool();
 
         backgroundImage = uTool.imageSetup("UI", "ForestBackground");
 
@@ -110,6 +113,12 @@ public class SettingUI extends JPanel{
         buttonPanel = new JPanel(new GridLayout(4, 1, 0, 30));
         buttonPanel.setOpaque(false);
 
+        //Music checkbox
+        musicOn = new JCheckBox("Music       ");
+
+        //Sound effect checkbox
+        soundEffectOn = new JCheckBox("Sound Effect ");
+
         //Start button
         startButton = new JButton();
 
@@ -119,9 +128,11 @@ public class SettingUI extends JPanel{
         //Quit button
         quitButton = new JButton();
 
-        buttonPanel.add(startButton);
-        buttonPanel.add(settingButton);
-        buttonPanel.add(quitButton);
+//        buttonPanel.add(startButton);
+//        buttonPanel.add(settingButton);
+//        buttonPanel.add(quitButton);
+        buttonPanel.add(musicOn);
+        buttonPanel.add(soundEffectOn);
 
         optionPanel.add(buttonPanel);
 
@@ -149,6 +160,25 @@ public class SettingUI extends JPanel{
         exit.addActionListener(e -> switchPanel("InitialUI", 0));
         exit.setPreferredSize(new Dimension(exitLeftPad.getWidth(), 75));
         exit.setContentAreaFilled(false);
+
+        //Music check box
+        musicOn.setHorizontalTextPosition(SwingConstants.LEFT);
+        musicOn.setSelected(isMusicOn());
+        musicOn.addActionListener(e -> {
+            if (musicOn.isSelected()){
+                setMusicOn(true);
+                startBGMusic();
+            }
+            else {
+                setMusicOn(false);
+                stopBGMusic();
+            }
+        });
+
+        //Sound effect check box
+        soundEffectOn.setHorizontalTextPosition(SwingConstants.LEFT);
+        soundEffectOn.setSelected(isSoundEffectOn());
+        soundEffectOn.addActionListener(e -> setSoundEffectOn(soundEffectOn.isSelected()));
 
         //Start button
         startButton.setText(" START GAME ");

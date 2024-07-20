@@ -1,14 +1,16 @@
 package ui;
 
+import main.Sound;
 import utility.UtilityTool;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Font;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+
+import static main.Sound.*;
+
 
 public class InitialUI extends JPanel {
     private final UtilityTool uTool;
@@ -17,6 +19,8 @@ public class InitialUI extends JPanel {
     private final int maxCommandNum = 2;
     private final Timer timer;
     private boolean blinking;
+    private static final int backgroundMusic = 0;
+    private static boolean BGMplaying;
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
@@ -36,7 +40,9 @@ public class InitialUI extends JPanel {
     public InitialUI(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
-        this.uTool = new UtilityTool();
+        uTool = new UtilityTool();
+
+        startBGMusic();
 
         backgroundImage = uTool.imageSetup("UI", "ForestBackground");
 
@@ -119,7 +125,10 @@ public class InitialUI extends JPanel {
         startButton.setContentAreaFilled(false);
         startButton.setPreferredSize(new Dimension(226, 72));
         startButton.setBorderPainted(false);
-        startButton.addActionListener(e -> switchPanel("StartGameUI", 1));
+        startButton.addActionListener(e -> {
+            playSE(1);
+            switchPanel("StartGameUI", 1);
+        });
 
         startButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -137,7 +146,10 @@ public class InitialUI extends JPanel {
         settingButton.setContentAreaFilled(false);
         settingButton.setPreferredSize(new Dimension(226, 72));
         settingButton.setBorderPainted(false);
-        settingButton.addActionListener(e -> switchPanel("SettingUI", 2));
+        settingButton.addActionListener(e -> {
+            playSE(1);
+            switchPanel("SettingUI", 2);
+        });
         settingButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -154,7 +166,10 @@ public class InitialUI extends JPanel {
         quitButton.setContentAreaFilled(false);
         quitButton.setPreferredSize(new Dimension(226, 72));
         quitButton.setBorderPainted(false);
-        quitButton.addActionListener(e -> System.exit(0));
+        quitButton.addActionListener(e -> {
+            playSE(1);
+            System.exit(0);
+        });
         quitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -168,6 +183,7 @@ public class InitialUI extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e){
+                startBGMusic();
                 timer.start();
             }
 
@@ -197,15 +213,18 @@ public class InitialUI extends JPanel {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
                         if (commandNum > 0) {
+                            playSE(3);
                             updateSelection(commandNum, -1);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
                         if (commandNum < maxCommandNum) {
+                            playSE(3);
                             updateSelection(commandNum, +1);
                         }
                     }
                     case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
+                        playSE(1);
                         switch (commandNum) {
                             case 0 -> switchPanel("StartGameUI", 1);
                             case 1 -> switchPanel("SettingUI", 2);
@@ -220,6 +239,23 @@ public class InitialUI extends JPanel {
         requestFocusInWindow();
     }
 
+    public static void startBGMusic(){
+        System.out.println(BGMplaying);
+        System.out.println(isMusicOn());
+        if (!BGMplaying && isMusicOn()) {
+            System.out.println("dE");
+            playMusic(backgroundMusic);
+            BGMplaying = true;
+        }
+    }
+
+    public static void stopBGMusic(){
+        System.out.println(BGMplaying);
+        System.out.println(isMusicOn());
+        stopMusic(backgroundMusic);
+        BGMplaying = false;
+    }
+
     public void updateSelection(int commandNum, int i) {
         buttonArray[commandNum].setText(buttonText[commandNum]);
 
@@ -229,6 +265,7 @@ public class InitialUI extends JPanel {
     }
 
     public void updateSelection(int commandNum){
+        playSE(3);
         for (int i = 0; i < buttonArray.length; i++){
             if (i == commandNum){
                 buttonArray[i].setText("> " + buttonText[i].trim() + " <");

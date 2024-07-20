@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
     private final static int originalTileSize = 16;
-    private final static int scale = 5;
+    private final static int scale = 4;
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -60,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final EntityManager entityManager;
     public final TileManager tileManager;
     public final ItemManager itemManager;
+    private final Sound sound;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -68,10 +69,11 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager = new TileManager(this);
         itemManager = new ItemManager();
         gameFileManager = new GameFileManager();
+        sound = new Sound();
 
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
+        player.setWeaponToSlot(new Sword("Wooden Sword", 2, tileSize, 750, this, "netherite_sword"), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
         
         debugRenderer = new DebugRenderer(this);
@@ -123,7 +125,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
             default -> {}
         }
-        System.out.println("TEST1");
     }
 
     public void startGameThread(GameFile gameFile) {
@@ -132,6 +133,7 @@ public class GamePanel extends JPanel implements Runnable {
             gameThread = new Thread(this);
             running = true;
             gameThread.start();
+            //playMusic(0);
         } else {
             System.out.println("Existing game thread found!!!");
         }
@@ -274,4 +276,5 @@ public class GamePanel extends JPanel implements Runnable {
     private void drawDeathScreen(Graphics2D g2){
 
     }
+
 }

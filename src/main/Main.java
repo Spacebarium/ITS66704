@@ -1,5 +1,6 @@
 package main;
 
+import game_file.GameFileManager;
 import ui.InitialUI;
 import ui.SettingUI;
 import ui.StartGameUI;
@@ -20,9 +21,13 @@ public class Main {
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Echoes of the Forest");
-        window.setMinimumSize(new Dimension(854, 480));
 
-        GamePanel gp = new GamePanel(); // Initialize your GamePanel
+        window.setMinimumSize(new Dimension(1280, 720));
+
+        GameFileManager gameFileManager = new GameFileManager();
+        gameFileManager.loadSettings();
+
+        GamePanel gp = new GamePanel();
         InitialUI ui = new InitialUI(cardLayout, mainPanel);
         StartGameUI startGame = new StartGameUI(cardLayout, mainPanel, gp);
         SettingUI setting = new SettingUI(cardLayout, mainPanel);
@@ -41,8 +46,9 @@ public class Main {
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                gameFileManager.saveSettings();
                 if (gp.isRunning()) {
-                    gp.saveGameFile(); // Save game state when window is closing
+                    gp.saveGameFile();
                 }
                 System.exit(1);
             }

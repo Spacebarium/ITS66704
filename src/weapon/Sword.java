@@ -6,12 +6,14 @@ import java.awt.geom.Ellipse2D;
 
 import main.GamePanel;
 import entity.type.*;
+import main.Sound;
+
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
 public class Sword extends Weapon {
-    
+    private final Sound soundManager = new Sound();
     private double swingStartAngle;
     private double swingCurrentAngle;
     private double swingAngleStep;
@@ -45,14 +47,16 @@ public class Sword extends Weapon {
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
         
         animateSwing();
-        
+        soundManager.playSE(2);
+
         enemiesInRange.forEach(enemy -> {
             Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
             Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
 
-            if (weaponRange.intersects(enemyBox)) {
-                enemy.setHealth(enemy.getHealth() - damage);
-            }
+
+                if (weaponRange.intersects(enemyBox)) {
+                    enemy.setHealth(enemy.getHealth() - damage);
+                }
         });
         
         lastAttackTime = System.currentTimeMillis();

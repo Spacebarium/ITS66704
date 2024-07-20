@@ -6,10 +6,14 @@ import java.awt.geom.Line2D;
 
 import main.GamePanel;
 import entity.type.*;
+import main.Sound;
+
 import java.awt.geom.AffineTransform;
 
+
 public class Gun extends Weapon {
-    
+
+    private final Sound soundManager = new Sound();
     private final int tileSize;
     private final Player player;
     private final int weaponOffset;
@@ -73,6 +77,7 @@ public class Gun extends Weapon {
                 .forEach(e -> e.setHealth(e.getHealth() - damage));
         
         lastAttackTime = System.currentTimeMillis();
+        soundManager.playSE(1);
     }
     
     public void renderDebugInfo(Graphics2D g2) {
