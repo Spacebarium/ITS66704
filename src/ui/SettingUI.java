@@ -165,11 +165,10 @@ public class SettingUI extends JPanel{
         musicOn.setHorizontalTextPosition(SwingConstants.LEFT);
         musicOn.setSelected(isMusicOn());
         musicOn.addActionListener(e -> {
-            if (musicOn.isSelected()){
+            if (musicOn.isSelected()) {
                 setMusicOn(true);
                 startBGMusic();
-            }
-            else {
+            } else {
                 setMusicOn(false);
                 stopBGMusic();
             }
@@ -248,10 +247,9 @@ public class SettingUI extends JPanel{
 
         //Timer for blinking text !!! MUST MAKE SURE THIS IS STOPPED TO PREVENT LAG !!!
         timer = new Timer(300, e -> {
-            if(blinking){
+            if (blinking) {
                 buttonArray[commandNum].setText("");
-            }
-            else {
+            } else {
                 buttonArray[commandNum].setText(oriText);
             }
             blinking = !blinking;
@@ -298,13 +296,12 @@ public class SettingUI extends JPanel{
         this.commandNum += i;
     }
 
-    public void updateSelection(int commandNum){
-        for (int i = 0; i < buttonArray.length; i++){
-            if (i == commandNum){
+    public void updateSelection(int commandNum) {
+        for (int i = 0; i < buttonArray.length; i++) {
+            if (i == commandNum) {
                 buttonArray[i].setText("> " + buttonText[i].trim() + " <");
                 this.oriText = buttonArray[i].getText();
-            }
-            else {
+            } else {
                 buttonArray[i].setText(buttonText[i]);
             }
         }

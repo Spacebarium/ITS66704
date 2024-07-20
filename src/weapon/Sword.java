@@ -46,7 +46,7 @@ public class Sword extends Weapon {
     @Override
     public void use() {
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
-        
+
         animateSwing();
         playSE(2);
 
@@ -54,15 +54,14 @@ public class Sword extends Weapon {
             Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
             Ellipse2D weaponRange = new Ellipse2D.Double(position.x - range, position.y - range, 2 * range, 2 * range);
 
-
-                if (weaponRange.intersects(enemyBox)) {
-                    enemy.setHealth(enemy.getHealth() - damage);
-                }
+            if (weaponRange.intersects(enemyBox)) {
+                enemy.setHealth(enemy.getHealth() - damage);
+            }
         });
-        
+
         lastAttackTime = System.currentTimeMillis();
     }
-    
+
     public void update() {
         if (isSwinging) {
             swingCurrentStep++;

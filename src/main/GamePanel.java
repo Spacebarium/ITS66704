@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final void initialiseEntities() {
         entityManager.showEntities();
         entityManager.clearEntities();
-        switch (level){
+        switch (level) {
             case 1 -> {
                 defaultX = 240;
                 defaultY = 1276;
@@ -115,27 +115,28 @@ public class GamePanel extends JPanel implements Runnable {
 //                private Sword sword;
 //                //private Key key;
 //                //private Girl girl;
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 2 -> {
                 defaultX = 1012;
                 defaultY = 2304;
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 3 -> {
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 4 -> {
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 0 -> {
 
             }
-            default -> {}
+            default -> {
+            }
         }
         entityManager.showEntities();
     }
