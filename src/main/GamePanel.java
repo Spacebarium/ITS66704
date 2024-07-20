@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
     private final static int originalTileSize = 16;
-    private final static int scale = 5;
+    private final static int scale = 4;
     private final static int tileSize = originalTileSize * scale; // 48
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -73,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Wooden Sword", 2, 1 * tileSize, 750, this, "netherite_sword"), 0);
+        player.setWeaponToSlot(new Sword("Wooden Sword", 2, tileSize, 750, this, "netherite_sword"), 0);
         player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
         
         debugRenderer = new DebugRenderer(this);
@@ -125,7 +125,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
             default -> {}
         }
-        System.out.println("TEST1");
     }
 
     public void startGameThread(GameFile gameFile) {
@@ -276,21 +275,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void drawDeathScreen(Graphics2D g2){
 
-    }
-
-    public void playMusic(int i) {
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
-    }
-
-    public void stopMusic() {
-        sound.stop();
-    }
-
-    public void playSE(int i) {
-        sound.setFile(i);
-        sound.play();
     }
 
 }
