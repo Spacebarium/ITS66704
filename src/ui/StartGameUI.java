@@ -2,7 +2,6 @@ package ui;
 
 import game_file.GameFileManager;
 import main.GamePanel;
-import main.Sound;
 import utility.UtilityTool;
 
 import javax.swing.*;
@@ -13,9 +12,10 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static main.Sound.stopMusic;
+
 public class StartGameUI extends JPanel{
     private final GamePanel gp;
-    private final Sound soundManager;
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
     private final GameFileManager gameFileManager;
@@ -46,7 +46,6 @@ public class StartGameUI extends JPanel{
         this.gp = gp;
         gameFileManager = new GameFileManager();
         uTool = new UtilityTool();
-        soundManager = new Sound();
 
         backgroundImage = uTool.imageSetup("UI", "ForestBackground");
 
@@ -263,7 +262,7 @@ public class StartGameUI extends JPanel{
                 gameButton.removeActionListener(listener);
             }
             gameButton.addActionListener(e -> {
-                soundManager.stopMusic(0);
+                stopMusic(0);
                 switchPanel("GamePanel", 3);
                 gameFileManager.newGame(gameSlot);
                 try {
@@ -280,7 +279,7 @@ public class StartGameUI extends JPanel{
         if (gameFileManager.checkFile(gameSlot)) {
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
-                soundManager.stopMusic(0);
+                stopMusic(0);
                 switchPanel("GamePanel", 3);
                 try {
                     gp.startGameThread(gameFileManager.loadGame(gameSlot));
@@ -291,7 +290,7 @@ public class StartGameUI extends JPanel{
         } else {
             gameButton.setText(" + ");
             gameButton.addActionListener(e -> {
-                soundManager.stopMusic(0);
+                stopMusic(0);
                 switchPanel("GamePanel", 3);
                 gameFileManager.newGame(gameSlot);
                 try {

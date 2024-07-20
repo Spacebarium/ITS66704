@@ -33,14 +33,14 @@ public class GameFileManager {
 
     public void newGame(int gameSlot) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
-            GameFile newGameFile = new GameFile(gameSlot, "Level5", 10 * getTileSize(), 20 * getTileSize());
+            GameFile newGameFile = new GameFile(gameSlot, 1, 0, 0);
             saveGame(newGameFile, gameSlot, newGameFile.getMap(), newGameFile.getPlayerX(), newGameFile.getPlayerY());
         } else {
             System.out.println("Invalid slot number.");
         }
     }
 
-    public void saveGame(GameFile gameFile, int gameSlot, String map, int playerX, int playerY) {
+    public void saveGame(GameFile gameFile, int gameSlot, int map, int playerX, int playerY) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_FOLDER + SAVE_FILE_PREFIX + gameSlot + ".ser"))) {
                 gameFile.setMap(map);

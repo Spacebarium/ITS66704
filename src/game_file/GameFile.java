@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class GameFile implements Serializable {
     private int gameFile;
-    private String map;
+    private int map;
     private int playerX;
     private int playerY;
     private int playerHP;
 
-    public GameFile(int gameFile, String map, int playerX, int playerY) {
+    public GameFile(int gameFile, int map, int playerX, int playerY) {
         this.gameFile = gameFile;
         this.map = map;
         this.playerX = playerX;
@@ -24,11 +24,11 @@ public class GameFile implements Serializable {
         this.gameFile = gameFile;
     }
 
-    public String getMap() {
+    public int getMap() {
         return map;
     }
 
-    public void setMap(String map) {
+    public void setMap(int map) {
         this.map = map;
     }
 

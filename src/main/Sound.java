@@ -17,6 +17,7 @@ public class Sound {
         loadSound("sword");
         loadSound("select");
         loadSound("enter");
+        loadSound("ingame");
     }
 
     public static void loadSound(String fileName) {

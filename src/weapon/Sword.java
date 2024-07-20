@@ -12,8 +12,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 
+import static main.Sound.playSE;
+
 public class Sword extends Weapon {
-    private final Sound soundManager = new Sound();
     private double swingStartAngle;
     private double swingCurrentAngle;
     private double swingAngleStep;
@@ -47,7 +48,7 @@ public class Sword extends Weapon {
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
         
         animateSwing();
-        soundManager.playSE(2);
+        playSE(2);
 
         enemiesInRange.forEach(enemy -> {
             Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());

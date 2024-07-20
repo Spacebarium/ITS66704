@@ -13,6 +13,8 @@ import tile.TileManager;
 import game_file.GameFile;
 import weapon.*;
 
+import static main.Sound.playMusic;
+
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
@@ -23,8 +25,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     //GAME SETTINGS
     private GameFile gameFile;
-    private String map;
+    private final String map = "Level";
     private boolean mapLoaded = false;
+    private int curLevel, level, defaultX, defaultY, nextMapX;
 
     //ENTITIES
     private Player player;
@@ -97,9 +100,13 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScale() { return scale; }
 
     public final void initialiseEntities() {
+        entityManager.showEntities();
         entityManager.clearEntities();
-        switch (map){
-            case "Level1" -> {
+        switch (level){
+            case 1 -> {
+                defaultX = 240;
+                defaultY = 1276;
+                nextMapX = 3148;
 //                private BlackNinja blackNinja;
 //                private GreenNinja greenNinja;
 //                private Boss boss;
@@ -111,20 +118,26 @@ public class GamePanel extends JPanel implements Runnable {
                 WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
-            case "Level2" -> {
-
+            case 2 -> {
+                defaultX = 1012;
+                defaultY = 2304;
+                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                entityManager.addEntity(whiteNinja);
             }
-            case "Level3" -> {
-
+            case 3 -> {
+                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                entityManager.addEntity(whiteNinja);
             }
-            case "Level4" -> {
-
+            case 4 -> {
+                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                entityManager.addEntity(whiteNinja);
             }
-            case "Level5" -> {
+            case 0 -> {
 
             }
             default -> {}
         }
+        entityManager.showEntities();
     }
 
     public void startGameThread(GameFile gameFile) {
@@ -141,13 +154,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void loadGameFile(GameFile gameFile){
         this.gameFile = gameFile;
-        this.map = gameFile.getMap();
+        this.curLevel = gameFile.getMap();
+        this.level = gameFile.getMap();
         this.player.setX(gameFile.getPlayerX());
         this.player.setY(gameFile.getPlayerY());
     }
 
     public void saveGameFile() {
-        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), this.map, player.getX(), player.getY());
+        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
     }
 
     public void restartGameThread(){
@@ -176,9 +190,14 @@ public class GamePanel extends JPanel implements Runnable {
         int    drawCount = 0; // FPS
         double cycleStart;
 
-        tileManager.loadMap(this.map);
+        tileManager.loadMap(map + level);
         initialiseEntities();
+        if (player.getX() == 0 && player.getY() == 0){
+            player.setX(defaultX);
+            player.setY(defaultY);
+        }
         mapLoaded = true;
+        playMusic(5);
 
         // game loop
         while (running) {
@@ -216,11 +235,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == GameState.PLAYING) {
-            if (player.getX() >= 1877 && player.getY() == 1248){
-                this.map = "Level5";
-                player.setX(400);
-                player.setY(1000);
-                gameFileManager.saveGame(gameFile, gameFile.getGameFile(), this.map, player.getX(), player.getY());
+            if (player.getX() >= nextMapX){
+                player.setX(0);
+                player.setY(0);
+//                if (level != 0){
+//                    level = 0;
+//                }
+//                else {
+                    curLevel += 1;
+                    level = curLevel;
+//                }
+                initialiseEntities();
+                gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
                 mapLoaded = false;
                 restartGameThread();
             }
