@@ -36,7 +36,6 @@ public class GamePanel extends JPanel implements Runnable {
     //ENTITIES
     private Player player;
 
-
     //GAME INFO
     private boolean running = false;
     private final int updatesPerSecond = 60;
@@ -183,16 +182,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void loadGameFile(GameFile gameFile){
         this.gameFile = gameFile;
-        this.curLevel = gameFile.getMap();
-        this.level = gameFile.getMap();
-        this.player.setX(gameFile.getPlayerX());
-        this.player.setY(gameFile.getPlayerY());
+        curLevel = gameFile.getCurLevel();
+        level = gameFile.getLevel();
+        player.setHealth(gameFile.getPlayerHP());
+        player.setX(gameFile.getPlayerX());
+        player.setY(gameFile.getPlayerY());
     }
 
     public void saveGameFile() {
-        System.out.println("level" + level);
-        System.out.println("cur" + curLevel);
-        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
+        gameFileManager.saveGame(gameFile, gameFile.getGameFile(), curLevel, level, player.getX(), player.getY(), player.getHealth());
     }
 
     public void restartGameThread(){
@@ -270,15 +268,11 @@ public class GamePanel extends JPanel implements Runnable {
                 int option = JOptionPane.showOptionDialog(null, "YOU DIED", "YOU DIED\n RESPAWN?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
                 if (option == JOptionPane.OK_OPTION) {
-                    player.setX(0);
-                    player.setY(0);
+                    player.setX(gameFile.getPlayerX());
+                    player.setY(gameFile.getPlayerX());
                     player.setHealth(player.getMaxHealth());
 
-                    level = 1;
-                    curLevel = 1;
-
                     initialiseEntities();
-                    gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
                     restartGameThread();
                 }
             }
@@ -293,20 +287,21 @@ public class GamePanel extends JPanel implements Runnable {
                     level = curLevel;
 
                     initialiseEntities();
-                    gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
+                    saveGameFile();
                     restartGameThread();
                 }
             }
             else if (player.getX() >= nextMapX){
                 gameState = GameState.LOADING;
                 repaint();
+                player.setHealth(player.getMaxHealth());
                 player.setX(0);
                 player.setY(0);
 
                 level = 0;
 
                 initialiseEntities();
-                gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
+                saveGameFile();
                 restartGameThread();
             }
             entityManager.update();
@@ -341,7 +336,6 @@ public class GamePanel extends JPanel implements Runnable {
     //CHAT GPTED WILL FIX
     private void drawPauseScreen(Graphics2D g2) {
         // Draw a semi-transparent overlay
-        System.out.println("DEBUG");
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, getWidth(), getHeight());
 
