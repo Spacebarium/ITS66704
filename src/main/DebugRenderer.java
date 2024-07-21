@@ -32,7 +32,7 @@ public class DebugRenderer {
         int screenX = player.getScreenX() - player.getX();
         int screenY = player.getScreenY() - player.getY();
         
-        // STUFF TO RENDER
+        // TEXT TO RENDER
         g2.drawString("FPS: " + GamePanel.FPS, 10, 20);
         g2.drawString("Update duration: " + String.format("%.2f", GamePanel.updateDurationPerSecond) + "ms", 10, 40);
         g2.drawString("Render duration: " + String.format("%.2f", GamePanel.renderDurationPerSecond) + "ms", 10, 60);
@@ -47,6 +47,7 @@ public class DebugRenderer {
         g2.drawString("slot0: " + player.getWeaponFromSlot(0).getName(), 10, 200);
         g2.drawString("slot1: " + player.getWeaponFromSlot(1).getName(), 10, 220);
         g2.drawString("equipped slot: " + player.getEquippedWeaponIndex(), 10, 240);
+        g2.drawString("has key? " + player.getHasKey(), 10, 260);
 
         
         for (Entity entity : entities) {

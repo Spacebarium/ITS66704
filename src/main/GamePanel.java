@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     private GameFile gameFile;
     private final String map = "Level";
     private boolean mapLoaded = false;
+    public boolean levelCleared = false;
     private int curLevel, level, defaultX, defaultY, nextMapX;
 
     //ENTITIES
@@ -68,9 +69,9 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
-        entityManager = new EntityManager();
+        entityManager = new EntityManager(this);
         tileManager = new TileManager(this);
-        itemManager = new ItemManager();
+        itemManager = new ItemManager(this);
         gameFileManager = new GameFileManager();
         sound = new Sound();
 
@@ -90,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseListener(mouseHandler);
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return this.running;
     }
 
@@ -102,6 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final void initialiseEntities() {
         entityManager.showEntities();
         entityManager.clearEntities();
+        
         switch (level) {
             case 1 -> {
                 defaultX = 240;
@@ -193,7 +195,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.loadMap(map + level);
         initialiseEntities();
-        if (player.getX() == 0 && player.getY() == 0){
+        if (player.getX() == 0 && player.getY() == 0) {
             player.setX(defaultX);
             player.setY(defaultY);
         }
@@ -236,15 +238,17 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == GameState.PLAYING) {
-            if (player.getX() >= nextMapX){
+            if (player.getHasKey() && player.getX() >= nextMapX) {
                 player.setX(0);
                 player.setY(0);
 //                if (level != 0){
 //                    level = 0;
-//                }
-//                else {
-                    curLevel += 1;
-                    level = curLevel;
+//                } else {
+                curLevel += 1;
+                level = curLevel;
+                
+                player.setHasKey(false);
+                levelCleared = false;
 //                }
                 initialiseEntities();
                 gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
@@ -252,6 +256,7 @@ public class GamePanel extends JPanel implements Runnable {
                 restartGameThread();
             }
             entityManager.update();
+            itemManager.update();
         }
     }
 
@@ -261,6 +266,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         if (mapLoaded) {
             tileManager.draw(g2);
+            itemManager.draw(g2);
             entityManager.draw(g2);
 
             if (gameState == GameState.PAUSED) {

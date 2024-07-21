@@ -1,15 +1,19 @@
 package item;
 
+import entity.type.Player;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import main.GamePanel;
 
 public class ItemManager {
     
+    private final Player player;
     private final List<Item> items;
     
-    public ItemManager() {
+    public ItemManager(GamePanel gp) {
+        this.player = gp.entityManager.getPlayer();
         items = new ArrayList<>();
     }
     
@@ -34,16 +38,21 @@ public class ItemManager {
     
     public void highlightNearestItem(int x, int y, int range) {
         List<Item> itemsInRange = getItemsInRange(x, y, range);
-        itemsInRange.forEach(i -> i.unhighlight());
+        items.forEach(i -> i.setHighlighted(false));
         
-        itemsInRange.getFirst().highlight();
+        itemsInRange.getFirst().setHighlighted(true);
+    }
+    
+    public void update() {
+        synchronized (items) {
+            items.forEach(i -> i.update());
+        }
+//        highlightNearestItem(player.getCentreX(), player.getCentreY(), player.getPickupRadius());
     }
     
     public void draw(Graphics2D g2) {
         synchronized (items) {
-            items.stream()
-                    .sorted(Comparator.comparingInt(Item::getY))
-                    .forEach(e -> e.draw(g2));
+            items.forEach(i -> i.draw(g2));
         }
     }
 }

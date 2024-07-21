@@ -6,14 +6,19 @@ import java.util.List;
 import java.awt.Graphics2D;
 
 import entity.type.*;
+import item.KeyItem;
+import main.GamePanel;
 
 public class EntityManager {
 
+    private final GamePanel gp;
     private final List<Entity> entities;
     private Player player;
+    private int lastEnemyDeathX, lastEnemyDeathY;
 
-    public EntityManager() {
+    public EntityManager(GamePanel gp) {
         entities = new ArrayList<>();
+        this.gp = gp;
     }
 
     public void addEntity(Entity entity) {
@@ -25,7 +30,8 @@ public class EntityManager {
     
     public Player getPlayer() { return player; }
 
-    public void removeEntity(Entity entity) {System.out.println("DEBUG3");
+    public void removeEntity(Entity entity) {
+        System.out.println("DEBUG3");
         entities.remove(entity);
     }
 
@@ -50,14 +56,20 @@ public class EntityManager {
         System.out.println("DEBUG2");
     }
 
-    public void showEntities(){
-        for (Entity entity: entities){
+    public void showEntities() {
+        for (Entity entity : entities) {
             System.out.println(entity.getName());
         }
     }
 
     public List<Entity> getEntities() {
         return entities;
+    }
+    
+    public <T extends Entity> List<T> getEntities(Class<T> entityType) {
+        return (List<T>) entities.stream()
+                .filter(e -> entityType.isInstance(e))
+                .toList();
     }
     
     public <T extends Entity> List<T> getEntitiesInRange(int x, int y, int range, Class<T> entityType) {
@@ -79,9 +91,23 @@ public class EntityManager {
             List<Entity> entitiesToRemove = new ArrayList<>();
             entities.stream()
                     .filter(e -> e.getHealth() == 0)
-                    .forEach(entitiesToRemove::add);
+                    .forEach(e -> {
+                        if (e.getEntityType() == EntityType.ENEMY) {
+                            lastEnemyDeathX = e.getX();
+                            lastEnemyDeathY = e.getY();
+                        }
+                        entitiesToRemove.add(e);
+                    });
+
 
             entitiesToRemove.forEach(this::removeEntity);
+            
+            if (getEntities(Enemy.class).isEmpty() && !gp.levelCleared) {
+                // spawn key
+                gp.itemManager.addItem(new KeyItem(gp, lastEnemyDeathX, lastEnemyDeathY));
+                System.out.printf("spawned key at (%d, %d)\n", lastEnemyDeathX, lastEnemyDeathY);
+                gp.levelCleared = true;
+            }
         }
     }
 

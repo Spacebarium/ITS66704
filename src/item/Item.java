@@ -55,7 +55,6 @@ public class Item {
 
     public void setX(int x) {
         this.x = x;
-        this.windowX = x - player.getX() + player.getScreenX();
     }
 
     public int getY() {
@@ -64,7 +63,6 @@ public class Item {
 
     public void setY(int y) {
         this.y = y;
-        this.windowY = y - player.getY() + player.getScreenY();
     }
 
     public int getWidth() {
@@ -83,12 +81,12 @@ public class Item {
         return texture;
     }
     
-    public void highlight() {
-        this.highlighted = true;
+    public void setHighlighted(boolean highlighted) {
+        this.highlighted = highlighted;
     }
     
-    public void unhighlight() {
-        this.highlighted = false;
+    public boolean getHighlighted() {
+        return highlighted;
     }
     
     public double getDistanceFrom(int x, int y, int range) {
@@ -109,6 +107,11 @@ public class Item {
         return getDistanceFrom(x, y, range) <= range;
     }
 
+    public void update() {
+        this.windowX = x - player.getX() + player.getScreenX();
+        this.windowY = y - player.getY() + player.getScreenY();
+    }
+    
     public void draw(Graphics2D g2) {
         g2.drawImage(texture, windowX, windowY, null);
         

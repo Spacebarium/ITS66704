@@ -13,6 +13,7 @@ public class HUDRenderer {
     
     private BufferedImage slot;
     private BufferedImage slotSelected;
+    private BufferedImage keyImg;
     
     public HUDRenderer(GamePanel gp) {
         this.gp = gp;
@@ -26,6 +27,7 @@ public class HUDRenderer {
         try {
             slot = ImageIO.read(getClass().getResource("/ui/slot.png"));
             slotSelected = ImageIO.read(getClass().getResource("/ui/slot_selected.png"));
+            keyImg = ImageIO.read(getClass().getResource("/item/key.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,5 +87,10 @@ public class HUDRenderer {
         int sw = slotSelected.getWidth() * scale;
         int sh = slotSelected.getHeight() * scale;
         g2.drawImage(slotSelected, sx, sy, sw, sh, null);
+        
+        // draw key
+        if (player.getHasKey()) {
+            g2.drawImage(keyImg, 20, 20, null);
+        }
     }
 }
