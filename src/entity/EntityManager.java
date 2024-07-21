@@ -25,8 +25,35 @@ public class EntityManager {
     
     public Player getPlayer() { return player; }
 
-    public void removeEntity(Entity entity) {
+    public void removeEntity(Entity entity) {System.out.println("DEBUG3");
         entities.remove(entity);
+    }
+
+    public void clearEntities() {
+        List<Entity> entitiesToRemove = new ArrayList<>();
+
+        System.out.println("Entities before clearing: " + entities.size());
+        for (Entity entity : entities) {
+            if (entity != player) {
+                System.out.println("Marking for removal: " + entity);
+                entitiesToRemove.add(entity);
+            }
+        }
+
+        System.out.println("Entities to remove: " + entitiesToRemove.size());
+        for (Entity entity : entitiesToRemove) {
+            removeEntity(entity);
+            System.out.println("Removed: " + entity);
+        }
+
+        System.out.println("Entities after clearing: " + entities.size());
+        System.out.println("DEBUG2");
+    }
+
+    public void showEntities(){
+        for (Entity entity: entities){
+            System.out.println(entity.getName());
+        }
     }
 
     public List<Entity> getEntities() {

@@ -6,10 +6,13 @@ import utility.UtilityTool;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import static main.Sound.stopMusic;
 
 public class StartGameUI extends JPanel{
     private final GamePanel gp;
@@ -41,7 +44,7 @@ public class StartGameUI extends JPanel{
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
         this.gp = gp;
-        this.gameFileManager = new GameFileManager(gp);
+        gameFileManager = new GameFileManager();
         uTool = new UtilityTool();
 
         backgroundImage = uTool.imageSetup("UI", "ForestBackground");
@@ -241,25 +244,8 @@ public class StartGameUI extends JPanel{
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                        if (commandNum > 0) {
-                            //updateSelection(commandNum, -1);
-                        }
-                    }
-                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                        if (commandNum < maxCommandNum) {
-                            //updateSelection(commandNum, +1);
-                        }
-                    }
-                    case KeyEvent.VK_ENTER, KeyEvent.VK_F -> {
-                        switch (commandNum) {
-                            case 0 -> switchPanel("GamePanel", 3);
-                            //    case 1 -> settingPanel();
-                            case 2 -> System.exit(0);
-                        }
-                    }
-                    case KeyEvent.VK_ESCAPE -> switchPanel("InitialUI", 0);
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    switchPanel("InitialUI", 0);
                 }
             }
         });
@@ -269,20 +255,22 @@ public class StartGameUI extends JPanel{
     }
 
     public void updateGameButtons(JButton gameButton, JButton closeButton, int gameSlot) {
-        if (gameFileManager.checkFile(gameSlot)) {
-            gameButton.setText(" Load Game ");
+        if (!gameFileManager.checkFile(gameSlot)) {
+            gameButton.setText(" + ");
+            ActionListener[] listeners = gameButton.getActionListeners();
+            for (ActionListener listener : listeners) {
+                gameButton.removeActionListener(listener);
+            }
             gameButton.addActionListener(e -> {
+                stopMusic(0);
+                switchPanel("GamePanel", 3);
+                gameFileManager.newGame(gameSlot);
                 try {
                     gp.startGameThread(gameFileManager.loadGame(gameSlot));
-                    switchPanel("GamePanel", 3);
-                } catch (IOException exception) {
-                    exception.printStackTrace();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             });
-            closeButton.setVisible(true); // Show close button if game file exists
-        } else {
-            gameButton.setText(" + ");
-            gameButton.addActionListener(e -> gameFileManager.newGame(gameSlot));
             closeButton.setVisible(false); // Hide close button if no game file
         }
     }
@@ -291,33 +279,29 @@ public class StartGameUI extends JPanel{
         if (gameFileManager.checkFile(gameSlot)) {
             gameButton.setText(" Load Game ");
             gameButton.addActionListener(e -> {
+                stopMusic(0);
+                switchPanel("GamePanel", 3);
                 try {
                     gp.startGameThread(gameFileManager.loadGame(gameSlot));
-                    switchPanel("GamePanel", 3);
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
             });
         } else {
             gameButton.setText(" + ");
-            gameButton.addActionListener(e -> gameFileManager.newGame(gameSlot));
+            gameButton.addActionListener(e -> {
+                stopMusic(0);
+                switchPanel("GamePanel", 3);
+                gameFileManager.newGame(gameSlot);
+                try {
+                    gp.startGameThread(gameFileManager.loadGame(gameSlot));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
         }
         gameButton.setContentAreaFilled(false);
     }
-
-//    public void updateSelection(int commandNum) {
-//        buttonOptions[commandNum].setText("> " + buttonOptions[commandNum].getText().trim() + " <");
-//    }
-//
-//    public void updateSelection(int commandNum, int i) {
-//        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace(">", " ").trim());
-//        buttonOptions[commandNum].setText(buttonOptions[commandNum].getText().replace("<", " ").trim());
-//        buttonOptions[commandNum].setVisible(true);
-//
-//        buttonOptions[commandNum + i].setText("> " + buttonOptions[commandNum + i].getText().trim() + " <");
-//
-//        this.commandNum += i;
-//    }
 
     public void switchPanel(String ui, int index){
         cardLayout.show(mainPanel, ui);

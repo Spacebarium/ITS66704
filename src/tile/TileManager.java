@@ -22,7 +22,8 @@ public class TileManager {
     }
 
     public void setTile(int x, int y, String type) {
-        tiles[y][x] = new Tile(type);
+        Tile tile = new Tile(type);
+        this.tiles[y][x] = tile;
     }
 
     public Tile getTile(int x, int y) {
@@ -38,7 +39,7 @@ public class TileManager {
     }
 
     public void loadMap(String mapName){
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("map/" + mapName + ".txt")) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("Map/" + mapName + ".txt")) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<String> lines = new ArrayList<>();
             String line;
@@ -51,7 +52,8 @@ public class TileManager {
 
             int mapTileHeight = lines.size();
             int mapTileWidth = lines.get(0).split(" ").length;
-            tiles = new Tile[mapTileHeight][mapTileWidth];
+
+            this.tiles = new Tile[mapTileHeight][mapTileWidth];
 
             for (int y = 0; y < mapTileHeight; y++) {
                 String[] tileIds = lines.get(y).split(" ");

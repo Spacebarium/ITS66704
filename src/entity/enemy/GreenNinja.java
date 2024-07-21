@@ -5,8 +5,8 @@ import main.GamePanel;
 
 public class GreenNinja extends Enemy {
 
-    public GreenNinja(GamePanel gp) {
-        super(gp, "greenNinja", 200, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
+    public GreenNinja(GamePanel gp, int defaultX, int defaultY) {
+        super(gp, "GreenNinja", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
 
         getImage();
     }

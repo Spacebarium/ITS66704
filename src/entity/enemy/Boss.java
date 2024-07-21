@@ -7,12 +7,12 @@ import movement.type.EnemyMovement;
 
 public class Boss extends Enemy {
 
-    public Boss(GamePanel gp, EnemyMovement enemyMovement, Player player) {
-        super(gp, "boss", 200, 400, 32 * gp.getScale(), 32 * gp.getScale(), 9, 12, 30, 36);
+    public Boss(GamePanel gp, int defaultX, int defaultY) {
+        super(gp, "Boss", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
 
-        setSpeed(5);
         getImage();
     }
+
 
     public void getImage(){
         setUp1(imageSetup("Boss", "BossUp1"));

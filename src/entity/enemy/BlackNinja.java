@@ -5,8 +5,8 @@ import main.GamePanel;
 
 public class BlackNinja extends Enemy {
 
-    public BlackNinja(GamePanel gp) {
-        super(gp, "blackNinja", 200, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
+    public BlackNinja(GamePanel gp, int defaultX, int defaultY) {
+        super(gp, "blackNinja", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
 
         getImage();
     }

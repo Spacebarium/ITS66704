@@ -7,11 +7,12 @@ import movement.type.EnemyMovement;
 
 public class FinalBoss extends Enemy {
 
-    public FinalBoss(GamePanel gp, EnemyMovement enemyMovement, Player player) {
-        super(gp, "finalBoss", 200, 200, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
-        setSpeed(4);
+    public FinalBoss(GamePanel gp, int defaultX, int defaultY) {
+        super(gp, "FinalBoss", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
+
         getImage();
     }
+
 
     public void getImage() {
         setUp1(imageSetup("FinalBoss", "FinalBossLeft1"));
