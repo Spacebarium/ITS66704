@@ -27,6 +27,7 @@ public class Main {
         GameFileManager gameFileManager = new GameFileManager();
         gameFileManager.loadSettings();
 
+        Sound sound = new Sound();
         GamePanel gp = new GamePanel();
         InitialUI ui = new InitialUI(cardLayout, mainPanel);
         StartGameUI startGame = new StartGameUI(cardLayout, mainPanel, gp);

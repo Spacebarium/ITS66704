@@ -1,9 +1,7 @@
 package entity.enemy;
 
 import entity.type.Enemy;
-import entity.type.Player;
 import main.GamePanel;
-import movement.type.EnemyMovement;
 
 public class Boss extends Enemy {
 

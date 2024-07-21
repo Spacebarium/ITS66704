@@ -4,16 +4,19 @@ import java.io.Serializable;
 
 public class GameFile implements Serializable {
     private int gameFile;
-    private String map;
+    private int curLevel;
+    private int level;
     private int playerX;
     private int playerY;
     private int playerHP;
 
-    public GameFile(int gameFile, String map, int playerX, int playerY) {
+    public GameFile(int gameFile, int curLevel, int level, int playerX, int playerY, int playerHP) {
         this.gameFile = gameFile;
-        this.map = map;
+        this.curLevel = curLevel;
+        this.level = level;
         this.playerX = playerX;
         this.playerY = playerY;
+        this.playerHP = playerHP;
     }
 
     public int getGameFile() {
@@ -24,12 +27,20 @@ public class GameFile implements Serializable {
         this.gameFile = gameFile;
     }
 
-    public String getMap() {
-        return map;
+    public int getCurLevel() {
+        return curLevel;
     }
 
-    public void setMap(String map) {
-        this.map = map;
+    public void setCurLevel(int curLevel) {
+        this.curLevel = curLevel;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public int getPlayerX() {
@@ -46,5 +57,13 @@ public class GameFile implements Serializable {
 
     public void setPlayerY(int playerY) {
         this.playerY = playerY;
+    }
+
+    public int getPlayerHP() {
+        return playerHP;
+    }
+
+    public void setPlayerHP(int playerHP) {
+        this.playerHP = playerHP;
     }
 }

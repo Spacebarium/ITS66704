@@ -29,11 +29,28 @@ public class EntityManager {
         entities.remove(entity);
     }
 
-    public void clearEntities(){
-        for (Entity entity: getEntities()){
-            if (entity != player)
-                removeEntity(entity);
+    public void clearEntities() {
+        List<Entity> entitiesToRemove = new ArrayList<>();
+
+        for (Entity entity : entities) {
+            if (entity != player) {
+                entitiesToRemove.add(entity);
+            }
         }
+
+        for (Entity entity : entitiesToRemove) {
+            removeEntity(entity);
+        }
+    }
+
+    public void showEntities(){
+        for (Entity entity: entities){
+            System.out.println(entity.getName());
+        }
+    }
+
+    public int entityCount(){
+        return entities.size();
     }
 
     public List<Entity> getEntities() {

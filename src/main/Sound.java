@@ -17,6 +17,7 @@ public class Sound {
         loadSound("sword");
         loadSound("select");
         loadSound("enter");
+        loadSound("ingame");
     }
 
     public static void loadSound(String fileName) {
@@ -48,6 +49,16 @@ public class Sound {
         Sound.soundEffectOn = soundEffectOn;
     }
 
+    public static void setVolume(float volume) {
+        for (Clip clip: soundClips){
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            float min = gainControl.getMinimum();
+            float max = gainControl.getMaximum();
+            float newVolume = min + (max - min) * volume;
+            gainControl.setValue(newVolume);
+        }
+    }
+
     public static void play(int i) {
         Clip clip = soundClips.get(i);
         if (clip != null) {
@@ -65,14 +76,12 @@ public class Sound {
     }
 
     public static void stopMusic(int i) {
-        System.out.println(i);
         Clip clip = soundClips.get(i);
         clip.stop();
     }
 
     public static void playMusic(int i) {
         if (musicOn) {
-            System.out.println("I am nln");
             play(i);
             loop(i);
         }
