@@ -119,7 +119,6 @@ public class GameFileManager {
                 FileEncryptor.decryptFile(secretKey, encryptedFile, decryptedFile);
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(decryptedFile))) {
                     SettingFile settings = (SettingFile) ois.readObject();
-                    System.out.println("MUSIC" + settings.isMusicOn() + "SE: " + settings.isSoundEffectOn());
                     setMusicOn(settings.isMusicOn());
                     setSoundEffectOn(settings.isSoundEffectOn());
                     decryptedFile.delete(); // Delete the decrypted file

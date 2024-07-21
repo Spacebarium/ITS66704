@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import entity.*;
@@ -11,9 +12,11 @@ import item.ItemManager;
 import movement.type.*;
 import tile.TileManager;
 import game_file.GameFile;
+import utility.UtilityTool;
 import weapon.*;
 
 import static main.Sound.playMusic;
+import static main.Sound.setVolume;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -26,8 +29,9 @@ public class GamePanel extends JPanel implements Runnable {
     //GAME SETTINGS
     private GameFile gameFile;
     private final String map = "Level";
-    private boolean mapLoaded = false;
     private int curLevel, level, defaultX, defaultY, nextMapX;
+    private BufferedImage loadingImage;
+    private Object[] options = {"RESPAWN"};
 
     //ENTITIES
     private Player player;
@@ -51,7 +55,9 @@ public class GamePanel extends JPanel implements Runnable {
         PLAYING,
         PAUSED,
         SETTINGS,
-        GAME_OVER
+        GAME_OVER,
+        LOADING,
+        WIN
     }
 
     private Thread gameThread;
@@ -63,7 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final EntityManager entityManager;
     public final TileManager tileManager;
     public final ItemManager itemManager;
-    private final Sound sound;
+    private final UtilityTool utilityTool;
 
     public GamePanel() {
         keyHandler = new KeyHandler();
@@ -72,7 +78,11 @@ public class GamePanel extends JPanel implements Runnable {
         tileManager = new TileManager(this);
         itemManager = new ItemManager();
         gameFileManager = new GameFileManager();
-        sound = new Sound();
+        utilityTool = new UtilityTool();
+
+        setVolume(0.7f);
+
+        loadingImage = utilityTool.imageSetup("UI", "Loading");
 
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
@@ -100,7 +110,6 @@ public class GamePanel extends JPanel implements Runnable {
     public int getScale() { return scale; }
 
     public final void initialiseEntities() {
-        entityManager.showEntities();
         entityManager.clearEntities();
         switch (level){
             case 1 -> {
@@ -115,38 +124,58 @@ public class GamePanel extends JPanel implements Runnable {
 //                private Sword sword;
 //                //private Key key;
 //                //private Girl girl;
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                GreenNinja greenNinja = new GreenNinja(this,17 * getTileSize(), 21 * getTileSize());
                 entityManager.addEntity(whiteNinja);
+                entityManager.addEntity(greenNinja);
             }
             case 2 -> {
                 defaultX = 1012;
                 defaultY = 2304;
+                nextMapX = 3148;
                 WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 3 -> {
+                defaultX = 709;
+                defaultY = 2608;
+                nextMapX = 3144;
                 WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 4 -> {
+                defaultX = 1612;
+                defaultY = 640;
+                gameState = GameState.WIN;
                 WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
             case 0 -> {
+                defaultX = 1646;
+                defaultY = 742;
+                switch (curLevel){
+                    case 1 -> {
+                        Boss boss =  new Boss(this,16 * getTileSize(), 20 * getTileSize());
+                        FinalBoss finalBoss = new FinalBoss(this, 16 * getTileSize(), 20 * getTileSize());
+                        entityManager.addEntity(boss);
+                        entityManager.addEntity(finalBoss);
+                    }
+                    case 2 -> {}
+                    case 3 -> {}
+                    case 4 -> {}
+                }
 
             }
-            default -> {}
         }
-        entityManager.showEntities();
     }
 
     public void startGameThread(GameFile gameFile) {
         if (gameThread == null || !gameThread.isAlive()) {
+            gameState = GameState.LOADING;
             loadGameFile(gameFile);
             gameThread = new Thread(this);
             running = true;
             gameThread.start();
-            //playMusic(0);
         } else {
             System.out.println("Existing game thread found!!!");
         }
@@ -161,6 +190,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void saveGameFile() {
+        System.out.println("level" + level);
+        System.out.println("cur" + curLevel);
         gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
     }
 
@@ -196,7 +227,7 @@ public class GamePanel extends JPanel implements Runnable {
             player.setX(defaultX);
             player.setY(defaultY);
         }
-        mapLoaded = true;
+        gameState = GameState.PLAYING;
         playMusic(5);
 
         // game loop
@@ -235,19 +266,47 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == GameState.PLAYING) {
-            if (player.getX() >= nextMapX){
-                player.setX(0);
-                player.setY(0);
-//                if (level != 0){
-//                    level = 0;
-//                }
-//                else {
+            if (player.getHealth() <= 0){
+                int option = JOptionPane.showOptionDialog(null, "YOU DIED", "YOU DIED\n RESPAWN?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+                if (option == JOptionPane.OK_OPTION) {
+                    player.setX(0);
+                    player.setY(0);
+                    player.setHealth(player.getMaxHealth());
+
+                    level = 1;
+                    curLevel = 1;
+
+                    initialiseEntities();
+                    gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
+                    restartGameThread();
+                }
+            }
+            else if (level == 0){
+                if (entityManager.entityCount() == 1) {
+                    gameState = GameState.LOADING;
+                    repaint();
+
+                    player.setX(0);
+                    player.setY(0);
                     curLevel += 1;
                     level = curLevel;
-//                }
+
+                    initialiseEntities();
+                    gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
+                    restartGameThread();
+                }
+            }
+            else if (player.getX() >= nextMapX){
+                gameState = GameState.LOADING;
+                repaint();
+                player.setX(0);
+                player.setY(0);
+
+                level = 0;
+
                 initialiseEntities();
                 gameFileManager.saveGame(gameFile, gameFile.getGameFile(), level, player.getX(), player.getY());
-                mapLoaded = false;
                 restartGameThread();
             }
             entityManager.update();
@@ -258,7 +317,11 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        if (mapLoaded) {
+
+        if (gameState == GameState.LOADING) {
+            g.drawImage(loadingImage, 0, 0, getWidth(), getHeight(), this);
+        } else if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
+
             tileManager.draw(g2);
             entityManager.draw(g2);
 
@@ -271,14 +334,14 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             hudRenderer.draw(g2);
-
-            g2.dispose();
         }
+        g2.dispose();
     }
 
     //CHAT GPTED WILL FIX
     private void drawPauseScreen(Graphics2D g2) {
         // Draw a semi-transparent overlay
+        System.out.println("DEBUG");
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, getWidth(), getHeight());
 
@@ -298,9 +361,4 @@ public class GamePanel extends JPanel implements Runnable {
         int resumeY = y + fm.getHeight() + 20;
         g2.drawString(resumeText, resumeX, resumeY);
     }
-
-    private void drawDeathScreen(Graphics2D g2){
-
-    }
-
 }

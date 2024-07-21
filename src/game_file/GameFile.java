@@ -20,10 +20,6 @@ public class GameFile implements Serializable {
         return gameFile;
     }
 
-    public void setGameFile(int gameFile) {
-        this.gameFile = gameFile;
-    }
-
     public int getMap() {
         return map;
     }
