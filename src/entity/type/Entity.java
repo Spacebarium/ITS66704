@@ -2,17 +2,15 @@ package entity.type;
 
 import main.GamePanel;
 import utility.UtilityTool;
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import main.CollisionChecker;
 import movement.MovementHandler;
 import movement.type.Movement;
 
-public abstract class Entity {
+public class Entity {
     
     protected final GamePanel gp;
     private final MovementHandler movementHandler;
@@ -48,8 +46,6 @@ public abstract class Entity {
         this.movementHandler = new MovementHandler(this, new CollisionChecker(gp), movement);
         this.type = type;
         this.name = name;
-        this.x = x;
-        this.y = y;
         this.width = width;
         this.height = height;
         
@@ -124,8 +120,6 @@ public abstract class Entity {
         
         return distX * distX + distY * distY <= range * range;
     }
-    
-  
 
     public void setLeft1(BufferedImage left1) { this.left1 = left1; }
     public void setLeft2(BufferedImage left2) { this.left2 = left2; }
@@ -145,7 +139,8 @@ public abstract class Entity {
     }
 
     public void setEntityImage() {
-        if (entityCounter > 12) { // change sprite every 12 frames
+        // change sprite every 12 frames
+        if (entityCounter > 12) {
             entityImage = (entityImage == 1) ? 2 : 1;
             entityCounter = 0;
         }

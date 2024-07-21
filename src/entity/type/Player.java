@@ -148,7 +148,7 @@ public class Player extends Entity {
         
         switch (getEquippedWeapon()) {
             case Sword sword -> sword.update();
-            default          -> {}
+            default -> {}
         };
         
         this.screenX = gp.getSize().width / 2 - getWidth() / 2;

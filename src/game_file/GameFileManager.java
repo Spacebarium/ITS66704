@@ -34,7 +34,8 @@ public class GameFileManager {
     public void newGame(int gameSlot) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
             GameFile newGameFile = new GameFile(gameSlot, 1, 1, 0, 0, 10);
-            saveGame(newGameFile, gameSlot, newGameFile.getCurLevel(), newGameFile.getLevel(), newGameFile.getPlayerX(), newGameFile.getPlayerY(), newGameFile.getPlayerHP());
+            saveGame(newGameFile, gameSlot, newGameFile.getCurLevel(), newGameFile.getLevel(),
+                    newGameFile.getPlayerX(), newGameFile.getPlayerY(), newGameFile.getPlayerHP());
         } else {
             System.out.println("Invalid slot number.");
         }

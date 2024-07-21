@@ -347,8 +347,7 @@ public class GamePanel extends JPanel implements Runnable {
         int x = (getWidth() - fm.stringWidth(pauseText)) / 2;
         int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
         g2.drawString(pauseText, x, y);
-
-        // Optional: Draw additional pause menu options (e.g., resume, quit)
+        
         g2.setFont(new Font("Arial", Font.PLAIN, 30));
         String resumeText = "Press 'P' to Resume";
         int resumeX = (getWidth() - fm.stringWidth(resumeText)) / 2;
