@@ -1,9 +1,7 @@
 package entity.enemy;
 
 import entity.type.Enemy;
-import entity.type.Player;
 import main.GamePanel;
-import movement.type.EnemyMovement;
 
 public class FinalBoss extends Enemy {
 
@@ -12,7 +10,6 @@ public class FinalBoss extends Enemy {
 
         getImage();
     }
-
 
     public void getImage() {
         setUp1(imageSetup("FinalBoss", "FinalBossLeft1"));

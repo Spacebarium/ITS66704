@@ -53,7 +53,7 @@ public class TileManager {
             int mapTileHeight = lines.size();
             int mapTileWidth = lines.get(0).split(" ").length;
 
-            this.tiles = new Tile[mapTileHeight][mapTileWidth];
+            tiles = new Tile[mapTileHeight][mapTileWidth];
 
             for (int y = 0; y < mapTileHeight; y++) {
                 String[] tileIds = lines.get(y).split(" ");

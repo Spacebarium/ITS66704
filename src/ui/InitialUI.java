@@ -240,18 +240,13 @@ public class InitialUI extends JPanel {
     }
 
     public static void startBGMusic(){
-        System.out.println(BGMplaying);
-        System.out.println(isMusicOn());
         if (!BGMplaying && isMusicOn()) {
-            System.out.println("dE");
             playMusic(backgroundMusic);
             BGMplaying = true;
         }
     }
 
     public static void stopBGMusic(){
-        System.out.println(BGMplaying);
-        System.out.println(isMusicOn());
         stopMusic(backgroundMusic);
         BGMplaying = false;
     }

@@ -33,19 +33,22 @@ public class GameFileManager {
 
     public void newGame(int gameSlot) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
-            GameFile newGameFile = new GameFile(gameSlot, 1, 0, 0);
-            saveGame(newGameFile, gameSlot, newGameFile.getMap(), newGameFile.getPlayerX(), newGameFile.getPlayerY());
+            GameFile newGameFile = new GameFile(gameSlot, 1, 1, 0, 0, 10);
+            saveGame(newGameFile, gameSlot, newGameFile.getCurLevel(), newGameFile.getLevel(),
+                    newGameFile.getPlayerX(), newGameFile.getPlayerY(), newGameFile.getPlayerHP());
         } else {
             System.out.println("Invalid slot number.");
         }
     }
 
-    public void saveGame(GameFile gameFile, int gameSlot, int map, int playerX, int playerY) {
+    public void saveGame(GameFile gameFile, int gameSlot, int curLevel,int level, int playerX, int playerY, int playerHP) {
         if (gameSlot >= 0 && gameSlot < maxGameFiles) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_FOLDER + SAVE_FILE_PREFIX + gameSlot + ".ser"))) {
-                gameFile.setMap(map);
+                gameFile.setCurLevel(curLevel);
+                gameFile.setLevel(level);
                 gameFile.setPlayerX(playerX);
                 gameFile.setPlayerY(playerY);
+                gameFile.setPlayerHP(playerHP);
                 oos.writeObject(gameFile);
                 oos.close();
                 // Encrypt the file
@@ -119,7 +122,6 @@ public class GameFileManager {
                 FileEncryptor.decryptFile(secretKey, encryptedFile, decryptedFile);
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(decryptedFile))) {
                     SettingFile settings = (SettingFile) ois.readObject();
-                    System.out.println("MUSIC" + settings.isMusicOn() + "SE: " + settings.isSoundEffectOn());
                     setMusicOn(settings.isMusicOn());
                     setSoundEffectOn(settings.isSoundEffectOn());
                     decryptedFile.delete(); // Delete the decrypted file
