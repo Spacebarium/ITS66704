@@ -221,7 +221,8 @@ public class GamePanel extends JPanel implements Runnable {
         long   timer = 0;
         int    drawCount = 0; // FPS
         double cycleStart;
-
+        
+        System.out.println("loading " + map + level);
         tileManager.loadMap(map + level);
         initialiseEntities();
         if (player.getX() == 0 && player.getY() == 0) {
@@ -267,59 +268,52 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == GameState.PLAYING) {
-            if (player.getHasKey() && player.getX() >= nextMapX) {
-                player.setX(0);
-                player.setY(0);
-//                if (level != 0){
-//                    level = 0;
-//                } else {
-                curLevel += 1;
-                level = curLevel;
+            if (player.getHealth() <= 0) {
+                int option = JOptionPane.showOptionDialog(null, "YOU DIED", "YOU DIED\n RESPAWN?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-                player.setHasKey(false);
-                levelCleared = false;
-//                }
-                if (player.getHealth() <= 0) {
-                    int option = JOptionPane.showOptionDialog(null, "YOU DIED", "YOU DIED\n RESPAWN?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                if (option == JOptionPane.OK_OPTION) {
+                    player.setX(gameFile.getPlayerX());
+                    player.setY(gameFile.getPlayerX());
+                    player.setHealth(player.getMaxHealth());
 
-                    if (option == JOptionPane.OK_OPTION) {
-                        player.setX(gameFile.getPlayerX());
-                        player.setY(gameFile.getPlayerX());
-                        player.setHealth(player.getMaxHealth());
-
-                        initialiseEntities();
-                        restartGameThread();
-                    }
-                } else if (level == 0) {
-                    if (entityManager.entityCount() == 1) {
-                        gameState = GameState.LOADING;
-                        repaint();
-
-                        player.setX(0);
-                        player.setY(0);
-                        curLevel += 1;
-                        level = curLevel;
-
-                        initialiseEntities();
-                        saveGameFile();
-                        restartGameThread();
-                    }
-                } else if (player.getX() >= nextMapX) {
+                    initialiseEntities();
+                    restartGameThread();
+                }
+                return;
+            } 
+            
+            if (level == 0) {
+                if (entityManager.entityCount() == 1) {
                     gameState = GameState.LOADING;
                     repaint();
-                    player.setHealth(player.getMaxHealth());
+
                     player.setX(0);
                     player.setY(0);
-
-                    level = 0;
+                    curLevel += 1;
+                    level = curLevel;
 
                     initialiseEntities();
                     saveGameFile();
                     restartGameThread();
                 }
-                entityManager.update();
-                itemManager.update();
+            } else if (player.getHasKey() && player.getX() >= nextMapX) {
+                gameState = GameState.LOADING;
+                repaint();
+                player.setHealth(player.getMaxHealth());
+                player.setX(0);
+                player.setY(0);
+
+                level = 0;
+
+                player.setHasKey(false);
+                levelCleared = false;
+
+                initialiseEntities();
+                saveGameFile();
+                restartGameThread();
             }
+            entityManager.update();
+            itemManager.update();
         }
     }
 

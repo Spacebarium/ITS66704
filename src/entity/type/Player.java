@@ -160,7 +160,6 @@ public class Player extends Entity {
     
     public void pickUpKeyItem(KeyItem keyItem) {
         this.hasKey = true;
-        gp.itemManager.removeItem(keyItem);
     }
     
     @Override
@@ -193,8 +192,6 @@ public class Player extends Entity {
             for (Item item : itemsInRange) {
                 if (item instanceof WeaponItem) {
                     pickUpWeaponItem((WeaponItem) item);
-                } else if (item instanceof KeyItem) {
-                    pickUpKeyItem((KeyItem) item);
                 }
             }
         }

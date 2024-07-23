@@ -100,9 +100,7 @@ public class EntityManager {
             entitiesToRemove.forEach(this::removeEntity);
             
             if (getEntities(Enemy.class).isEmpty() && !gp.levelCleared) {
-                // spawn key
-                gp.itemManager.addItem(new KeyItem(gp, lastEnemyDeathX, lastEnemyDeathY));
-                System.out.printf("spawned key at (%d, %d)\n", lastEnemyDeathX, lastEnemyDeathY);
+                player.setHasKey(true);
                 gp.levelCleared = true;
             }
         }
