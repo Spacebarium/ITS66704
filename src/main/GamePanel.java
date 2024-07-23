@@ -336,7 +336,7 @@ public class GamePanel extends JPanel implements Runnable {
                     player.setX(gameFile.getPlayerX());
                     player.setY(gameFile.getPlayerX());
                     player.setHealth(player.getMaxHealth());
-
+                    entityManager.addEntity(player);
                     initialiseEntities();
                     restartGameThread();
                 }
@@ -503,7 +503,6 @@ public class GamePanel extends JPanel implements Runnable {
         String exitText = "CLICK ANYWHERE TO EXIT TO MAIN MENU";
         int exitX = (int)((getWidth() / 2.0) - (fm.stringWidth(exitText)/3.5));
         int exitY = y + fm.getHeight() + 80;
-        System.out.println("X: "+x +" Y: " + y);
         g2.drawString(exitText, exitX, exitY);
     }
 
