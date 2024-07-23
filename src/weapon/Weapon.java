@@ -35,6 +35,9 @@ public abstract class Weapon {
     }
 
     public String getName() { return name;}
+    public void setDamage(int damage){
+        this.damage = damage;
+    }
     public int getDamage() { return damage; }
     public int getRange() { return range; }
     public int getAttackRate() { return attackRate; }

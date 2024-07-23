@@ -5,9 +5,8 @@ import main.GamePanel;
 
 public class WhiteNinja extends Enemy {
 
-    public WhiteNinja(GamePanel gp, int defaultX, int defaultY) {
-        super(gp, "whiteNinja", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
-
+    public WhiteNinja(GamePanel gp, int defaultX, int defaultY, int damage, int health) {
+        super(gp, "whiteNinja", health, damage, defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
         getImage();
     }
 

@@ -47,8 +47,8 @@ public class Sword extends Weapon {
     public void use() {
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
 
-        animateSwing();
         playSE(2);
+        animateSwing();
 
         enemiesInRange.forEach(enemy -> {
             Rectangle enemyBox = new Rectangle(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
