@@ -6,7 +6,7 @@ import main.GamePanel;
 public class Boss extends Enemy {
 
     public Boss(GamePanel gp, int defaultX, int defaultY) {
-        super(gp, "Boss", defaultX, defaultY, 16 * gp.getScale(), 16 * gp.getScale(), 9, 12, 30, 36);
+        super(gp, "Boss", defaultX, defaultY, 32 * gp.getScale(), 32 * gp.getScale(), 5 * gp.getScale(), 3 * gp.getScale(), 21 * gp.getScale(), 27 * gp.getScale());
 
         getImage();
     }
