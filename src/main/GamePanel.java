@@ -446,7 +446,7 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
 
-            if (player.getX() <= defaultX && player.getY() <= defaultY && curLevel == 1){
+            if (player.getX() <= defaultX && player.getY() <= defaultY && level == 1){
                 g2.setColor(Color.WHITE);
                 g2.setFont(new Font("Arial", Font.BOLD, 20));
                 String promptText = "WASD To Move; 1 for melee; 2 for gun; ESC to pause; LMB to attack";
@@ -462,7 +462,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (promptMessage){
                 g2.setColor(Color.WHITE);
-                g2.setFont(new Font("Arial", Font.BOLD, 50));
+                g2.setFont(new Font("Arial", Font.BOLD, 20));
                 String promptText = "Defeat all enemies and get the key to go deeper into the forest";
                 FontMetrics fm = g2.getFontMetrics();
                 int x = (getWidth() - fm.stringWidth(promptText)) / 2;
