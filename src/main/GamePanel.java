@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -29,11 +31,11 @@ public class GamePanel extends JPanel implements Runnable {
     //GAME SETTINGS
     private GameFile gameFile;
     private final String map = "Level";
-    private boolean mapLoaded = false;
     public boolean levelCleared = false;
     private int curLevel, level, defaultX, defaultY, nextMapX;
-    private BufferedImage loadingImage;
-    private Object[] options = {"RESPAWN"};
+    private final BufferedImage loadingImage;
+    private final BufferedImage winImage;
+    private final Object[] options = {"RESPAWN"};
 
     //ENTITIES
     private Player player;
@@ -71,8 +73,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final TileManager tileManager;
     public final ItemManager itemManager;
     private final UtilityTool utilityTool;
+    private final CardLayout cardLayout;
+    private final JPanel mainPanel;
 
-    public GamePanel() {
+    public GamePanel(CardLayout cardLayout, JPanel mainPanel) {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
@@ -80,11 +84,13 @@ public class GamePanel extends JPanel implements Runnable {
         itemManager = new ItemManager(this);
         gameFileManager = new GameFileManager();
         utilityTool = new UtilityTool();
+        this.cardLayout = cardLayout;
+        this.mainPanel = mainPanel;
 
         setVolume(0.7f);
 
         loadingImage = utilityTool.imageSetup("UI", "Loading");
-
+        winImage = utilityTool.imageSetup("UI", "Win");
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
         player.setWeaponToSlot(new Sword("Wooden Sword", 2, tileSize, 750, this, "netherite_sword"), 0);
@@ -147,7 +153,6 @@ public class GamePanel extends JPanel implements Runnable {
             case 4 -> {
                 defaultX = 1612;
                 defaultY = 640;
-                gameState = GameState.WIN;
                 WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
                 entityManager.addEntity(whiteNinja);
             }
@@ -290,6 +295,12 @@ public class GamePanel extends JPanel implements Runnable {
                     player.setX(0);
                     player.setY(0);
                     curLevel += 1;
+
+                    if (curLevel == 5){
+                        gameState = GameState.WIN;
+                        repaint();
+                        return;
+                    }
                     level = curLevel;
 
                     initialiseEntities();
@@ -318,11 +329,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (gameState == GameState.LOADING) {
+        if (gameState == GameState.WIN){
+            g.drawImage(winImage, 0, 0, getWidth(), getHeight(), this);
+        }
+        else if (gameState == GameState.LOADING) {
             g.drawImage(loadingImage, 0, 0, getWidth(), getHeight(), this);
         } else if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
 
@@ -332,6 +346,15 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (gameState == GameState.PAUSED) {
                 drawPauseScreen(g2);
+                addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        switchPanel();
+                        saveGameFile();
+                        stopGameThread();
+                    }
+                });
             }
 
             if (keyHandler.isDebugMode()) {
@@ -343,7 +366,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
-    //CHAT GPTED WILL FIX
     private void drawPauseScreen(Graphics2D g2) {
         // Draw a semi-transparent overlay
         g2.setColor(new Color(0, 0, 0, 150));
@@ -355,13 +377,18 @@ public class GamePanel extends JPanel implements Runnable {
         String pauseText = "Paused";
         FontMetrics fm = g2.getFontMetrics();
         int x = (getWidth() - fm.stringWidth(pauseText)) / 2;
-        int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        int y = (getHeight() - fm.getHeight()) / 2 - fm.getAscent();
         g2.drawString(pauseText, x, y);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 30));
-        String resumeText = "Press 'P' to Resume";
-        int resumeX = (getWidth() - fm.stringWidth(resumeText)) / 2;
+        String resumeText = "Press 'ESCAPE' to Resume";
+        int resumeX = (int)((getWidth() / 2.0) - (fm.stringWidth(resumeText)/3.5));
         int resumeY = y + fm.getHeight() + 20;
         g2.drawString(resumeText, resumeX, resumeY);
+    }
+
+    public void switchPanel(){
+        cardLayout.show(mainPanel, "InitialUI");
+        mainPanel.getComponent(3).requestFocusInWindow();
     }
 }
