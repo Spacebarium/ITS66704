@@ -11,22 +11,28 @@ import movement.type.EnemyMovement;
 public class Enemy extends Entity {
 
     private final Player player;
-    private final int    aggroDistance = 46 * gp.getScale();
+    private int          aggroDistance;
     private int          cooldown = 2 * 60;
     private int          attackRange = 16;
     private int          attackCooldown = cooldown;
     private boolean      canAttack = true;
 
-    public Enemy(GamePanel gp, String name, int defaultX, int defaultY, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
+    public Enemy(GamePanel gp, String name, int maxHealth, int damage, int defaultX, int defaultY, int width, int height, int hitboxOffsetX, int hitboxOffsetY, int hitboxWidth, int hitboxHeight) {
         super(gp, EntityType.ENEMY, name, width, height, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, new EnemyMovement());
         this.player = gp.entityManager.getPlayer();
         setX(defaultX);
         setY(defaultY);
-
+        setAggroDistance(48);
+        setMaxHealth(maxHealth);
+        setHealth(getMaxHealth());
+        setDamage(damage);
         setSpeed(gp.getScale() + 1);
-        setHealth(20);
     }
-    
+
+    public void setAggroDistance(int distance){
+        this.aggroDistance= distance * gp.getScale();
+    }
+
     public int getAttackRange() {
         return attackRange;
     }
@@ -67,7 +73,7 @@ public class Enemy extends Entity {
 
     public void attack() {
         if (canAttack) {
-            player.setHealth(player.getHealth() - 1);
+            player.setHealth(player.getHealth() - getDamage());
             attackCooldown = 0;
         }
     }
@@ -75,7 +81,7 @@ public class Enemy extends Entity {
     @Override
     public void update() {
         super.update();
-        setCombatStatus(getDistanceToPlayer() <= aggroDistance);
+        setCombatStatus(getDistanceToPlayer() <= aggroDistance || getHealth() != getMaxHealth());
     }
     
     @Override

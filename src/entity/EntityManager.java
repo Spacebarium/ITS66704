@@ -31,8 +31,9 @@ public class EntityManager {
     public Player getPlayer() { return player; }
 
     public void removeEntity(Entity entity) {
-        System.out.println("DEBUG3");
+        showEntities();
         entities.remove(entity);
+        showEntities();
     }
 
     public void clearEntities() {
