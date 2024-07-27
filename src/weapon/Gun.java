@@ -69,14 +69,15 @@ public class Gun extends Weapon {
     public void use() {
         List<Enemy> enemiesInRange = gp.entityManager.getEntitiesInRange(position.x, position.y, range, Enemy.class);
         Line2D raycast = getRaycast(player.getCentre(), player.getWorldMouse());
-        
+
+        playSE(1);
+
         // check for enemies in line
         enemiesInRange.stream()
                 .filter(e -> e.getBoundingBox().intersectsLine(raycast))
                 .forEach(e -> e.setHealth(e.getHealth() - damage));
         
         lastAttackTime = System.currentTimeMillis();
-        playSE(1);
     }
     
     public void renderDebugInfo(Graphics2D g2) {

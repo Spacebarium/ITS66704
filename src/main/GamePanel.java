@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -29,14 +31,18 @@ public class GamePanel extends JPanel implements Runnable {
     //GAME SETTINGS
     private GameFile gameFile;
     private final String map = "Level";
-    private boolean mapLoaded = false;
+    private boolean promptMessage = false;
     public boolean levelCleared = false;
     private int curLevel, level, defaultX, defaultY, nextMapX;
-    private BufferedImage loadingImage;
-    private Object[] options = {"RESPAWN"};
+    private final BufferedImage loadingImage;
+    private final BufferedImage winImage;
+    private final Object[] options = {"RESPAWN"};
+    private MouseAdapter mouseAdapter;
 
     //ENTITIES
     private Player player;
+    private Sword sword;
+    private Gun gun;
 
     //GAME INFO
     private boolean running = false;
@@ -71,8 +77,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final TileManager tileManager;
     public final ItemManager itemManager;
     private final UtilityTool utilityTool;
+    private final CardLayout cardLayout;
+    private final JPanel mainPanel;
 
-    public GamePanel() {
+    public GamePanel(CardLayout cardLayout, JPanel mainPanel) {
         keyHandler = new KeyHandler();
         mouseHandler = new MouseHandler();
         entityManager = new EntityManager(this);
@@ -80,15 +88,19 @@ public class GamePanel extends JPanel implements Runnable {
         itemManager = new ItemManager(this);
         gameFileManager = new GameFileManager();
         utilityTool = new UtilityTool();
+        this.cardLayout = cardLayout;
+        this.mainPanel = mainPanel;
 
         setVolume(0.7f);
 
         loadingImage = utilityTool.imageSetup("UI", "Loading");
-
+        winImage = utilityTool.imageSetup("UI", "Win");
         player = new Player(this, keyHandler, mouseHandler, new PlayerMovement(keyHandler));
         entityManager.addEntity(player);
-        player.setWeaponToSlot(new Sword("Wooden Sword", 2, tileSize, 750, this, "netherite_sword"), 0);
-        player.setWeaponToSlot(new Gun("Pew Pew", 1, 5 * tileSize, 200, this, "jb007"), 1);
+        sword = new Sword("Wooden Sword", 100, tileSize, 500, this, "netherite_sword");
+        gun = new Gun("Pew Pew", 1, 5 * tileSize, 300, this, "jb007");
+        player.setWeaponToSlot(sword, 0);
+        player.setWeaponToSlot(gun, 1);
         
         debugRenderer = new DebugRenderer(this);
         hudRenderer = new HUDRenderer(this);
@@ -118,52 +130,101 @@ public class GamePanel extends JPanel implements Runnable {
                 defaultX = 240;
                 defaultY = 1276;
                 nextMapX = 3148;
-//                private BlackNinja blackNinja;
-//                private GreenNinja greenNinja;
-//                private Boss boss;
-//                private FinalBoss finalBoss;
-//                private Gun gun;
-//                private Sword sword;
-//                //private Key key;
-//                //private Girl girl;
-                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
-                GreenNinja greenNinja = new GreenNinja(this, 17 * getTileSize(), 21 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 27 * getTileSize(), 16 * getTileSize(), 1, 10);
+                WhiteNinja whiteNinja2 = new WhiteNinja(this, 30 * getTileSize(), 22 * getTileSize(), 1, 10);
+                GreenNinja greenNinja = new GreenNinja(this, 21 * getTileSize(), 23 * getTileSize(), 2, 10);
+                entityManager.addEntity(whiteNinja2);
                 entityManager.addEntity(whiteNinja);
                 entityManager.addEntity(greenNinja);
             }
             case 2 -> {
                 defaultX = 1012;
                 defaultY = 2304;
-                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize(), 3, 16);
+                GreenNinja greenNinja = new GreenNinja(this, 17 * getTileSize(), 21 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja2 = new WhiteNinja(this, 24 * getTileSize(), 35 * getTileSize(), 3, 16);
+                GreenNinja greenNinja2 = new GreenNinja(this, 25 * getTileSize(), 36 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja3 = new WhiteNinja(this, 40 * getTileSize(), 26 * getTileSize(), 3, 16);
+                entityManager.addEntity(whiteNinja3);
+                entityManager.addEntity(whiteNinja2);
+                entityManager.addEntity(greenNinja2);
                 entityManager.addEntity(whiteNinja);
+                entityManager.addEntity(greenNinja);
             }
             case 3 -> {
                 defaultX = 709;
                 defaultY = 2608;
                 nextMapX = 3144;
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 16 * getTileSize(), 20 * getTileSize(), 3, 16);
+                GreenNinja greenNinja = new GreenNinja(this, 17 * getTileSize(), 21 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja2 = new WhiteNinja(this, 23 * getTileSize(), 36 * getTileSize(), 3, 16);
+                GreenNinja greenNinja2 = new GreenNinja(this, 24 * getTileSize(), 37 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja3 = new WhiteNinja(this, 35 * getTileSize(), 17 * getTileSize(), 3, 16);
+                GreenNinja greenNinja3 = new GreenNinja(this, 36 * getTileSize(), 18 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja4 = new WhiteNinja(this, 44 * getTileSize(), 29 * getTileSize(), 3, 16);
+                GreenNinja greenNinja4 = new GreenNinja(this, 45 * getTileSize(), 30 * getTileSize(), 3, 16);
+                entityManager.addEntity(whiteNinja4);
+                entityManager.addEntity(greenNinja4);
+                entityManager.addEntity(whiteNinja3);
+                entityManager.addEntity(greenNinja3);
+                entityManager.addEntity(whiteNinja2);
+                entityManager.addEntity(greenNinja2);
                 entityManager.addEntity(whiteNinja);
+                entityManager.addEntity(greenNinja);
             }
             case 4 -> {
                 defaultX = 1612;
                 defaultY = 640;
-                gameState = GameState.WIN;
-                WhiteNinja whiteNinja =  new WhiteNinja(this,16 * getTileSize(), 20 * getTileSize());
+                WhiteNinja whiteNinja = new WhiteNinja(this, 10 * getTileSize(), 22 * getTileSize(), 3, 16);
+                GreenNinja greenNinja = new GreenNinja(this, 10 * getTileSize(), 21 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja5 = new WhiteNinja(this, 11 * getTileSize(), 22 * getTileSize(), 3, 16);
+                GreenNinja greenNinja5 = new GreenNinja(this, 11 * getTileSize(), 21 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja2 = new WhiteNinja(this, 27 * getTileSize(), 22 * getTileSize(), 3, 16);
+                GreenNinja greenNinja2 = new GreenNinja(this, 28 * getTileSize(), 23 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja3 = new WhiteNinja(this, 27 * getTileSize(), 23 * getTileSize(), 3, 16);
+                GreenNinja greenNinja3 = new GreenNinja(this, 28 * getTileSize(), 22 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja4 = new WhiteNinja(this, 44 * getTileSize(), 25 * getTileSize(), 3, 16);
+                GreenNinja greenNinja4 = new GreenNinja(this, 45 * getTileSize(), 26 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja6 = new WhiteNinja(this, 46 * getTileSize(), 27 * getTileSize(), 3, 16);
+                GreenNinja greenNinja6 = new GreenNinja(this, 44 * getTileSize(), 25 * getTileSize(), 3, 16);
+                WhiteNinja whiteNinja7 = new WhiteNinja(this, 45 * getTileSize(), 26 * getTileSize(), 3, 16);
+                GreenNinja greenNinja7 = new GreenNinja(this, 46 * getTileSize(), 27 * getTileSize(), 3, 16);
+                entityManager.addEntity(whiteNinja7);
+                entityManager.addEntity(greenNinja7);
+                entityManager.addEntity(whiteNinja6);
+                entityManager.addEntity(greenNinja6);
+                entityManager.addEntity(whiteNinja4);
+                entityManager.addEntity(greenNinja4);
+                entityManager.addEntity(whiteNinja3);
+                entityManager.addEntity(greenNinja3);
+                entityManager.addEntity(whiteNinja2);
+                entityManager.addEntity(greenNinja2);
+                entityManager.addEntity(whiteNinja5);
+                entityManager.addEntity(greenNinja5);
                 entityManager.addEntity(whiteNinja);
+                entityManager.addEntity(greenNinja);
             }
             case 0 -> {
                 defaultX = 1646;
                 defaultY = 742;
                 switch (curLevel){
                     case 1 -> {
-                        Boss boss =  new Boss(this,16 * getTileSize(), 20 * getTileSize());
-                        FinalBoss finalBoss = new FinalBoss(this, 16 * getTileSize(), 20 * getTileSize());
+                        Boss boss =  new Boss(this,25 * getTileSize(), 23 * getTileSize(), 3, 30);
                         entityManager.addEntity(boss);
+
+                    }
+                    case 2 -> {
+                        Boss boss =  new Boss(this,25 * getTileSize(), 23 * getTileSize(), 6, 40);
+                        entityManager.addEntity(boss);
+                    }
+                    case 3 -> {
+                        Boss boss =  new Boss(this,25 * getTileSize(), 23 * getTileSize(), 9, 50);
+                        entityManager.addEntity(boss);
+                    }
+                    case 4 -> {
+                        FinalBoss finalBoss = new FinalBoss(this, 25 * getTileSize(), 23 * getTileSize(), 15, 70);
                         entityManager.addEntity(finalBoss);
                     }
-                    case 2 -> {}
-                    case 3 -> {}
-                    case 4 -> {}
                 }
 
             }
@@ -275,7 +336,7 @@ public class GamePanel extends JPanel implements Runnable {
                     player.setX(gameFile.getPlayerX());
                     player.setY(gameFile.getPlayerX());
                     player.setHealth(player.getMaxHealth());
-
+                    entityManager.addEntity(player);
                     initialiseEntities();
                     restartGameThread();
                 }
@@ -290,16 +351,27 @@ public class GamePanel extends JPanel implements Runnable {
                     player.setX(0);
                     player.setY(0);
                     curLevel += 1;
+
+                    if (curLevel == 5){
+                        gameState = GameState.WIN;
+                        repaint();
+                        return;
+                    }
                     level = curLevel;
+                    player.setHasKey(false);
+                    levelCleared = false;
 
                     initialiseEntities();
                     saveGameFile();
                     restartGameThread();
                 }
-            } else if (player.getHasKey() && player.getX() >= nextMapX) {
+            } else if (player.getX() >= nextMapX && player.getHasKey()) {
                 gameState = GameState.LOADING;
                 repaint();
+                player.setMaxHealth(player.getMaxHealth() + (curLevel) * 2);
                 player.setHealth(player.getMaxHealth());
+                sword.setDamage(sword.getDamage() + level * 2);
+                gun.setDamage(gun.getDamage() + level * 2);
                 player.setX(0);
                 player.setY(0);
 
@@ -307,22 +379,43 @@ public class GamePanel extends JPanel implements Runnable {
 
                 player.setHasKey(false);
                 levelCleared = false;
-
                 initialiseEntities();
                 saveGameFile();
                 restartGameThread();
             }
+            promptMessage = !player.getHasKey() && player.getX() >= nextMapX;
+
             entityManager.update();
             itemManager.update();
         }
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (gameState == GameState.LOADING) {
+        if (gameState == GameState.WIN){
+            g.drawImage(winImage, 0, 0, getWidth(), getHeight(), this);
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 50));
+            FontMetrics fm = g2.getFontMetrics();
+            String gameWin = "CLICK ANYWHERE TO RETURN";
+            int x = (getWidth() - fm.stringWidth(gameWin)) / 2;
+            int y = (getHeight() - fm.getHeight()) / 2 - fm.getAscent();
+            g2.drawString(gameWin, x, y);
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    switchPanel();
+                    saveGameFile();
+                    stopGameThread();
+                }
+            });
+        }
+        else if (gameState == GameState.LOADING) {
             g.drawImage(loadingImage, 0, 0, getWidth(), getHeight(), this);
         } else if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
 
@@ -330,8 +423,51 @@ public class GamePanel extends JPanel implements Runnable {
             itemManager.draw(g2);
             entityManager.draw(g2);
 
+
+
             if (gameState == GameState.PAUSED) {
-                drawPauseScreen(g2);
+                    drawPauseScreen(g2);
+                    if (mouseAdapter == null) {
+                        mouseAdapter = new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                super.mouseClicked(e);
+                                switchPanel();
+                                saveGameFile();
+                                stopGameThread();
+                            }
+                        };
+                        addMouseListener(mouseAdapter);
+                    }
+                } else {
+                    if (mouseAdapter != null) {
+                        removeMouseListener(mouseAdapter);
+                        mouseAdapter = null;
+                    }
+                }
+
+            if (player.getX() <= defaultX && player.getY() <= defaultY && level == 1){
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("Arial", Font.BOLD, 20));
+                String promptText = "WASD To Move; 1 for melee; 2 for gun; ESC to pause; LMB to attack";
+                FontMetrics fm = g2.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(promptText)) / 2;
+                int y = -20 + (getHeight() - fm.getHeight()) / 2 - fm.getAscent();
+                g2.drawString(promptText, x, y);
+                String promptText2 = "Defeat all enemies to go deeper into the forest and save your waifus";
+                int resumeX = (int)((getWidth() / 2.0) - (fm.stringWidth(promptText2)/2));
+                int resumeY = y - fm.getHeight() - 20;
+                g2.drawString(promptText2, resumeX, resumeY);
+            }
+
+            if (promptMessage){
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("Arial", Font.BOLD, 20));
+                String promptText = "Defeat all enemies and get the key to go deeper into the forest";
+                FontMetrics fm = g2.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(promptText)) / 2;
+                int y = (getHeight() - fm.getHeight()) / 2 - fm.getAscent();
+                g2.drawString(promptText, x, y);
             }
 
             if (keyHandler.isDebugMode()) {
@@ -343,7 +479,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
-    //CHAT GPTED WILL FIX
     private void drawPauseScreen(Graphics2D g2) {
         // Draw a semi-transparent overlay
         g2.setColor(new Color(0, 0, 0, 150));
@@ -355,13 +490,24 @@ public class GamePanel extends JPanel implements Runnable {
         String pauseText = "Paused";
         FontMetrics fm = g2.getFontMetrics();
         int x = (getWidth() - fm.stringWidth(pauseText)) / 2;
-        int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+        int y = (getHeight() - fm.getHeight()) / 2 - fm.getAscent();
         g2.drawString(pauseText, x, y);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 30));
-        String resumeText = "Press 'P' to Resume";
-        int resumeX = (getWidth() - fm.stringWidth(resumeText)) / 2;
+        String resumeText = "Press 'ESCAPE' to Resume";
+        int resumeX = (int)((getWidth() / 2.0) - (fm.stringWidth(resumeText)/3.5));
         int resumeY = y + fm.getHeight() + 20;
         g2.drawString(resumeText, resumeX, resumeY);
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 30));
+        String exitText = "CLICK ANYWHERE TO EXIT TO MAIN MENU";
+        int exitX = (int)((getWidth() / 2.0) - (fm.stringWidth(exitText)/3.5));
+        int exitY = y + fm.getHeight() + 80;
+        g2.drawString(exitText, exitX, exitY);
+    }
+
+    public void switchPanel(){
+        cardLayout.show(mainPanel, "InitialUI");
+        mainPanel.getComponent(3).requestFocusInWindow();
     }
 }

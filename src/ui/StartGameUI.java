@@ -6,9 +6,7 @@ import utility.UtilityTool;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -132,13 +130,13 @@ public class StartGameUI extends JPanel{
         closePanel.setOpaque(false);
 
         //Close left button
-        closeButton1 = new JButton("X");
+        closeButton1 = new JButton("DELETE FILE");
 
         //Close middle button
-        closeButton2 = new JButton("X");
+        closeButton2 = new JButton("DELETE FILE");
 
         //Close right button
-        closeButton3 = new JButton("X");
+        closeButton3 = new JButton("DELETE FILE");
 
 
 
@@ -184,10 +182,9 @@ public class StartGameUI extends JPanel{
 
         //Close left button
         closeButton1.setContentAreaFilled(false);
-        if (!gameFileManager.checkFile(0)) {
-            closeButton1.setVisible(false);
-        }
-        closeButton1.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 255, 69)));
+        closeButton1.setHorizontalTextPosition(SwingConstants.CENTER);
+        closeButton1.setVerticalTextPosition(SwingConstants.CENTER);
+        closeButton1.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 77)));
         closeButton1.addActionListener(e -> {
             gameFileManager.deleteGame(0);
             updateGameButtons(gameButton1, closeButton1, 0);
@@ -195,48 +192,64 @@ public class StartGameUI extends JPanel{
 
         //Close middle button
         closeButton2.setContentAreaFilled(false);
-        if (!gameFileManager.checkFile(1)) {
-            closeButton2.setVisible(false);
-        }
-        closeButton2.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 255, 69)));
+        closeButton2.setHorizontalTextPosition(SwingConstants.CENTER);
+        closeButton2.setVerticalTextPosition(SwingConstants.CENTER);
+        closeButton2.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 72)));
         closeButton2.addActionListener(e -> {
             gameFileManager.deleteGame(1);
             updateGameButtons(gameButton2, closeButton2, 1);
         });
 
         //Close right button
-        if (!gameFileManager.checkFile(2)) {
-            closeButton3.setVisible(false);
-        }
-        closeButton3.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 255, 69)));
+        closeButton3.setContentAreaFilled(false);
+        closeButton3.setHorizontalTextPosition(SwingConstants.CENTER);
+        closeButton3.setVerticalTextPosition(SwingConstants.CENTER);
+        closeButton3.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 72)));
         closeButton3.addActionListener(e -> {
             gameFileManager.deleteGame(2);
             updateGameButtons(gameButton3, closeButton3, 2);
         });
-        closeButton3.setContentAreaFilled(false);
 
         //Game button 1
-        setupGameButton(0, gameButton1);
-        gameButton1.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 500, 600)));
+
+        gameButton1.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 270)));
         gameButton1.setHorizontalTextPosition(SwingConstants.CENTER);
         gameButton1.setVerticalTextPosition(SwingConstants.CENTER);
         gameButton1.setContentAreaFilled(false);
 
         //Game button 2
-        setupGameButton(1, gameButton2);
-        gameButton2.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 500, 600)));
+
+        gameButton2.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 270)));
         gameButton2.setHorizontalTextPosition(SwingConstants.CENTER);
         gameButton2.setVerticalTextPosition(SwingConstants.CENTER);
         gameButton2.setContentAreaFilled(false);
 
         //Game button 3
-        setupGameButton(2, gameButton3);
-        gameButton3.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 500, 600)));
+
+        gameButton3.setIcon(new ImageIcon(uTool.imageSetup("UI", "buttonBackground", 380, 270)));
         gameButton3.setHorizontalTextPosition(SwingConstants.CENTER);
         gameButton3.setVerticalTextPosition(SwingConstants.CENTER);
         gameButton3.setContentAreaFilled(false);
 
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
+                setupGameButton(0, gameButton1);
+                setupGameButton(1, gameButton2);
+                setupGameButton(2, gameButton3);
 
+                if (!gameFileManager.checkFile(0)) {
+                    closeButton1.setVisible(false);
+                }
+                if (!gameFileManager.checkFile(1)) {
+                    closeButton2.setVisible(false);
+                }
+                if (!gameFileManager.checkFile(2)) {
+                    closeButton3.setVisible(false);
+                }
+            }
+        });
 
 
         //Accept keyboard inputs

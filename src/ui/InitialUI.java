@@ -1,5 +1,6 @@
 package ui;
 
+import game_file.GameFileManager;
 import main.Sound;
 import utility.UtilityTool;
 
@@ -14,6 +15,7 @@ import static main.Sound.*;
 
 public class InitialUI extends JPanel {
     private final UtilityTool uTool;
+    private final GameFileManager gameFileManager;
     private Font arial_40, arial_80B;
     private int commandNum;
     private final int maxCommandNum = 2;
@@ -41,6 +43,7 @@ public class InitialUI extends JPanel {
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
         uTool = new UtilityTool();
+        gameFileManager = new GameFileManager();
 
         startBGMusic();
 
@@ -168,6 +171,7 @@ public class InitialUI extends JPanel {
         quitButton.setBorderPainted(false);
         quitButton.addActionListener(e -> {
             playSE(1);
+            gameFileManager.saveSettings();
             System.exit(0);
         });
         quitButton.addMouseListener(new MouseAdapter() {
@@ -228,7 +232,10 @@ public class InitialUI extends JPanel {
                         switch (commandNum) {
                             case 0 -> switchPanel("StartGameUI", 1);
                             case 1 -> switchPanel("SettingUI", 2);
-                            case 2 -> System.exit(0);
+                            case 2 -> {
+                                gameFileManager.saveSettings();
+                                System.exit(0);
+                            }
                         }
                     }
                 }
