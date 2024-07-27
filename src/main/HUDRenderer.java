@@ -90,7 +90,7 @@ public class HUDRenderer {
         
         // draw key
         if (player.getHasKey()) {
-            g2.drawImage(keyImg, 20, 20, null);
+            g2.drawImage(keyImg, 20, 20, 48, 48, null);
         }
     }
 }
