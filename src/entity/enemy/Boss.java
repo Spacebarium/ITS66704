@@ -9,9 +9,10 @@ public class Boss extends Enemy {
         super(gp, "Boss", health, damage, defaultX, defaultY, 32 * gp.getScale(), 32 * gp.getScale(), 5 * gp.getScale(), 3 * gp.getScale(), 21 * gp.getScale(), 27 * gp.getScale());
         getImage();
     }
-//hello testing 1, 2, 3
+    //hello testing 1, 2, 3
     //hero wars peak
     //hello darkness my old friends
+    //nani???
 
     public void getImage(){
         String folderName = "entity/enemy/boss";
