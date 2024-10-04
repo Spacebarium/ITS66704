@@ -22,6 +22,7 @@ public class Item {
     private String name;
     private BufferedImage texture;
     private boolean highlighted;
+    //swagggg
 
     public Item(GamePanel gp, int x, int y, int width, int height, String name, String textureFilePath) {
         this.gp = gp;
