@@ -10,7 +10,8 @@ public class Boss extends Enemy {
         getImage();
     }
 //hello testing 1, 2, 3
-
+    //hero wars peak
+    //hello darkness my old friends
 
     public void getImage(){
         String folderName = "entity/enemy/boss";
